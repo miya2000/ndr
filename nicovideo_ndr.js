@@ -15,16 +15,7 @@
         ENABLE_HATENASTAR : true,
         ENABLE_HATENABOOKMARK : false,
         ENABLE_STORAGE : true,
-        FEED_LIST : [
-//            'http://b.hatena.ne.jp/video/rss',
-//            'http://www.nicovideo.jp/mylist/3091300?rss=2.0',
-//            'http://www.nicovideo.jp/mylist/3091300?rss=1.0',
-//            { url : 'http://www.nicovideo.jp/mylist/3091300?rss=atom', otitle: 'test', order: 'entryDate' },
-//            { url : 'http://www.nicovideo.jp/mylist/1399500?rss=2.0', order: 'uploadDate' },
-//            'http://www.nicovideo.jp/mylist/27336?rss=2.0',
-//            'http://www.casluck.com/niko/nikorank.xml',
-//            'http://www.casluck.com/niko/nikorank2.xml',
-        ]
+        FEED_LIST : []
     };
 
     // ==== shortcut keys ==== //
@@ -39,10 +30,10 @@
         { command: 'NewerEntries', key: 'k shift' },
         { command: 'NextFeed', key: 's' },
         { command: 'NextFeed', key: 'shift ctrl' },
-        //{ command: 'NextFeed', key: 'Down shift' },
+        { command: 'NextFeed', key: 'Down shift' },
         { command: 'PrevFeed', key: 'a' },
         { command: 'PrevFeed', key: 'ctrl shift' },
-        //{ command: 'PrevFeed', key: 'Up shift' },
+        { command: 'PrevFeed', key: 'Up shift' },
         { command: 'ScrollDown', key: 'Space' },
         { command: 'ScrollDown', key: 'PageDown' },
         { command: 'ScrollUp',   key: 'Space shift' },
@@ -63,6 +54,11 @@
     var NDR_IMG_COMPLETE = 'data:image/gif;base64,R0lGODlhFAAUAIIAADAvMOPl40hHSPT19Dg5OFRWVOzs7Pz%2B%2FCH5BAANAAAALAAAAAAUABQAAgNNeLpqAmSwOU0xx2I6h9iZIHEMMZnk4oHOmGYXDL5HIBAfrT6Gqw8QHcMTFC4ASKOCGFFmCACREwlwHh5NZQDqdHCNXpuSQMCUjdkoKQEAIfkEACgAAAAsAAAAABQAFAACA0Z4umcCZLA5TTHtUjoEVo60McRUjkv3NYKIZpi1vizg0RM04wfEm4AfA%2BLiDQgRoYIAKPJ8ygMzOoAqmU7a8XQl7LQAGyoBACH5BAANAAAALAAAAAAUABQAAgNGeLpqAmSwOU0xx2I6h9iZIHEMMZnk4oHOmGYXDL4h8NGMYc%2F4w9MDCI5CAAxzRdfwcTsGCT%2Ba8LgoUhdTqgd6zey6AFsqAQAh%2BQQADQAAACwAAAAAFAAUAAIDSni6POcsSiOIMDIfU8zgmLYM10JB4kFEa%2FqUyuluggPODwFYoUsBF5RLB8MNdL0ZaYdjAHbC2bPVXAKaJgIVu0sqBUBsrCtWhTUJACH5BAANAAAALAAAAAAUABQAAgNLeLrc%2Fm0cCZ8RRJjaTDGDt3GTtlwURzQreRDjgZJGtom0AACYyV07zSAFAQJgLpmOFyMtCYHkZEcgupbSEwGQXRy7JWTXwARvBZUEACH5BAAKAAAALAAAAAAUABQAAgNKeLo85yxKI4gwMh9TzOCYtgzXQkHiQURr%2BpTK6W6CA84PAVihSwEXlEsHww10vRlph2MAdsLZs9VcApomAhW7SyoFQGysK1aFNQkAIfkEAAoAAAAsAAAAABQAFAACA0Z4umoCZLA5TTHHYjqH2JkgcQwxmeTigc6YZhcMviHw0Yxhz%2FjD0wMIjkIADHNF1%2FBxOwYJP5rwuChSF1OqB3rN7LoAWyoBACH5BAAUAAAALAAAAAAUABQAAgNGeLpnAmSwOU0x7VI6BFaOtDHEVI5L9zWCiGaYtb4s4NETNOMHxJuAHwPi4g0IEaGCACjyfMoDMzqAKplO2vF0Jey0ABsqAQAh%2BQQADQAAACwAAAAAFAAUAAIDS3i6ZwJksDlNMe1SOgRWjrQxxFSOS%2Fc1gohmmLW%2BLODREzTjBnHiig4EyABAXLgB4UhUPABIHrN58EWohICAWlVGaZEfUHVrQmyjBAAh%2BQQADQAAACwAAAAAFAAUAAIDT3i6ZwJksDlNMe1SOgRWjrQxxFSOS%2Fc1gohmmLW%2BLODREzTjBnHiig4EyADoiAehzcXz7WgDAoCJ8%2FmoqN4giiS0Dr8qhgtUKW5AW3K5SQAAIfkEAA0AAAAsAAAAABQAFAACA1J4umcCZLA5TTHtUjoEVo60McRUjkv3NYKIZpi1vizg0ROEtbhC2IYTbvADhHqHH%2BGGhAxcvR%2BS4Zw2CNgZbRkQCGmOGHMbORC%2FI9UiTCPm0IcEACH5BADIAAAALAAAAAAUABQAAgNXeLpqAmSwOU0xx2I6h9iZIHEMMZnk4oHOmGYXDL4hIASHS0NOSys8EepHsOGGtKJR9DsAeLFmMaJ7DSC2WcpBJXyI3wwByekxVq%2BxbjB%2B3ShmzpU5gSwSADs%3D';
     var NDR_HATENASTAR_TOKEN = '43176db8ca94b7e759246873fc3dad868c75fd6f';
     var NDR_STORAGE_SWF = 'http://miya2000.up.seesaa.net/storage/ndr.swf';
+    
+    // ==== resource ==== //
+    var lang = {
+        HAS_SUBSCRIBED : '\u65E2\u306B\u8CFC\u8AAD\u3057\u3066\u3044\u307E\u3059\u3002'
+    };
     
     // ==== main ==== //
     var opera9_5Ab = (window.opera && parseFloat(opera.version()) >= 9.5);
@@ -146,7 +142,7 @@
         '    overflow: hidden; ',
         '} ',
         '.ndr_header {',
-        '    background: #FFFFFF url(http://res.nicovideo.jp/img/index/tag/b1_off.gif) repeat-x scroll 0 0; ',
+        '    background: #FFFFFF url(http://res.nicovideo.jp/img/index/bg_ch_kanren.gif) repeat-x scroll 0 0; ',
         '    border-color: #CCCCCC; ',
         '    border-style: solid; ',
         '    border-width: 1px 0; ',
@@ -603,7 +599,8 @@
         '    margin-right: 3px; ',
         '} ',
         '.ndr_feed_title {',
-        '    background: url("' + NDR_DEF_FAVICON + '") no-repeat 1px 0; ',
+        '    background: url("' + NDR_DEF_FAVICON + '") no-repeat 1px 0 ; ',
+        '    background-color: white; ',
         '    padding-left: 22px; ',
         '    border: #555 solid 1px; ',
         '} ',
@@ -616,6 +613,45 @@
         '.ndr_emphasis_phrase_02 { background-color: #99FF99; } ',
         '.ndr_emphasis_phrase_03 { background-color: #FF9999; } ',
         '.ndr_emphasis_phrase_04 { background-color: #FF66FF; } ',
+        '.ndr_feed_input_pane {',
+        '    color: white; ',
+        '    background-color: #202020; ',
+        '    width: 400px; ',
+        '    padding: 13px 15px;',
+        '    font-size: 12px; ',
+        '    box-sizing: border-box; ',
+        '} ',
+        '.ndr_feed_input_pane form {',
+        '    margin: 0; ',
+        '    padding: 0; ',
+        '} ',
+        '.ndr_feed_input_pane .ndr_feed_url {',
+        '    width: 364px; ',
+        '    margin: auto; ',
+        '} ',
+        '.ndr_feed_input_pane p {',
+        '    line-height: 2.2; ',
+        '    border-width: 0; ',
+        '} ',
+        '.ndr_feed_input_import {',
+        '    float: left; ',
+        '} ',
+        '.ndr_feed_input_submit {',
+        '    float: right; ',
+        '} ',
+        '.ndr_feed_input_submit input {',
+        '    margin-left: .2em; ',
+        '} ',
+        '.ndr_feed_input_pane .ndr_message {',
+        '    color: red; ',
+        '    font-size: smaller; ',
+        '    margin-top: -3px; ',
+        '    line-height: 1; ',
+        '    height: 1.5em; ',
+        '} ',
+        '.ndr_feed_input_pane.ndr_feed_editor {',
+        '    width: 600px; ',
+        '} ',
     ].join('\n');
 
     var NDR_EMPHASIS_CLASSES = [
@@ -652,7 +688,7 @@
         style.type = 'text/css';
         style.style.display = 'none';
         style.innerHTML = styleStr;
-        style.ownerDocument.body.appendChild(style);
+        document.body.appendChild(style);
         return style;
     }
     function hasClass(el, className) {
@@ -764,6 +800,46 @@
     function clone(obj) {
         return eval('(' + toJSON(obj) + ')');
     }
+    
+    function evaluate(xpath, context) {
+        var eles = document.evaluate(xpath, context || document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+        var arr = [];
+        for (var i = 0, len = eles.snapshotLength; i < len; i++) {
+            arr.push(eles.snapshotItem(i));
+        }
+        return arr;
+    }
+    // http(s) only.
+    function getAbsoluteURL(url, baseURL) {
+        if (!url && !baseURL) return location.href;
+        var base = baseURL || location.href;
+        var href;
+        if (!url) {
+            href = base;
+        }
+        else if (/https?:\/\/.*/.test(url)) {
+            href = url;
+        }
+        else if (url[0] == '?') {
+            href = base.replace(/\?.*/, '') + url;
+        }
+        else if (url[0] == '#') {
+            href = base.replace(/#.*/, '') + url;
+        }
+        else if (url[0] == '/') {
+            href = /https?:\/\/.*?(?=(\/|$))/.exec(base)[0] + url;
+        }
+        else if (base[base.length-1] != '/'){
+            href = base.replace(/[^/]*$/, '') + url;
+        }
+        else {
+            href = base + url;
+        }
+        // normalize.
+        var a = document.createElement('a');
+        a.href = href;
+        return a.href;
+    }
 
     function createPlayInfo(el) {
         var an = el.getElementsByTagName('a');
@@ -804,7 +880,6 @@
     function KeyBind(target) {
         this.target = target || window;
         this.binds = [];
-        this.init();
     };
     KeyBind.KEY_MAP = {
         'backspace' : 8,
@@ -836,10 +911,10 @@
         'right'     : 0,
         'down'      : 0
     };
-    KeyBind.prototype.init = function() {
+    KeyBind.prototype.start = function() {
         var self = this;
         this.target.addEventListener('keypress', this._listener = function(e) {
-            if (self.target != e.target && /^input|textarea|select$/i.test(e.target.nodeName)) return;
+            if (self.target != e.target && /^(?:input|textarea|select|button)$/i.test(e.target.nodeName)) return;
             self.binds.forEach(function(shortcut) {
                 if (self.checkShortcut(shortcut, e)) {
                     e.preventDefault();
@@ -848,22 +923,22 @@
             });
         }, false);
     };
+    KeyBind.prototype.stop = function() {
+        this.target.removeEventListener('keypress', this._listener, false);
+        delete this._listener;
+    };
     KeyBind.prototype.clear = function() {
         this.binds = [];
     };
     KeyBind.prototype.dispose = function() {
-        this.target.removeEventListener('keypress', this._listener, false);
-        delete this._listener;
+        this.stop();
         delete this.binds;
         delete this.target;
     };
     KeyBind.prototype.add = function(ch, fn) {
-        var chlist = ch.split(/\s*,\s*/);
-        for (var i = 0; i < chlist.length; i++) {
-            var shortcut = this.parseShortcut(chlist[i]);
-            shortcut.fn = fn;
-            this.binds.push(shortcut);
-        }
+        var shortcut = this.parseShortcut(ch);
+        shortcut.fn = fn;
+        this.binds.push(shortcut);
     };
     KeyBind.prototype.parseShortcut = function(str) {
         var shortcut = {};
@@ -1093,6 +1168,39 @@
             this.isActive = false;
         }
     }
+    
+    /**
+     * class TimerManager.
+     */
+    function TimerManager(win) {
+        this.win = win || window;
+        this.timeouts = {};
+        this.intervals = {};
+    }
+    TimerManager.prototype.setTimeout = function(name, func, delay) {
+        this.clearTimeout(name);
+        var self = this;
+        this.timeouts[name] = this.win.setTimeout(function() {
+            delete self.timeouts[name];
+            func();
+        }, delay);
+    };
+    TimerManager.prototype.clearTimeout = function(name) {
+        if (this.timeouts[name]) {
+            this.win.clearTimeout(this.timeouts[name]);
+            delete this.timeouts[name];
+        }
+    };
+    TimerManager.prototype.setInterval = function(name, func, delay) {
+        this.clearInterval(name);
+        this.intervals[name] = this.win.setInterval(func, delay);
+    };
+    TimerManager.prototype.clearInterval = function(name) {
+        if (this.intervals[name]) {
+            this.win.clearInterval(this.intervals[name]);
+            delete this.intervals[name];
+        }
+    };
 
     /**
      * class RequestPool.
@@ -1208,9 +1316,24 @@
     var isSameDomain = (function() {
         var homeAddress = location.href.match(/.*?[/][/].*?[/]/).toString();
         return function(url) {
-            return url.indexOf(':') < 0 || url.indexOf(homeAddress) == 0
+            return url.indexOf(':') < 0 || url.indexOf(homeAddress) == 0;
         }
     })();
+    
+    function httpRequest(href, callback) {
+        if (isSameDomain(href)) {
+            sameDomainRequest(href, callback);
+        }
+        else {
+            if (href.indexOf('atwiki') > 0) {
+                crossDomainRequest(href, callback, true);
+            }
+            else {
+                crossDomainRequest(href, callback);
+            }
+        }
+    }
+    
     function feedRequest(href, feedCallback) {
         var callback = function(e) {
             if (e.readyState < 4) { // timeout.
@@ -1233,8 +1356,18 @@
                     status : 'nodata'
                 };
             }
+            else if (!/^\s*</.test(e.responseText)) { // deleted mylist. etc.
+                var feedObj = {
+                    title : href,
+                    link : href,
+                    description: '\u6709\u52B9\u306A\u30D5\u30A3\u30FC\u30C9\u3067\u306F\u3042\u308A\u307E\u305B\u3093\u3002\n(' + /\s*(.*)$/m.exec(e.responseText)[0].substring(0, 300) + ')',
+                    items : [],
+                    url : href,
+                    status : 'invalid'
+                };
+            }
             else {
-                var feedObj = parseFeedObject(e.responseText);
+                var feedObj = parseFeedObjectFromString(e.responseText);
                 feedObj.url = href;
                 feedObj.status = 'ok';
                 if (!feedObj.link) {
@@ -1243,12 +1376,7 @@
             }
             feedCallback(feedObj);
         };
-        if (isSameDomain(href)) {
-            sameDomainRequest(href, callback);
-        }
-        else {
-            crossDomainRequest(href, callback);
-        }
+        httpRequest(href, callback);
     }
     
     /**
@@ -1736,12 +1864,15 @@
         }
         return data;
     };
-    function parseFeedObject(str) {
+    function parseFeedObjectFromString(str) {
         var responseDocument = null;
         if (/^\s*<\?xml/.test(str)) {
-            responseDocument = new DOMParser().parseFromString(str, 'application/xml');
+            var xmlDocument = new DOMParser().parseFromString(str, 'application/xml');
+            if (xmlDocument.documentElement.nodeName != 'parsererror') {
+                responseDocument = xmlDocument;
+            }
         }
-        else {
+        if (responseDocument == null) {
             // cutting corners
             var doc = document.implementation.createHTMLDocument('');
             var range = doc.createRange();
@@ -1750,15 +1881,21 @@
             range.insertNode(range.createContextualFragment(str));
             responseDocument = doc;
         }
+        return parseFeedObjectFromDocument(responseDocument);
+    }
+    function parseFeedObjectFromDocument(document) {
         var rssProcessor;
-        switch (responseDocument.documentElement.nodeName) {
+        switch (document.documentElement.nodeName) {
             case 'rss'    : rssProcessor = new RSSProcessor();  break;
             case 'rdf:RDF': rssProcessor = new RSS1Processor(); break;
             case 'feed'   : rssProcessor = new AtomProcessor(); break;
             default       : rssProcessor = new HtmlProcessor(); break;
         }
-        var obj = rssProcessor.toObject(responseDocument);
+        var obj = rssProcessor.toObject(document);
         return obj;
+    }
+    function isFeedDocument(document) {
+        return /^(?:rss|rdf:RDF|feed)$/.test(document.documentElement.nodeName);
     }
     
     /**
@@ -1849,7 +1986,9 @@
     function Platform() {
         this.commands = new ListedKeyMap();
         this.currentMode = '';
-        this.keyBind = new KeyBind();
+        this.keyBinds = {};
+        this.currentKeyBind = this.keyBinds[''] = new KeyBind();
+        this.currentKeyBind.start();
     }
     Platform.prototype.bindCommand = function(command) {
         this.commands.add(command.name, command);
@@ -1860,10 +1999,22 @@
             cmd.fn.apply(this, arguments.slice(1));
         }
     };
-    Platform.prototype.bindShortcut = function(commandName, key) {
+    Platform.prototype.bindShortcut = function(commandName, key, mode) {
         var self = this;
-        this.keyBind.add(key, function(e) { self.doCommand(commandName, e); });
-    }
+        var keyBind = this.keyBinds[mode || ''];
+        if (!keyBind) {
+            keyBind = this.keyBinds[mode] = new KeyBind();
+        }
+        keyBind.add(key, function(e) { self.doCommand(commandName, e); });
+    };
+    Platform.prototype.setMode = function(mode) {
+        if (this.currentKeyBind) this.currentKeyBind.stop();
+        this.currentKeyBind = this.keyBinds[mode || ''];
+        if (this.currentKeyBind) this.currentKeyBind.start();
+    };
+    Platform.prototype.clearMode = function(mode) {
+        this.setMode(null);
+    };
     
     function NDR(preferences) {
         var p = preferences || {};
@@ -1881,12 +2032,15 @@
         this.feedMap = new ListedKeyMap();
         this.tempFeedMap = new ListedKeyMap();
         this.pinnedMap = new ListedKeyMap();
+        this.timer = new TimerManager();
+        this.player = new SimpleNicovideoPlayer('NDR');
         this.build();
         this.openFeed(this.createHistoryFeed());
         this.clearFeedItems();
         this.importFeedList(p.FEED_LIST || []);
-        this.loadPreference();
-        this.player = new SimpleNicovideoPlayer('NDR');
+        // loadPreference delay for Opera9.
+        var self = this;
+        setTimeout(function() { self.loadPreference() }, 0);
     }
     NDR.prototype.build = function() {
         addStyle(NDR_STYLE);
@@ -1946,28 +2100,22 @@
         var feedReloadButton = document.getElementById('NDR_C_FEED_RELOAD');
         feedReloadButton.addEventListener('click', function(e) {
             e.preventDefault();
-            self.loadPreference();
             self.reloadAllFeeds();
         }, false);
         
         var feedEditButton = document.getElementById('NDR_C_FEED_EDIT');
         feedEditButton && feedEditButton.addEventListener('click', function(e) {
             e.preventDefault();
-            self.loadPreference();
             self.openFeedEdit();
         }, false);
         
         var feedAddButton = document.getElementById('NDR_C_FEED_ADD');
         feedAddButton && feedAddButton.addEventListener('click', function(e) {
             e.preventDefault();
-            self.loadPreference();
             self.addFeedURL();
         }, false);
         
         var feedSearchBox = document.getElementById('NDR_C_FEED_SEARCH');
-        var feedSearchTid = null;
-        var entrySearchTid = null;
-        var intervalCount = 0;
         feedSearchBox.addEventListener('keypress', function(e) {
             if (e.which == 0 && e.keyCode == 38) {
                 self.selectPreviousFeed();
@@ -1978,10 +2126,11 @@
                 e.preventDefault();
             }
         }, false);
+        var intervalCount = 0;
         feedSearchBox.addEventListener('keydown', function(e) {
-            if (!feedSearchTid) {
+            if (!self.timer.intervals['feedSearch']) {
                 var preWord = null;
-                feedSearchTid = setInterval(function() {
+                self.timer.setInterval('feedSearch', function() {
                     if (preWord != feedSearchBox.value) {
                         preWord = feedSearchBox.value;
                         intervalCount = 0;
@@ -1989,18 +2138,16 @@
                     }
                     else {
                         if (++intervalCount > 10) {
-                            clearInterval(feedSearchTid);
-                            feedSearchTid = null;
+                            self.timer.clearInterval('feedSearch');
                         }
                     }
                 }, 500);
             }
-            if (entrySearchTid) clearTimeout(entrySearchTid);
+            self.timer.clearTimeout('entrySearch');
             if (e.keyCode == 13) {
-                entrySearchTid = setTimeout(function() {
+                self.timer.setTimeout('entrySearch', function() {
                     var feed = self.createEntrySearchResultFeed(feedSearchBox);
                     if (feed) self.openFeed(feed);
-                    entrySearchTid = null;
                 }, 300);
             }
             e.stopPropagation();
@@ -2025,7 +2172,6 @@
         
         var pinnedListButton = document.getElementById('NDR_C_PINNED_LIST');
         var pinnedList = document.getElementById('NDR_PINNED_LIST');
-        var pinTooltipTid = null;
         pinnedListButton.addEventListener('click', function(e) {
             self.viewPinnedEntries();
         }, false);
@@ -2091,7 +2237,7 @@
     };
     NDR.prototype.initKeyBind = function(shortcutList) {
         if (!shortcutList) return;
-        this.platform.keyBind.clear();
+        this.platform.keyBinds[''].clear();
         for (var i = 0; i < shortcutList.length; i++) {
             var item = shortcutList[i];
             this.platform.bindShortcut(item.command, item.key);
@@ -2427,10 +2573,7 @@
         this.openFeedItemFromElementLater(element);
     };
     NDR.prototype.openFeedItemFromElementLater = function(element) {
-        if (this.openFeedItemTid) clearTimeout(this.openFeedItemTid);
-        var self = this;
-        this.openFeedItemTid = setTimeout(function() {
-            self.openFeedItemTid = null;
+        this.timer.setTimeout('openFeedItem', function() {
             var evt = document.createEvent('MouseEvents');
             evt.initEvent('click', false, false);
             element.dispatchEvent(evt);
@@ -2471,24 +2614,34 @@
             this.importFeedList(list);
         }
     };
-    NDR.prototype.loadPreference = function() {
-        if (!this.pref.enableStorage) return;
-        var count = 0;
+    NDR.prototype.loadPreference = function(retry) {
+        if (!this.pref.enableStorage) return false;
+        if (this.timer.timeouts['loadPreference'] && retry == 0) return false;
+        var count = (retry + 1) || 30;
         var self = this;
-        setTimeout(function() {
-            var storage = document.getElementById('NDR_STORAGE');
+        function _loadPreference() {
+            var jsonStr;
             try {
-                var jsonStr = storage.getData();
+                var storage = document.getElementById('NDR_STORAGE');
+                jsonStr = storage.getData();
             }
             catch(e) {
-                setTimeout(arguments.callee, 500);
-                return;
+                if (--count > 0) {
+                    self.timer.setTimeout('loadPreference', _loadPreference, 500);
+                }
+                return false;
             }
             var storePref = (jsonStr) ? eval('(' + jsonStr + ')') : null;
             self.importPreference(storePref);
-        }, 500);
+            self._loadSucceeded = true;
+            return true;
+        }
+        return _loadPreference();
     };
     NDR.prototype.storePreference = function() {
+        if (!this._loadSucceeded) {
+            throw 'storage has not been loaded.';
+        }
         var storage = document.getElementById('NDR_STORAGE');
         if (!storage || !storage.setData) {
             throw 'storage is unavailable.';
@@ -2522,7 +2675,6 @@
                 // if not stored, store this feed.
                 var list = self.pref.feedList;
                 if (list.indexOf(url) < 0) {
-                    // TODO: add dialog.
                     self.pref.feedList.push(url);
                     self.pref.feedInfo[url] = { title: feedObj.title };
                     self.storePreference();
@@ -2557,6 +2709,7 @@
     };
     NDR.prototype.reloadAllFeeds = function() {
         this.setStatus('loading', 'Loading');
+        this.loadPreference(0);
         this.clearFeedItems();
         var list = this.pref.feedList;
         for (var i = 0; i < list.length; i++) {
@@ -2873,8 +3026,7 @@
         return feedObj;
     };
     NDR.prototype.clearEntriesPanel = function() {
-        if (this.openFeedTid) clearTimeout(this.openFeedTid);
-        this.openFeedTid = null;
+        this.timer.clearTimeout('openFeed');
         thumbnailInfo.cancelRequest();
         hatenaStar.cancelRequest();
         this.stopObserveScrollEntriesPanel();
@@ -3036,61 +3188,87 @@
                 }
             }, false);
             
-            var clipButton = dv.getElementsByClassName('ndr_clip')[0];
-            var mylistPanel = null;
-            clipButton.addEventListener('mousedown', function(e) {
-                if (!hasClass(dv, 'ndr_entry_clip')) {
-                    if (!mylistPanel) {
-                        mylistPanel = self.createMylistPanel();
-                        if (!mylistPanel) return;
-                        var s = mylistPanel.getElementsByTagName('select')[0];
-                        var b = mylistPanel.getElementsByTagName('input')[0];
-                        mylistPanel.addEventListener('click', function(e) {
-                            e.stopPropagation();
-                        }, false);
-                        b.addEventListener('click', function(e) {
-                            nicoMylist.add(video_id, s.value);
-                            removeClass(dv, 'ndr_entry_clip');
-                        }, false);
-                    }
-                    var entry_title = dv.getElementsByTagName('h4')[0];
-                    entry_title.parentNode.insertBefore(mylistPanel, entry_title.nextSibling);
-                    appendClass(dv, 'ndr_entry_clip');
-                }
-                else {
-                    removeClass(dv, 'ndr_entry_clip');
-                }
-            }, false);
-            
-            var pinButton = dv.getElementsByClassName('ndr_pin')[0];
-            pinButton.addEventListener('mousedown', function(e) {
-                if (!hasClass(dv, 'ndr_entry_pin')) {
-                    appendClass(dv, 'ndr_entry_pin');
-                    self.pinAdd(item.link, item.title);
-                }
-                else {
-                    removeClass(dv, 'ndr_entry_pin');
-                    self.pinRemove(item.link);
-                }
-            }, false);
-            
-            var markAsReadButton = dv.getElementsByClassName('ndr_mark_as_read')[0];
-            markAsReadButton.addEventListener('click', function(e) {
-                if (!showVisited) {
-                    if (!VisitUtil.isVisited(item.link)) VisitUtil.pseudoVisit(item.link);
-                    if (feedObj.unreadItems) {
-                        var myIndex = feedObj.unreadItems.indexOf(item);
-                        if (myIndex >= 0) {
-                            feedObj.unreadItems.splice(myIndex, 1);
-                            if (!feedObj.readItems) feedObj.readItems = [];
-                            feedObj.readItems.unshift(item);
+            // ndr_entry_controls functions.
+            (function() {
+                var mylistPanel = null;
+                function clipToggle() {
+                    if (!hasClass(dv, 'ndr_entry_clip')) {
+                        if (!mylistPanel) {
+                            mylistPanel = self.createMylistPanel();
+                            if (!mylistPanel) return;
+                            var s = mylistPanel.getElementsByTagName('select')[0];
+                            var b = mylistPanel.getElementsByTagName('input')[0];
+                            mylistPanel.addEventListener('click', function(e) {
+                                e.stopPropagation();
+                            }, false);
+                            b.addEventListener('click', function(e) {
+                                nicoMylist.add(video_id, s.value);
+                                removeClass(dv, 'ndr_entry_clip');
+                            }, false);
+                            var entry_title = dv.getElementsByTagName('h4')[0];
+                            entry_title.parentNode.insertBefore(mylistPanel, entry_title.nextSibling);
                         }
+                        appendClass(dv, 'ndr_entry_clip');
                     }
-                    if (dv.parentNode) dv.parentNode.removeChild(dv);
-                    var nextButton = document.getElementById('NDR_C_ENTRIES_NEXT');
-                    if (nextButton   ) nextButton.removeAttribute('disabled');
+                    else {
+                        removeClass(dv, 'ndr_entry_clip');
+                    }
                 }
-            }, false);
+                var mousedownOccurred = false;
+                var clipButton = dv.getElementsByClassName('ndr_clip')[0];
+                clipButton.addEventListener('mousedown', function(e) {
+                    clipToggle();
+                    mousedownOccurred = true;
+                }, false);
+                // for Spacial Navigation.
+                clipButton.addEventListener('click', function(e) {
+                    if (!mousedownOccurred) clipToggle();
+                    mousedownOccurred = false;
+                }, false);
+            })();
+            (function() {
+                function pinToggle() {
+                    if (!hasClass(dv, 'ndr_entry_pin')) {
+                        appendClass(dv, 'ndr_entry_pin');
+                        self.pinAdd(item.link, item.title);
+                    }
+                    else {
+                        removeClass(dv, 'ndr_entry_pin');
+                        self.pinRemove(item.link);
+                    }
+                }
+                var mousedownOccurred = false;
+                var pinButton = dv.getElementsByClassName('ndr_pin')[0];
+                pinButton.addEventListener('mousedown', function() {
+                    pinToggle();
+                    mousedownOccurred = true;
+                }, false);
+                pinButton.addEventListener('click', function() {
+                    if (!mousedownOccurred) pinToggle();
+                    mousedownOccurred = false;
+                }, false);
+            })();
+            (function() {
+                function markAsRead() {
+                    if (!showVisited) {
+                        if (!VisitUtil.isVisited(item.link)) VisitUtil.pseudoVisit(item.link);
+                        if (feedObj.unreadItems) {
+                            var myIndex = feedObj.unreadItems.indexOf(item);
+                            if (myIndex >= 0) {
+                                feedObj.unreadItems.splice(myIndex, 1);
+                                if (!feedObj.readItems) feedObj.readItems = [];
+                                feedObj.readItems.unshift(item);
+                            }
+                        }
+                        if (dv.parentNode) dv.parentNode.removeChild(dv);
+                        var nextButton = document.getElementById('NDR_C_ENTRIES_NEXT');
+                        if (nextButton   ) nextButton.removeAttribute('disabled');
+                    }
+                }
+                var markAsReadButton = dv.getElementsByClassName('ndr_mark_as_read')[0];
+                markAsReadButton.addEventListener('click', markAsRead, false);
+            })();
+            
             if (self.pref.enableHatenaStar) {
                 var starPlace = dv.getElementsByClassName('ndr_hstar')[0];
                 var starRequest = { uri: item.link, title: item.title, place: starPlace };
@@ -3135,7 +3313,6 @@
                     }
                 });
             }
-            
             return dv;
         };
         var df = document.createDocumentFragment();
@@ -3152,7 +3329,7 @@
             entriesPane.appendChild(remainsContainer);
             
             var defferFuncs = [];
-            this.openFeedTid = setTimeout(function() {
+            this.timer.setTimeout('openFeed', function() {
                 var buf = [];
                 for (var ii = i; ii < items.length; ii++) {
                     var item = items[ii];
@@ -3196,11 +3373,9 @@
         var entriesPane = document.getElementById('NDR_ENTRIES');
         var self = this;
         entriesPane.addEventListener('scroll', this.scrollObserverEntriesPanel = function() {
-            if (self.scrollEntriesPanelFuncTid) {
-                clearTimeout(self.scrollEntriesPanelFuncTid);
-            }
+            self.timer.clearTimeout('scrollEntriesPanelFunc');
             if (self.wellScrolledEntriesPanel()) {
-                self.scrollEntriesPanelFuncTid = setTimeout(function() {
+                self.timer.setTimeout('scrollEntriesPanelFunc', function() {
                     if (self.wellScrolledEntriesPanel()) func();
                 }, 500);
             }
@@ -3208,10 +3383,7 @@
         this.scrollObserverEntriesPanel(); // first execute.
     };
     NDR.prototype.stopObserveScrollEntriesPanel = function() {
-        if (this.scrollEntriesPanelFuncTid) {
-            clearTimeout(this.scrollEntriesPanelFuncTid);
-            delete this.scrollEntriesPanelFuncTid;
-        }
+        this.timer.clearTimeout('scrollEntriesPanelFunc');
         if (this.scrollObserverEntriesPanel) {
             var entriesPane = document.getElementById('NDR_ENTRIES');
             entriesPane.removeEventListener('scroll', this.scrollObserverEntriesPanel, false);
@@ -3225,53 +3397,305 @@
         var clientHeight = entriesPane.clientHeight;
         return scrollTop > (scrollHeight - clientHeight - clientHeight*2);
     };
-    
-    NDR.prototype.blockUI = function() {
-        /*
-        if (this.isVideoMode) return;
-        this.isVideoMode = true;
-        var videoModeScreen = document.createElement('div');
-        videoModeScreen.style.cssText = 'width: 100%; height: 100%; position: absolute; top: 0; left: 0; z-index: 1000;';
-        videoModeScreen.innerHTML = [
-            '<div style="position: absolute; width: 100%; height: 100%; background-color: #000; opacity: .8;" onmousedown="window.event.preventDefault();" onclick="window.event.preventDefault();"></div>'
-        ].join('');
-        document.body.appendChild(videoModeScreen);
-        this.videoModeScreen = videoModeScreen;
-        */
-    };
-    NDR.prototype.unblockUI = function() {
-        //document.body.removeChild(this.videoModeScreen);
-    };
-    NDR.prototype.addFeedURL = function(p_url) {
-        if (p_url && this.pref.feedList.indexOf(p_url) >= 0) {
-            alert('\u65E2\u306B\u8CFC\u8AAD\u3057\u3066\u3044\u307E\u3059\u3002');
+    NDR.prototype.blockUI = function(content) { // (ref:jQuery blockUI plugin)
+        this.platform.setMode('blockUI');
+        
+        // if already blocking, replace content and return;
+        if (this.uiBlocker) {
+            if (this.uiBlocker.content) this.uiBlocker.content.parentNode.removeChild(this.uiBlocker.content);
+            this.uiBlocker.content = setContent(content);
             return;
         }
-        this.blockUI();
-        var url = prompt('\u30D5\u30A3\u30FC\u30C9\u306EURL\u3092\u5165\u529B\u3057\u3066\u304F\u3060\u3055\u3044\u3002', p_url ? p_url : 'http://');
-        if (url) {
-            if (this.pref.feedList.indexOf(url) >= 0) {
-                alert('\u65E2\u306B\u8CFC\u8AAD\u3057\u3066\u3044\u307E\u3059\u3002');
-                return;
+        
+        function setContent(content) {
+            if (!content || typeof content == 'string') {
+                var message = content || '';
+                content = document.createElement('p');
+                content.style.cssText = 'color: white; font-size: 18px; text-align: center; max-width: 60%;';
+                content.textContent = message;
             }
-            var storage = document.getElementById('NDR_STORAGE');
-            if (storage && storage.setData) {
-                this.loadFeed(url);
+            if (content) {
+                content.style.position = 'absolute';
+                content.style.zIndex = '1001';
+                content.style.visibility = 'hidden';
+                content.style.left = '50%';
+                content.style.top = '40%';
+                document.body.appendChild(content);
+                content.style.marginLeft = -(content.offsetWidth/2) + 'px';
+                content.style.marginTop  = -(content.offsetHeight/2) + 'px';
+                content.style.visibility = '';
+                content.addEventListener('mousedown', function(e) {
+                    var inputs = evaluate('descendant::*[self::input or self::select or self::button or self::textarea]', content);
+                    if (inputs.indexOf(e.target) < 0) {
+                        e.preventDefault();
+                    }
+                }, false);
             }
-            else {
-                this.openTemporaryFeed(url);
+            return content;
+        }
+        
+        var uiBlocker = this.uiBlocker = {
+            preActive : document.activeElement
+        };
+        var self = this;
+        var background = uiBlocker.background = document.createElement('div');
+        background.style.cssText = 'width: 100%; height: 100%; position: absolute; top: 0; left: 0; z-index: 1000; background-color: #000; opacity: .3;';
+        background.addEventListener('mousedown', function(e) { e.preventDefault() }, false);
+        background.addEventListener('dblclick', function(e) { self.unblockUI() }, false);
+        document.body.appendChild(background);
+        var dummy = document.createElement('input');
+        dummy.style.cssText = 'visibility: hidden; width: 0; height: 0;';
+        background.appendChild(dummy);
+        dummy.focus();
+        
+        uiBlocker.content = setContent(content);
+        if (uiBlocker.content) {
+            var inputs = evaluate('descendant::*[self::input or self::select or self::button or self::textarea]', uiBlocker.content);
+            if (inputs.length > 0) {
+                this.timer.setTimeout('focus', function() { inputs[0].focus(); }, 0);
             }
         }
-        this.unblockUI();
+        uiBlocker.handler = function(e) {
+            if (e.keyCode == 27) { // Esc
+                self.unblockUI();
+            }
+            else if (e.keyCode == 9) { // Tab
+                var inputs = evaluate('descendant::*[self::input or self::select or self::button or self::textarea]', uiBlocker.content); // for dynamic change.
+                if (inputs.length == 0) {
+                    e.preventDefault();
+                }
+                else if (inputs.indexOf(e.target) < 0) {
+                    e.preventDefault();
+                    inputs[0].focus();
+                }
+                else if (e.target == inputs[0] && e.shiftKey) {
+                    e.preventDefault();
+                    inputs[inputs.length -1].focus();
+                }
+                else if (e.target == inputs[inputs.length -1] && !e.shiftKey) {
+                    e.preventDefault();
+                    inputs[0].focus();
+                }
+            }
+        }
+        window.addEventListener('keypress', uiBlocker.handler, false);
+    };
+    NDR.prototype.unblockUI = function() {
+        var uiBlocker = this.uiBlocker;
+        if (!uiBlocker) return;
+        window.removeEventListener('keypress', uiBlocker.handler, false);
+        uiBlocker.background.parentNode.removeChild(uiBlocker.background);
+        if (uiBlocker.content) uiBlocker.content.parentNode.removeChild(uiBlocker.content);
+        if (uiBlocker.preActive) this.timer.setTimeout('focus', function(){ uiBlocker.preActive.focus() }, 0);
+        delete this.uiBlocker;
+    };
+    NDR.prototype.hasSubscribed = function(url) {
+        return this.pref.feedList.indexOf(url) >= 0;
+    };
+    NDR.prototype.addFeedURL = function(p_url) {
+        if (p_url && this.hasSubscribed(p_url)) {
+            alert(lang.HAS_SUBSCRIBED);
+            return;
+        }
+        if (!this.loadPreference(0)) {
+            alert('\u30B9\u30C8\u30EC\u30FC\u30B8\u304C\u8AAD\u307F\u8FBC\u307E\u308C\u3066\u3044\u306A\u3044\u305F\u3081\u3001\u5229\u7528\u3067\u304D\u307E\u305B\u3093\u3002');
+            return;
+        }
+        this.blockUI(this.createFeedUriInputPanel(p_url));
+    };
+    // respect Remedie.
+    NDR.prototype.createFeedUriInputPanel = function(p_url) {
+        var feedInputPanel = document.createElement('div');
+        feedInputPanel.className = 'ndr_feed_input_pane';
+        feedInputPanel.innerHTML = [
+            '<form action="javascript:void(0)">',
+            '<p>\u8CFC\u8AAD\u3059\u308B\u30DA\u30FC\u30B8\uFF08\u307E\u305F\u306F\u30D5\u30A3\u30FC\u30C9\uFF09\u306EURL\u3092\u5165\u529B\u3057\u3066\u304F\u3060\u3055\u3044\u3002</p>',
+            '<p><input type="url" name="feed_url" class="ndr_feed_url" value="' + (p_url || '') + '"></p>',
+            '<p><input type="checkbox" name="discovery_skip" id="NDR_AUTO_DISCOVERY_SKIP_CHECK"><label for="NDR_AUTO_DISCOVERY_SKIP_CHECK">RSS\u30D5\u30A3\u30FC\u30C9\u3092\u63A2\u3055\u305A\u306B\u3053\u306EURL\u3092\u8CFC\u8AAD\u3059\u308B</label></p>',
+            '<p class="ndr_message"></p>',
+            // TODO: OPML import.
+            '<p class="ndr_feed_input_import" style="display:none"><input type="button" name="opml_import" value="OPML\u3092\u30A4\u30F3\u30DD\u30FC\u30C8"></p>',
+            '<p class="ndr_feed_input_submit"><input type="submit" value="\u8CFC\u8AAD\u3059\u308B"><input type="button" name="cancel" class="ndr_button_cancel" value="\u30AD\u30E3\u30F3\u30BB\u30EB"></p>',
+            '</form>',
+        ].join('');
+        var self = this;
+        var form = feedInputPanel.getElementsByTagName('form')[0];
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            var url = form.feed_url.value;
+            var message = form.getElementsByClassName('ndr_message')[0];
+            if (!/https?:\/\/.+/.test(url)) {
+                message.textContent = 'http\u0020\u304B\u3089\u59CB\u307E\u308B\u0020URL\u0020\u3092\u5165\u529B\u3057\u3066\u304F\u3060\u3055\u3044\u3002';
+                return;
+            }
+            else if (self.hasSubscribed(url)) {
+                message.textContent = lang.HAS_SUBSCRIBED;
+                return;
+            }
+            else {
+                message.textContent = '';
+            }
+            self.blockUI('\u8AAD\u307F\u8FBC\u307F\u4E2D');
+            if (form.discovery_skip.checked) {
+                feedRequest(url, function(feedObj) {
+                    self.confirmRegisterFeedProcess(feedObj);
+                });
+            }
+            else {
+                self.rssAutoDiscoveryProcess(url);
+            }
+        }, false);
+        var cancelButton = form.cancel;
+        cancelButton.addEventListener('click', function(e) {
+            self.unblockUI();
+        }, false);
+        return feedInputPanel;
+    };
+    NDR.prototype.rssAutoDiscoveryProcess = function(url) {
+        var self = this;
+        httpRequest(url, function(xhr) {
+            if (xhr.readyState < 4) { // timeout.
+                alert('\u63A5\u7D9A\u304C\u30BF\u30A4\u30E0\u30A2\u30A6\u30C8\u3057\u307E\u3057\u305F\u3002');
+                self.unblockUI();
+                return;
+            }
+            if (xhr.responseText == '') {
+                alert('\u6307\u5B9A\u3055\u308C\u305FURL\u304B\u3089\u60C5\u5831\u3092\u53D6\u5F97\u3067\u304D\u307E\u305B\u3093\u3067\u3057\u305F\u3002');
+                self.unblockUI();
+                return;
+            }
+            var str = xhr.responseText;
+            var responseDocument = null;
+            if (/^\s*<\?xml/.test(str)) {
+                var xmlDocument = new DOMParser().parseFromString(str, 'application/xml');
+                if (xmlDocument.documentElement.nodeName != 'parsererror') {
+                    responseDocument = xmlDocument;
+                }
+            }
+            if (responseDocument == null) {
+                var doc = document.implementation.createHTMLDocument('');
+                var range = doc.createRange();
+                range.selectNodeContents(doc.documentElement);
+                range.deleteContents();
+                range.insertNode(range.createContextualFragment(str));
+                responseDocument = doc;
+            }
+            if (isFeedDocument(responseDocument)) {
+                var feedObj = parseFeedObjectFromDocument(responseDocument);
+                feedObj.url = url;
+                feedObj.status = 'ok';
+                if (!feedObj.link) feedObj.link = url;
+                self.confirmRegisterFeedProcess(feedObj);
+            }
+            else {
+                // http://d.hatena.ne.jp/amachang/20080808/1218171377
+                var xpath = '/x:html/x:head/x:link[contains(concat(" ", @rel, " "), " alternate ") and (@type="application/x.atom+xml" or @type="application/atom+xml" or @type="application/xml" or @type="text/xml" or @type="application/rss+xml" or @type="application/rdf+xml")]';
+                if (!responseDocument.documentElement.namespaceURI) xpath = xpath.replace(/x:/g, '');
+                var items = responseDocument.evaluate(xpath, responseDocument, function(prefix) { return responseDocument.documentElement.namespaceURI }, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+                // http://blog.fkoji.com/2009/01130110.html
+                var rss, rdf, atom, xml;
+                for (var i = 0; i < items.snapshotLength; i++) {
+                    var item = items.snapshotItem(i);
+                    var type = item.getAttribute('type');
+                    var href = item.getAttribute('href');
+                    if      (/rss/.test(type))  rss  = href;
+                    else if (/rdf/.test(type))  rdf  = href;
+                    else if (/atom/.test(type)) atom = href;
+                    else                        xml  = href;
+                }
+                var feedURL = rss || rdf || atom || xml;
+                if (!feedURL) {
+                    if (confirm('RSS\u30D5\u30A3\u30FC\u30C9\u304C\u898B\u3064\u304B\u308A\u307E\u305B\u3093\u3067\u3057\u305F\u3002\u3053\u306E\u30DA\u30FC\u30B8\u3092\u30D5\u30A3\u30FC\u30C9\u3068\u3057\u3066\u8CFC\u8AAD\u3057\u307E\u3059\u304B\uFF1F')){
+                        if (self.hasSubscribed(feedURL)) {
+                            alert(lang.HAS_SUBSCRIBED);
+                            self.unblockUI();
+                            return;
+                        }
+                        var feedObj = parseFeedObjectFromDocument(responseDocument);
+                        feedObj.url = url;
+                        feedObj.status = 'ok';
+                        if (!feedObj.link) feedObj.link = url;
+                        self.confirmRegisterFeedProcess(feedObj);
+                        return;
+                    }
+                    else {
+                        self.unblockUI();
+                        return;
+                    }
+                }
+                var base = responseDocument.getElementsByTagNameNS(responseDocument.namespaceURI , 'base');
+                var baseURL = (base && base.href) || url;
+                feedURL = getAbsoluteURL(feedURL, baseURL);
+                if (self.hasSubscribed(feedURL)) {
+                    alert(lang.HAS_SUBSCRIBED);
+                    self.unblockUI();
+                    return;
+                }
+                feedRequest(feedURL, function(feedObj) {
+                    self.confirmRegisterFeedProcess(feedObj);
+                });
+            }
+        });
+    };
+    NDR.prototype.confirmRegisterFeedProcess = function(feedObj) {
+        if (feedObj.status != 'ok') {
+            alert('\u30D5\u30A3\u30FC\u30C9\u306E\u8AAD\u307F\u8FBC\u307F\u306B\u5931\u6557\u3057\u307E\u3057\u305F\u3002\n' + feedObj.description);
+            this.unblockUI();
+            return;
+        }
+        this.blockUI(this.createFeedEditorPanel(feedObj));
+    };
+    NDR.prototype.createFeedEditorPanel = function(feedObj) {
+        var feedEditorPanel = document.createElement('div');
+        feedEditorPanel.className = 'ndr_feed_input_pane ndr_feed_editor';
+        var tmp_id = "NDR_TMP_" + (new Date() * Math.random() | 0);
+        var feedItemClass = this.getFeedItemClass(feedObj.url);
+        feedEditorPanel.innerHTML = [
+            '<form action="javascript:void(0)">',
+            '<table>'
+            '<tr><td>\u30BF\u30A4\u30C8\u30EB</td><td><input type="text" class="ndr_feed_title ' + feedItemClass + '" size="80" value="' + escAttr(feedObj.otitle || feedObj.title) + '"></td></tr>',
+            '<tr><td></td><td><input type="checkbox" class="ndr_feed_title_check" id="' + tmp_id + 'TI"' + (feedObj.otitle ? ' checked' : '') + '><label for="' + tmp_id + 'TI">\u81EA\u5206\u3067\u3064\u3051\u305F\u30BF\u30A4\u30C8\u30EB\u3092\u4F7F\u3046</label></td></tr>',
+            '<tr><td>\u30A2\u30C9\u30EC\u30B9</td><td><span class="ndr_feed_address">' + stripTag(feedObj.url) + '</span></td></tr>',
+            '<tr><td>\u4E26\u3073\u9806</td>',
+            '<td><select class="ndr_feed_order">',
+            '<option value="entryOrder">\u30A8\u30F3\u30C8\u30EA\u30FC\u9806\uFF08\u30C7\u30D5\u30A9\u30EB\u30C8\uFF09</option>',
+            '<option value="entryDate">\u30A8\u30F3\u30C8\u30EA\u30FC\u306E\u65E5\u4ED8\u9806</option>',
+            '<option value="uploadDate">\u30A2\u30C3\u30D7\u30ED\u30FC\u30C9\u9806\uFF08\u30CB\u30B3\u30CB\u30B3\u52D5\u753B\u306ERSS\u3067\u306E\u307F\u6709\u52B9\u3067\u3059\uFF09</option>',
+            '</select></td></tr>',
+            '<tr><td>\u30B5\u30E0\u30CD\u30A4\u30EB\u60C5\u5831</td>',
+            '<td><select class="ndr_feed_thumb">',
+            '<option value="always">\u5E38\u306B\u53D6\u5F97\u3059\u308B</option>',
+            '<option value="necessary" selected>\u8AAC\u660E\u6587\u304C\u7121\u3044\u3068\u304D\u3060\u3051\u53D6\u5F97\u3059\u308B\uFF08\u30C7\u30D5\u30A9\u30EB\u30C8\uFF09</option>',
+            '<option value="never">\u53D6\u5F97\u3057\u306A\u3044</option>',
+            '</select></td></tr>',
+            '</table>'
+            '<p class="ndr_feed_input_submit"><input type="submit" value="\u8CFC\u8AAD\u3059\u308B"><input type="button" name="cancel" class="ndr_button_cancel" value="\u30AD\u30E3\u30F3\u30BB\u30EB"></p>',
+            '</form>',
+        ].join('');
+        var self = this;
+        var form = feedEditorPanel.getElementsByTagName('form')[0];
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            self.pref.feedList.push(feedObj.url);
+            self.pref.feedInfo[feedObj.url] = self.createFeedInfoFromFeedEditPanel(feedObj.url, feedEditorPanel);
+            self.storePreference();
+            self.processFeedObj(feedObj);
+            self.addFeedItem(feedObj);
+            self.openFeed(feedObj);
+            self.unblockUI();
+        }, false);
+        var cancelButton = form.cancel;
+        cancelButton.addEventListener('click', function(e) {
+            self.unblockUI();
+        }, false);
+        return feedEditorPanel;
     };
     NDR.prototype.openFeedEdit = function() {
-        var storage = document.getElementById('NDR_STORAGE');
-        if (!storage || !storage.setData) {
-            alert('storage is unavailable.');
+        if (!this.loadPreference(0)) {
+            alert('\u30B9\u30C8\u30EC\u30FC\u30B8\u304C\u8AAD\u307F\u8FBC\u307E\u308C\u3066\u3044\u306A\u3044\u305F\u3081\u3001\u5229\u7528\u3067\u304D\u307E\u305B\u3093\u3002');
             return;
         }
         this.clearEntriesPanel();
-        
         var dv = document.createElement('div');
         dv.innerHTML = [
             '<h2 class="ndr_title">\u30A2\u30A4\u30C6\u30E0\u306E\u7DE8\u96C6</h2>',
@@ -3389,7 +3813,7 @@
         var feed_title_check = feedPanel.getElementsByClassName('ndr_feed_title_check')[0];
         var feed_order = feedPanel.getElementsByClassName('ndr_feed_order')[0];
         var feed_thumb = feedPanel.getElementsByClassName('ndr_feed_thumb')[0];
-        if (feed_del_check.checked) {
+        if (feed_del_check && feed_del_check.checked) {
             return null;
         }
         var feedItem = this.feedMap.get(url);
@@ -3483,11 +3907,7 @@
     };
     NDR.prototype.pinClear = function(time) {
         this.pinnedMap = new ListedKeyMap();
-        var items = document.evaluate('//div[contains(@class, "ndr_entry_pin")]', document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
-        var pinnedEntries = [];
-        for (var i = 0, len = items.snapshotLength; i < len; i++) {
-            pinnedEntries.push(items.snapshotItem(i));
-        }
+        var pinnedEntries = evaluate('/div[contains(@class, "ndr_entry_pin")]', content);
         for (var i = 0, len = pinnedEntries.length; i < len; i++) {
             removeClass(pinnedEntries[i], 'ndr_entry_pin');
         }
@@ -3495,7 +3915,7 @@
         countEl.textContent = '0';
     };
     NDR.prototype.showPinnedList = function() {
-        if (this.pinTooltipTid) clearTimeout(this.pinTooltipTid);
+        this.timer.clearTimeout('pinTooltip');
         if (this.pinnedMap.size() == 0) return;
         var pinnedList = document.getElementById('NDR_PINNED_LIST');
         if (pinnedList.style.display == 'block') return;
@@ -3518,11 +3938,7 @@
                     self.hidePinnedListLater(0);
                     self.pinRemove(item.url);
                     self.player.add([item.url]);
-                    var items = document.evaluate('/\/div[contains(@class, "ndr_entry_pin") and descendant::a[position()=1 and @href="' + escAttr(item.url) + '"]]', document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
-                    var pinnedEntries = [];
-                    for (var i = 0, len = items.snapshotLength; i < len; i++) {
-                        pinnedEntries.push(items.snapshotItem(i));
-                    }
+                    var items = evaluate('/\/div[contains(@class, "ndr_entry_pin") and descendant::a[position()=1 and @href="' + escAttr(item.url) + '"]]', content);
                     for (var i = 0, len = pinnedEntries.length; i < len; i++) {
                         removeClass(pinnedEntries[i], 'ndr_entry_pin');
                     }
@@ -3541,10 +3957,8 @@
         pinnedList.style.display = 'block';
     };
     NDR.prototype.hidePinnedListLater = function(time) {
-        if (this.pinTooltipTid) clearTimeout(this.pinTooltipTid);
         var self = this;
-        this.pinTooltipTid = setTimeout(function() { 
-            self.pinTooltipTid = null;
+        this.timer.setTimeout('pinTooltip', function() { 
             var pinnedList = document.getElementById('NDR_PINNED_LIST');
             pinnedList.style.display = '';
         }, (time == 0) ? 0 : time || 1000);
