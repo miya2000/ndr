@@ -2390,15 +2390,23 @@
         return resultFeedObj;
     };
     NDR.prototype.scrollDown = function() {
-        if (this.scrollSoar != null) {
-            this.scrollSoar.cancel();
-        }
         var list = document.getElementById('NDR_ENTRIES');
         var scrollTop = list.scrollTop;
         var clientHeight = list.clientHeight;
-        var nextScrollTop = Math.min(scrollTop + clientHeight / 2, list.scrollHeight - clientHeight);
-        if (scrollTop == nextScrollTop) return;
+        var scrollEdge = list.scrollHeight - clientHeight;
+        if (scrollTop == scrollEdge) return;
+        if (this.scrollSoar) {
+            if (this.scrollSoar.nextScrollTop == scrollEdge) return;
+            this.scrollSoar.cancel();
+        }
+        var scrollTopEx = scrollTop;
+        if (this.scrollSoar && this.scrollSoar.direction == 'Down') {
+            scrollTopEx = this.scrollSoar.nextScrollTop;
+        }
+        var nextScrollTop = Math.min(Math.ceil(scrollTopEx + clientHeight / 2), scrollEdge);
         this.scrollSoar = new Soar(list);
+        this.scrollSoar.nextScrollTop = nextScrollTop;
+        this.scrollSoar.direction = 'Down';
         this.scrollSoar.to({scrollTop: nextScrollTop}).go();
         var self = this;
         this.scrollSoar.onFinish = function() {
@@ -2406,15 +2414,22 @@
         };
     };
     NDR.prototype.scrollUp = function() {
-        if (this.scrollSoar != null) {
-            this.scrollSoar.cancel();
-        }
         var list = document.getElementById('NDR_ENTRIES');
         var scrollTop = list.scrollTop;
-        if (scrollTop == 0) return;
         var clientHeight = list.clientHeight;
-        var nextScrollTop = Math.max(scrollTop - clientHeight / 2, 0);
+        if (scrollTop == 0) return;
+        if (this.scrollSoar != null) {
+            if (this.scrollSoar.nextScrollTop == 0) return;
+            this.scrollSoar.cancel();
+        }
+        var scrollTopEx = scrollTop;
+        if (this.scrollSoar && this.scrollSoar.direction == 'Up') {
+            scrollTopEx = this.scrollSoar.nextScrollTop;
+        }
+        var nextScrollTop = Math.max(scrollTopEx - clientHeight / 2, 0);
         this.scrollSoar = new Soar(list);
+        this.scrollSoar.nextScrollTop = nextScrollTop;
+        this.scrollSoar.direction = 'Up';
         this.scrollSoar.to({scrollTop: nextScrollTop}).go();
         var self = this;
         this.scrollSoar.onFinish = function() {
