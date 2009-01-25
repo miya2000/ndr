@@ -2007,13 +2007,13 @@
         }
         keyBind.add(key, function(e) { self.doCommand(commandName, e); });
     };
-    Platform.prototype.setMode = function(mode) {
+    Platform.prototype.changeMode = function(mode) {
         if (this.currentKeyBind) this.currentKeyBind.stop();
         this.currentKeyBind = this.keyBinds[mode || ''];
         if (this.currentKeyBind) this.currentKeyBind.start();
     };
     Platform.prototype.clearMode = function(mode) {
-        this.setMode(null);
+        this.changeMode(null);
     };
     
     function NDR(preferences) {
@@ -3398,7 +3398,7 @@
         return scrollTop > (scrollHeight - clientHeight - clientHeight*2);
     };
     NDR.prototype.blockUI = function(content) { // (ref:jQuery blockUI plugin)
-        this.platform.setMode('blockUI');
+        this.platform.changeMode('blockUI');
         
         // if already blocking, replace content and return;
         if (this.uiBlocker) {
@@ -3481,12 +3481,13 @@
         window.addEventListener('keypress', uiBlocker.handler, false);
     };
     NDR.prototype.unblockUI = function() {
+        this.platform.clearMode();
         var uiBlocker = this.uiBlocker;
         if (!uiBlocker) return;
         window.removeEventListener('keypress', uiBlocker.handler, false);
         uiBlocker.background.parentNode.removeChild(uiBlocker.background);
         if (uiBlocker.content) uiBlocker.content.parentNode.removeChild(uiBlocker.content);
-        if (uiBlocker.preActive) this.timer.setTimeout('focus', function(){ uiBlocker.preActive.focus() }, 0);
+        //if (uiBlocker.preActive) this.timer.setTimeout('focus', function(){ uiBlocker.preActive.focus() }, 0);
         delete this.uiBlocker;
     };
     NDR.prototype.hasSubscribed = function(url) {
