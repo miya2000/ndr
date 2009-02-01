@@ -56,14 +56,81 @@
     var NDR_STORAGE_SWF = 'http://miya2000.up.seesaa.net/storage/ndr.swf';
     
     // ==== resource ==== //
-    var lang = {
-        HAS_SUBSCRIBED : '\u65E2\u306B\u8CFC\u8AAD\u3057\u3066\u3044\u307E\u3059\u3002'
+    NDR.lang = {
+        HAS_SUBSCRIBED : '\u65E2\u306B\u8CFC\u8AAD\u3057\u3066\u3044\u307E\u3059\u3002',
+        GET_TITLE_FROM_FEED : '\u30D5\u30A3\u30FC\u30C9\u304B\u3089\u540D\u524D\u3092\u53D6\u5F97',
+        IMPORT_OPML : 'OPML\u3092\u30A4\u30F3\u30DD\u30FC\u30C8',
+        EXPORT_OPML : 'OPML\u306B\u30A8\u30AF\u30B9\u30DD\u30FC\u30C8',
+        PASTE_OPML : 'OPML\u3092\u8CBC\u308A\u4ED8\u3051\u3066\u304F\u3060\u3055\u3044',
+        IMPORT : '\u30A4\u30F3\u30DD\u30FC\u30C8',
+        CANCEL : '\u30AD\u30E3\u30F3\u30BB\u30EB',
+        INPUT_FEED_URL : '\u8CFC\u8AAD\u3059\u308B\u30DA\u30FC\u30B8\uFF08\u307E\u305F\u306F\u30D5\u30A3\u30FC\u30C9\uFF09\u306EURL\u3092\u5165\u529B\u3057\u3066\u304F\u3060\u3055\u3044\u3002',
+        INPUT_HTTP_URL : 'http\u0020\u304B\u3089\u59CB\u307E\u308B\u0020URL\u0020\u3092\u5165\u529B\u3057\u3066\u304F\u3060\u3055\u3044\u3002',
+        SKIP_AUTO_DISCOVERY : 'RSS\u30D5\u30A3\u30FC\u30C9\u3092\u63A2\u3055\u305A\u306B\u3053\u306EURL\u3092\u8CFC\u8AAD\u3059\u308B',
+        SUBSCRIBE : '\u8CFC\u8AAD\u3059\u308B',
+        LOADING : '\u8AAD\u307F\u8FBC\u307F\u4E2D',
+        TIMEOUT : '\u63A5\u7D9A\u304C\u30BF\u30A4\u30E0\u30A2\u30A6\u30C8\u3057\u307E\u3057\u305F\u3002',
+        ABORTED_CONNECTION : '\u901A\u4FE1\u3092\u4E2D\u65AD\u3057\u307E\u3057\u305F\u3002',
+        MISSING_DATA: '\u6307\u5B9A\u3055\u308C\u305FURL\u304B\u3089\u60C5\u5831\u3092\u53D6\u5F97\u3067\u304D\u307E\u305B\u3093\u3067\u3057\u305F\u3002',
+        CONFIRM_SUBSCRIBE_PAGE_AS_FEED : 'RSS\u30D5\u30A3\u30FC\u30C9\u304C\u898B\u3064\u304B\u308A\u307E\u305B\u3093\u3067\u3057\u305F\u3002\u3053\u306E\u30DA\u30FC\u30B8\u3092\u30D5\u30A3\u30FC\u30C9\u3068\u3057\u3066\u8CFC\u8AAD\u3057\u307E\u3059\u304B\uFF1F',
+        FAIL_TO_LOAD_FEED : '\u30D5\u30A3\u30FC\u30C9\u306E\u8AAD\u307F\u8FBC\u307F\u306B\u5931\u6557\u3057\u307E\u3057\u305F\u3002',
+        FAIL_TO_LOAD_THUMBNAIL_INFO : '\u52D5\u753B\u60C5\u5831\u306E\u53D6\u5F97\u306B\u5931\u6557\u3057\u307E\u3057\u305F\u3002',
+        UNAVAILABLE_FOR_MISSING_STORAGE : '\u30B9\u30C8\u30EC\u30FC\u30B8\u304C\u8AAD\u307F\u8FBC\u307E\u308C\u3066\u3044\u306A\u3044\u305F\u3081\u3001\u5229\u7528\u3067\u304D\u307E\u305B\u3093\u3002',
+        EDIT_FEED_INFO : '\u30A2\u30A4\u30C6\u30E0\u306E\u7DE8\u96C6',
+        SAVE : '\u4FDD\u5B58\u3059\u308B',
+        PLAY_COUNT : '\u518D\u751F',
+        COMMENT : '\u30B3\u30E1\u30F3\u30C8',
+        MYLIST : '\u30DE\u30A4\u30EA\u30B9\u30C8',
+        POSTED : '\u6295\u7A3F',
+        TAG : '\u30BF\u30B0',
+        REGISTER : '\u767B\u9332',
+        XML_PARSER_ERROR : 'XML\u306E\u89E3\u6790\u306B\u5931\u6557\u3057\u307E\u3057\u305F\u3002',
+        RSS_NOT_FOUND : 'RSS\u30D5\u30A3\u30FC\u30C9\u304C\u898B\u3064\u304B\u308A\u307E\u305B\u3093\u3067\u3057\u305F\u3002',
+        DO_DELETE : '\u524A\u9664\u3059\u308B',
+        TITLE : '\u30BF\u30A4\u30C8\u30EB',
+        ADDRESS : '\u30A2\u30C9\u30EC\u30B9',
+        SORT_ORDER : '\u4E26\u3073\u9806',
+        ORDER_NONE : '\u30A8\u30F3\u30C8\u30EA\u30FC\u9806\uFF08\u30C7\u30D5\u30A9\u30EB\u30C8\uFF09',
+        ORDER_ENTRY_DATE : '\u30A8\u30F3\u30C8\u30EA\u30FC\u306E\u65E5\u4ED8\u9806',
+        ORDER_UPLOAD_DATE : '\u30A2\u30C3\u30D7\u30ED\u30FC\u30C9\u9806\uFF08\u30CB\u30B3\u30CB\u30B3\u52D5\u753B\u306ERSS\u3067\u306E\u307F\u6709\u52B9\u3067\u3059\uFF09',
+        THUMBNAIL_INFO : '\u30B5\u30E0\u30CD\u30A4\u30EB\u60C5\u5831',
+        THUMB_ALWAYS : '\u5E38\u306B\u53D6\u5F97\u3059\u308B',
+        THUMB_NECESSARY : '\u8AAC\u660E\u6587\u304C\u7121\u3044\u3068\u304D\u3060\u3051\u53D6\u5F97\u3059\u308B\uFF08\u30C7\u30D5\u30A9\u30EB\u30C8\uFF09',
+        THUMB_NEVER : '\u53D6\u5F97\u3057\u306A\u3044',
+        RELOAD : '\u66F4\u65B0',
+        EDIT : '\u7DE8\u96C6',
+        ADD_MYLIST : '\u30DE\u30A4\u30EA\u30B9\u30C8\u306B\u8FFD\u52A0',
+        PIN_TOGGLE : '\u30D4\u30F3\u3092\u7ACB\u3066\u308B\uFF0F\u5916\u3059',
+        MARK_AS_READ : '\u65E2\u8AAD\u306B\u3059\u308B',
+        NEW_ARRIVAL : '\u65B0\u7740',
+        TOTAL : '\u5408\u8A08',
+        RECENT_VIDEOS : '\u6700\u8FD1\u898B\u305F\u52D5\u753B',
+        NO_HISTORY : '\u5C65\u6B74\u306F\u3042\u308A\u307E\u305B\u3093\u3002',
+        NO_UNREAD_ITEMS : '\u672A\u8996\u8074\u306E\u52D5\u753B\u306F\u3042\u308A\u307E\u305B\u3093\u3002',
+        RANDOM_PICKOUT_FROM_FEEDS : '\u8CFC\u8AAD\u3057\u3066\u3044\u308B\u30D5\u30A3\u30FC\u30C9\u304B\u3089\u30E9\u30F3\u30C0\u30E0\u306B\u62BD\u51FA\u3057\u3066\u3044\u307E\u3059\u3002',
+        DELETE_MARK : '\u00D7',
+        ENTRY_SEARCH_RESULT : '\u30A8\u30F3\u30C8\u30EA\u30FC\u691C\u7D22\u7D50\u679C',
+        COMMAND_NEXT_ENTRY : '\u6B21\u306E\u30A2\u30A4\u30C6\u30E0',
+        COMMAND_PREV_ENTRY : '\u524D\u306E\u30A2\u30A4\u30C6\u30E0',
+        COMMAND_OLDER_ENTRIES : '\u65E2\u306B\u898B\u305F\u52D5\u753B\u3092\u8868\u793A',
+        COMMAND_NEWER_ENTRIES : '\u307E\u3060\u898B\u3066\u306A\u3044\u52D5\u753B\u3092\u8868\u793A',
+        COMMAND_NEXT_FEED : '\u6B21\u306E\u30D5\u30A3\u30FC\u30C9\u306B\u79FB\u52D5',
+        COMMAND_PREV_FEED : '\u524D\u306E\u30D5\u30A3\u30FC\u30C9\u306B\u79FB\u52D5',
+        COMMAND_SCROLL_DOWN : '\u4E0B\u306B\u30B9\u30AF\u30ED\u30FC\u30EB',
+        COMMAND_SCROLL_UP : '\u4E0A\u306B\u30B9\u30AF\u30ED\u30FC\u30EB',
+        COMMAND_VIEW : '\u52D5\u753B\u3092\u518D\u751F',
+        COMMAND_PIN_TOGGLE : '\u30D4\u30F3\u3092\u4ED8\u3051\u308B\u0020/\u0020\u5916\u3059',
+        COMMAND_OPEN_PIN : '\u30D4\u30F3\u3092\u958B\u304F',
+        COMMAND_REFRESH_FEED_LIST : '\u30D5\u30A3\u30FC\u30C9\u4E00\u89A7\u306E\u66F4\u65B0',
+        COMMAND_FOCUS_SEARCH : '\u691C\u7D22\u30DC\u30C3\u30AF\u30B9\u3092\u30D5\u30A9\u30FC\u30AB\u30B9',
+        COMMAND_TOGGLE_FEED_PANE : '\u30DE\u30A4\u30D5\u30A3\u30FC\u30C9\u3092\u7573\u3080\u0020/\u0020\u623B\u3059',
+        COMMAND_TOGGLE_COMPACT_MODE : '\u672C\u6587\u306E\u8868\u793A\u0020/\u0020\u975E\u8868\u793A',
     };
     
     // ==== main ==== //
     var opera9_5Ab = (window.opera && parseFloat(opera.version()) >= 9.5);
-    var NDR_HTML = [
-        NDR.PREFERENCES.ENABLE_STORAGE ? '<embed id="NDR_STORAGE" type="application/x-shockwave-flash" src="' + NDR_STORAGE_SWF + '" width="1" height="1" allowScriptAccess="always">' : '',
+    NDR.html = function(pref) { return [
+        pref.enableStorage ? '<embed id="NDR_STORAGE" type="application/x-shockwave-flash" src="' + NDR_STORAGE_SWF + '" width="1" height="1" allowScriptAccess="always">' : '',
         '<h1 class="ndr_title"><a href="http://www.nicovideo.jp/" target="_blank"><img src="/favicon.ico" width="16" height="16"></a><a href="' + location.href + '" onclick="javascript:void(location.reload())">niconico douga Reader</a></h1>',
         '<div class="ndr_status"><img id="NDR_STATUS_IMAGE" width="20" height="20" src="' + NDR_IMG_LOADING + '">&lt; <span id="NDR_STATUS_MESSAGE">Welcome.</span></div>',
         '<form id="NDR_NICO_SEARCH" class="ndr_search_form" action="/search" method="get" target="ndr_search_result">',
@@ -90,8 +157,8 @@
         '    <div class="ndr_feed_pane" id="NDR_FEED_PANE">',
         '        <ul class="ndr_feed_menu" id="NDR_FEED_MENU">',
         '            <li class="ndr_feed_reload"><button class="ndr_control" id="NDR_C_FEED_RELOAD">\u66F4\u65B0</button></li>',
-        NDR.PREFERENCES.ENABLE_STORAGE ? '            <li class="ndr_feed_edit"><button class="ndr_control" id="NDR_C_FEED_EDIT">\u7DE8\u96C6</button></li>' : '',
-        NDR.PREFERENCES.ENABLE_STORAGE ? '            <li class="ndr_feed_add"><button class="ndr_control" id="NDR_C_FEED_ADD">\u8FFD\u52A0</button></li>' : '',
+        pref.enableStorage ? '            <li class="ndr_feed_edit"><button class="ndr_control" id="NDR_C_FEED_EDIT">\u7DE8\u96C6</button></li>' : '',
+        '            <li class="ndr_feed_add"><button class="ndr_control" id="NDR_C_FEED_ADD">\u8FFD\u52A0</button></li>',
         '            <li class="ndr_feed_search"><input type="text" id="NDR_C_FEED_SEARCH" autocomplete="off"></li>',
         '        </ul>',
         '        <div class="ndr_feed_lists" id="NDR_FEED_LISTS">',
@@ -99,13 +166,13 @@
         '            <ul class="ndr_feed_list ndr_temporary_feed_list" id="NDR_TEMPORARY_FEED_LIST"></ul>',
         '        </div>',
         '    </div>',
-        '    <div class="ndr_entry_pane">',
+        '    <div class="ndr_entry_pane">' ,
         '        <div class="ndr_entries" id="NDR_ENTRIES"></div>',
         '    </div>',
-        '</div>',
-    ].join('\n');
-    
-    var NDR_STYLE = [
+        '</div>'
+        ].join('\n');
+    };
+    NDR.style = function(pref) { return [
         'body { width: 99%; min-width: 580px; overflow: hidden; background-image: none; } ',
         'a, a:hover, a:active { color: inherit; text-decoration: underline; } ',
         'h1 a { text-decoration: none !important; } ',
@@ -369,7 +436,7 @@
         '    height: 100%; ',
         '    overflow: auto; ',
         '    position: relative; ',
-        opera9_5Ab ? 'overflow-y: scroll; ' : '',
+        '    overflow-y: scroll; ',
         '} ',
         '.ndr_entries h2.ndr_title {',
         '    font-weight: normal; ',
@@ -411,7 +478,7 @@
         '    height: 20px; ',
         '    text-align: right; ',
         '} ',
-        'button.ndr_reload_button {',
+        '.ndr_page_button button {',
         '    position: static; ',
         '    height: 20px; ',
         '    font-size: 12px; ',
@@ -445,9 +512,9 @@
         '    padding: 3px 10px 5px; ',
         '} ',
         '.ndr_entry_even {',
-        '    background-color: #F5F5F5; ', opera9_5Ab ? 'background-color: transparent; ' : '',
+        '    background-color: #F5F5F5; ', opera9_5Ab ? '    background-color: transparent; ' : '',
         '} ',
-        opera9_5Ab ? '.ndr_entry:nth-child(even) { background-color: #F5F5F5; } ' : '',
+        '.ndr_entry:nth-child(even) { background-color: #F5F5F5; } ',
         '.ndr_mylist_pane {',
         '    box-sizing: border-box;',
         '    background-color: white;',
@@ -492,14 +559,18 @@
         '.ndr_entry h4 a:visited {',
         '    color: #595959; ',
         '} ',
-        'p.ndr_entry_thumbnail {',
+        '.ndr_entry_thumbnail {',
         '    width: 100%; ',
-        '    overflow: auto; ',
         '} ',
-        'img.ndr_entry_thumbnail {',
+        '.ndr_entry_thumbnail img.ndr_thumbnail_img {',
         '    border: #333333 solid 1px; ',
         '    float: left; ',
         '    margin: 0 10px 10px 0; ',
+        '} ',
+        '.ndr_entry_thumbnail:after {',
+        '    content: ""; ',
+        '    display: block; ',
+        '    clear: both; ',
         '} ',
         '.ndr_entry_footer {',
         '    color: #747474; ',
@@ -530,7 +601,7 @@
         '    display: none !important; ',
         '} ',
         '.ndr_entry_controls {',
-        '    position: absolute; ', opera9_5Ab ? 'position: static; float: right; ' : '', // Booooooooo!!!
+        '    position: absolute; ', opera9_5Ab ? '    position: static; float: right; ' : '',
         '    right: 30px; ',
         '    width: 100px; ',
         '    text-align: right; ',
@@ -566,6 +637,9 @@
         '} ',
         '.ndr_feed_edit_controls {',
         '    margin-top: 5px; ',
+        '} ',
+        '.ndr_feed_edit_controls button {',
+        '    margin-right: 10px; ',
         '} ',
         'ul.ndr_feed_edit_list {',
         '    list-style-type: none; ',
@@ -613,7 +687,7 @@
         '.ndr_emphasis_phrase_02 { background-color: #99FF99; } ',
         '.ndr_emphasis_phrase_03 { background-color: #FF9999; } ',
         '.ndr_emphasis_phrase_04 { background-color: #FF66FF; } ',
-        '.ndr_feed_input_pane {',
+        '.ndr_input_pane {',
         '    color: white; ',
         '    background-color: #202020; ',
         '    width: 400px; ',
@@ -621,17 +695,18 @@
         '    font-size: 12px; ',
         '    box-sizing: border-box; ',
         '} ',
-        '.ndr_feed_input_pane form {',
+        '.ndr_input_pane form {',
         '    margin: 0; ',
         '    padding: 0; ',
         '} ',
-        '.ndr_feed_input_pane .ndr_feed_url {',
+        '.ndr_input_pane .ndr_feed_url {',
         '    width: 364px; ',
         '    margin: auto; ',
         '} ',
-        '.ndr_feed_input_pane p {',
-        '    line-height: 2.2; ',
+        '.ndr_input_pane p {',
+        '    line-height: 1.2; ',
         '    border-width: 0; ',
+        '    margin: 5px 0; ',
         '} ',
         '.ndr_feed_input_import {',
         '    float: left; ',
@@ -642,18 +717,24 @@
         '.ndr_feed_input_submit input {',
         '    margin-left: .2em; ',
         '} ',
-        '.ndr_feed_input_pane .ndr_message {',
+        '.ndr_input_pane .ndr_message {',
         '    color: red; ',
         '    font-size: smaller; ',
-        '    margin-top: -3px; ',
+        '    margin: -3px 0 0; ',
         '    line-height: 1; ',
         '    height: 1.5em; ',
         '} ',
-        '.ndr_feed_input_pane.ndr_feed_editor {',
+        '.ndr_input_pane.ndr_feed_editor {',
         '    width: 600px; ',
         '} ',
-    ].join('\n');
-
+        '.ndr_input_pane.ndr_opml_editor {',
+        '    width: 600px; ',
+        '} ',
+        '.ndr_opml_editor .ndr_opml_text {',
+        '    width: 564px; ',
+        '} ',
+        ].join('\n');
+    };
     var NDR_EMPHASIS_CLASSES = [
         'ndr_emphasis_phrase_00',
         'ndr_emphasis_phrase_01',
@@ -661,7 +742,6 @@
         'ndr_emphasis_phrase_03',
         'ndr_emphasis_phrase_04'
     ];
-    
     var NDR_STYLE_HIDE_FEED_PANE = [
         '.ndr_feed_pane {',
         '    display: none; ',
@@ -1390,6 +1470,7 @@
         this.cache = {};
         this.requestPool = new RequestPool(1);
         this.requestPool.timeout = 2000;
+        this.tagExp = new XPathEvaluator().createExpression('//tags[@domain="jp"]/tag', null);
     };
     ThumbnailInfo.Instance.prototype = {
         getThumbnailInfo : function(uri, callback) {
@@ -1430,11 +1511,11 @@
                             mylist  : Number(thumb_doc.getElementsByTagName('mylist_counter')[0].textContent),
                             tags  : (function(t) {
                                     var tags = [];
-                                    for (var i = 0; i < t.length; i++) {
-                                        tags.push(t[i].textContent);
+                                    for (var i = 0, len = t.snapshotLength; i < len; i++) {
+                                        tags.push(t.snapshotItem(i).text);
                                     }
                                     return tags;
-                                })(thumb_doc.getElementsByTagName('tag'))
+                                })(self.tagExp.evaluate(thumb_doc, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null))
                         };
                     }
                     else {
@@ -1898,6 +1979,30 @@
         return /^(?:rss|rdf:RDF|feed)$/.test(document.documentElement.nodeName);
     }
     
+    // class OPMLProcessor.
+    function OPMLProcessor() {
+    }
+    OPMLProcessor.prototype.toObject = function(document) {
+        var opmlObj = {
+            version : document.documentElement.getAttribute('version'),
+            title : (document.getElementsByTagName('title')[0] || {}).text,
+            outline : []
+        };
+        // not support folder.
+        var outlines = document.evaluate('//outline[@type="rss"]', document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+        for (var i = 0, len = outlines.snapshotLength; i < len; i++) {
+            var ol = outlines.snapshotItem(i);
+            var olObj = {
+                text  : ol.getAttribute('text'),
+                title : ol.getAttribute('title'),
+                xmlUrl  : ol.getAttribute('xmlUrl'),
+                htmlUrl : ol.getAttribute('htmlUrl')
+            };
+            opmlObj.outline.push(olObj);
+        }
+        return opmlObj;
+    };
+    
     /**
      * VisitUtil
      */
@@ -2039,16 +2144,26 @@
         this.clearFeedItems();
         this.importFeedList(p.FEED_LIST || []);
         // loadPreference delay for Opera9.
-        var self = this;
-        setTimeout(function() { self.loadPreference() }, 0);
+        if (this.pref.enableStorage) {
+            var self = this;
+            setTimeout(function() { self.loadPreference() }, 0);
+        }
+        // no feed.
+        if (this.pref.feedList.length == 0 && !this.pref.enableStorage) {
+            this.setStatus('complete', 'Welcome.');
+        }
     }
     NDR.prototype.build = function() {
-        addStyle(NDR_STYLE);
+        addStyle(NDR.style(this.pref));
         var body = document.getElementsByTagName('body')[0];
         var ndrBody = document.createElement('div');
         appendClass(ndrBody, 'ndr_body');
-        ndrBody.innerHTML = NDR_HTML;
+        ndrBody.innerHTML = NDR.html(this.pref);
         body.appendChild(ndrBody);
+        
+        // save memory?
+        delete NDR.html;
+        delete NDR.style;
         
         var feed_pane = document.getElementById('NDR_FEED_PANE');
         var feed_menu = document.getElementById('NDR_FEED_MENU');
@@ -2074,7 +2189,7 @@
             }
             else {
                 e.preventDefault();
-                self.openTemporaryFeed('http://www.nicovideo.jp/search/' + nicoSearchForm.s.value);
+                self.openTemporaryFeed('http://www.nicovideo.jp/search/' + nicoSearchForm.s.value.replace(/\s+/g, '+'));
                 setTimeout(function() { nicoSearchForm.s.value = '' }, 0);
             }
         }, false);
@@ -2190,21 +2305,21 @@
         
         var platform = new Platform();
         // bind commands.
-        platform.bindCommand({ name: 'NextEntry', fn: function() { self.selectNextEntry() }, desc: '\u6B21\u306E\u30A2\u30A4\u30C6\u30E0'});
-        platform.bindCommand({ name: 'PrevEntry', fn: function() { self.selectPreviousEntry() }, desc: '\u524D\u306E\u30A2\u30A4\u30C6\u30E0'});
-        platform.bindCommand({ name: 'OlderEntries', fn: function() { self.openOlderEntries() }, desc: '\u65E2\u306B\u898B\u305F\u52D5\u753B\u3092\u8868\u793A'});
-        platform.bindCommand({ name: 'NewerEntries', fn: function() { self.openNewerEntries() }, desc: '\u307E\u3060\u898B\u3066\u306A\u3044\u52D5\u753B\u3092\u8868\u793A'});
-        platform.bindCommand({ name: 'NextFeed', fn: function() { self.selectNextFeed() }, desc: '\u6B21\u306E\u30D5\u30A3\u30FC\u30C9\u306B\u79FB\u52D5'});
-        platform.bindCommand({ name: 'PrevFeed', fn: function() { self.selectPreviousFeed() }, desc: '\u524D\u306E\u30D5\u30A3\u30FC\u30C9\u306B\u79FB\u52D5'});
-        platform.bindCommand({ name: 'ScrollDown', fn: function() { self.scrollDown() }, desc: '\u4E0B\u306B\u30B9\u30AF\u30ED\u30FC\u30EB'});
-        platform.bindCommand({ name: 'ScrollUp', fn: function() { self.scrollUp() }, desc: '\u4E0A\u306B\u30B9\u30AF\u30ED\u30FC\u30EB'});
-        platform.bindCommand({ name: 'View', fn: function() { self.viewEntry() }, desc: '\u52D5\u753B\u3092\u518D\u751F'});
-        platform.bindCommand({ name: 'Pin', fn: function() { self.pinToggle() }, desc: '\u30D4\u30F3\u3092\u4ED8\u3051\u308B\u0020/\u0020\u5916\u3059'});
-        platform.bindCommand({ name: 'OpenPin', fn: function() { self.viewPinnedEntries() }, desc: '\u30D4\u30F3\u3092\u958B\u304F'});
-        platform.bindCommand({ name: 'RefreshFeedList', fn: function() { self.refreshFeedList() }, desc: '\u30D5\u30A3\u30FC\u30C9\u4E00\u89A7\u306E\u66F4\u65B0'});
-        platform.bindCommand({ name: 'FocusSearch', fn: function() { self.focusSearch() }, desc: '\u691C\u7D22\u30DC\u30C3\u30AF\u30B9\u3092\u30D5\u30A9\u30FC\u30AB\u30B9'});
-        platform.bindCommand({ name: 'ToggleFeedPane', fn: function() { self.toggleFeedPane() }, desc: '\u30DE\u30A4\u30D5\u30A3\u30FC\u30C9\u3092\u7573\u3080\u0020/\u0020\u623B\u3059'});
-        platform.bindCommand({ name: 'ToggleCompactMode', fn: function() { self.toggleCompactMode() }, desc: '\u672C\u6587\u306E\u8868\u793A\u0020/\u0020\u975E\u8868\u793A'});
+        platform.bindCommand({ name: 'NextEntry', fn: function() { self.selectNextEntry() }, desc: NDR.lang.COMMAND_NEXT_ENTRY });
+        platform.bindCommand({ name: 'PrevEntry', fn: function() { self.selectPreviousEntry() }, desc: NDR.lang.COMMAND_PREV_ENTRY });
+        platform.bindCommand({ name: 'OlderEntries', fn: function() { self.openOlderEntries() }, desc: NDR.lang.COMMAND_OLDER_ENTRIES });
+        platform.bindCommand({ name: 'NewerEntries', fn: function() { self.openNewerEntries() }, desc: NDR.lang.COMMAND_NEWER_ENTRIES });
+        platform.bindCommand({ name: 'NextFeed', fn: function() { self.selectNextFeed() }, desc: NDR.lang.COMMAND_NEXT_FEED });
+        platform.bindCommand({ name: 'PrevFeed', fn: function() { self.selectPreviousFeed() }, desc: NDR.lang.COMMAND_PREV_FEED });
+        platform.bindCommand({ name: 'ScrollDown', fn: function() { self.scrollDown() }, desc: NDR.lang.COMMAND_SCROLL_DOWN });
+        platform.bindCommand({ name: 'ScrollUp', fn: function() { self.scrollUp() }, desc: NDR.lang.COMMAND_SCROLL_UP });
+        platform.bindCommand({ name: 'View', fn: function() { self.viewEntry() }, desc: NDR.lang.COMMAND_VIEW });
+        platform.bindCommand({ name: 'Pin', fn: function() { self.pinToggle() }, desc: NDR.lang.COMMAND_PIN_TOGGLE });
+        platform.bindCommand({ name: 'OpenPin', fn: function() { self.viewPinnedEntries() }, desc: NDR.lang.COMMAND_OPEN_PIN });
+        platform.bindCommand({ name: 'RefreshFeedList', fn: function() { self.refreshFeedList() }, desc: NDR.lang.COMMAND_REFRESH_FEED_LIST });
+        platform.bindCommand({ name: 'FocusSearch', fn: function() { self.focusSearch() }, desc: NDR.lang.COMMAND_FOCUS_SEARCH });
+        platform.bindCommand({ name: 'ToggleFeedPane', fn: function() { self.toggleFeedPane() }, desc: NDR.lang.COMMAND_TOGGLE_FEED_PANE });
+        platform.bindCommand({ name: 'ToggleCompactMode', fn: function() { self.toggleCompactMode() }, desc: NDR.lang.COMMAND_TOGGLE_COMPACT_MODE });
         this.platform = platform;
         
         var entries = document.getElementById('NDR_ENTRIES');
@@ -2244,9 +2359,9 @@
         }
     };
     NDR.prototype.makeNicoLinks = (function() {
-        var makeNicoReg = /(https?:\/\/[-_.!~*()a-zA-Z0-9;\/?:@&=+$,%#]+)|([a-z]{2}\d+)|(mylist\/\d+)|(^|\D)(\d{10})(?!\d)/mg;
+        var makeNicoReg = /(https?:\/\/[-_.!~*()a-zA-Z0-9;\/?:@&=+$,%#]+)|([a-z]{2}\d+)|(mylist\/\d+)|(^|\D)(\d{10})(?!\d)|(user\/\d+)/mg;
         return function(str) {
-            return str.replace(makeNicoReg, function(str, $1, $2, $3, $4, $5){
+            return str.replace(makeNicoReg, function(str, $1, $2, $3, $4, $5, $6) {
                 if ($1 != null) return ' <a href="' + $1 + '" target="_blank" rel="nofollow">' + $1 + '</a> ';
                 if ($2 != null) {
                     if ($2 == 'mp3') return $2;
@@ -2256,6 +2371,7 @@
                 }
                 if ($3 != null) return ' <a href="http://www.nicovideo.jp/' + $3 + '" target="_blank" rel="nofollow">'+ $3 + '</a> (<a rel="nofollow" class="ndr_subscribe" title="ndr\u0020\u3067\u3053\u306E\u30DE\u30A4\u30EA\u30B9\u30C8\u306E\u0020RSS\u0020\u3092\u8CFC\u8AAD\u3057\u307E\u3059\u3002">\u8CFC\u8AAD</a>) ';
                 if ($5 != null) return $4 + ' <a href="http://www.nicovideo.jp/watch/' + $5 + '" target="_blank" rel="nofollow">'+ $5 + '</a> ';
+                if ($6 != null) return ' <a href="http://www.nicovideo.jp/' + $6 + '" target="_blank" rel="nofollow">'+ $6 + '</a> ';
             });
         }
     })();
@@ -2352,7 +2468,7 @@
             return;
         }
         var resultFeedObj = {
-            title : '\u30A8\u30F3\u30C8\u30EA\u30FC\u691C\u7D22\u7D50\u679C',
+            title : NDR.lang.ENTRY_SEARCH_RESULT,
             description: '',
             option : {
                 emphases: unique(phrase.split(/[ |]/))
@@ -2549,8 +2665,10 @@
             this.currenFeedItem.style.backgroundColor = '';
         }
         this.currenFeedItem = element;
-        this.currenFeedItem.style.color = 'white';
-        this.currenFeedItem.style.backgroundColor = '#80A0DF';
+        if (this.currenFeedItem) {
+            this.currenFeedItem.style.color = 'white';
+            this.currenFeedItem.style.backgroundColor = '#80A0DF';
+        }
     };
     NDR.prototype.selectNextFeed = function() {
         var current = this.feedSelectionIterator.item;
@@ -2579,6 +2697,7 @@
         this.openFeedItemFromElement(this.feedSelectionIterator.item);
     };
     NDR.prototype.scrollToFeedItemElement = function(element) {
+        if (!element) return;
         var container = document.getElementById('NDR_FEED_LISTS');
         container.scrollTop = Math.min(element.offsetTop - 30, container.scrollHeight - container.clientHeight);
     };
@@ -2607,19 +2726,27 @@
             statusMsg.textContent = message;
         }
     };
-    NDR.prototype.importFeedList = function(feedList) {
+    NDR.prototype.importFeedList = function(feedList, overwrite) {
         for (var i = 0; i < feedList.length; i++) {
             var item = feedList[i]; // deadly.
             if (typeof item == 'string') {
                 item = { url: item };
             }
             var url = item.url;
-            if (this.pref.feedList.indexOf(url) < 0) {
-                this.pref.feedList.push(url);
-                this.loadFeed(url);
+            if (this.pref.enableStorage) {
+                if (this.pref.feedList.indexOf(url) < 0) {
+                    this.pref.feedList.push(url);
+                    this.pref.feedInfo[url] = item;
+                    this.loadFeed(url);
+                }
+                delete item.url; // save memory.
+                if (overwrite) {
+                    this.pref.feedInfo[url] = item;
+                }
             }
-            delete item.url; // save memory.
-            this.pref.feedInfo[url] = item; // overwrite if exists.
+            else {
+                this.loadTemporaryFeed(url);
+            }
         }
     };
     NDR.prototype.importPreference = function(pref) {
@@ -2686,54 +2813,52 @@
         this.setStatus('loading');
         feedRequest(url, function(feedObj) {
             self.processFeedObj(feedObj);
-            if (feedObj.status == 'ok') {
-                // if not stored, store this feed.
-                var list = self.pref.feedList;
-                if (list.indexOf(url) < 0) {
-                    self.pref.feedList.push(url);
-                    self.pref.feedInfo[url] = { title: feedObj.title };
-                    self.storePreference();
-                }
-            }
-            else {
+            if (feedObj.status != 'ok') {
                 var feedInfo = self.pref.feedInfo[url];
                 feedObj.title = (feedInfo.otitle || feedInfo.title || url) + ' (' + feedObj.status + ')';
             }
             self.addFeedItem(feedObj);
+            // load completed.
+            if (self.pref.feedList.length == self.feedSelectionIterator.count()) {
+                self.setStatus('complete', 'Completed.');
+            }
         });
     };
     NDR.prototype.reloadFeed = function(url) {
         var self = this;
         feedRequest(url, function(feedObj) {
             self.processFeedObj(feedObj);
-            self.replaceFeedItem(feedObj);
-            var feedItem = self.feedMap.get(url).element;
-            self.selectFeedItemElement(feedItem);
-            self.scrollToFeedItemElement(feedItem);
+            var feedElement = self.replaceFeedItem(feedObj);
+            self.selectFeedItemElement(feedElement);
+            self.scrollToFeedItemElement(feedElement);
             self.openFeed(feedObj);
+        });
+    };
+    NDR.prototype.loadTemporaryFeed = function(url) {
+        var self = this;
+        feedRequest(url, function(feedObj) {
+            self.processFeedObj(feedObj);
+            self.addTemporaryFeedItem(feedObj);
         });
     };
     NDR.prototype.openTemporaryFeed = function(url) {
         var self = this;
         feedRequest(url, function(feedObj) {
             self.processFeedObj(feedObj);
-            self.addTemporaryFeedItem(feedObj);
-            self.selectFeedItemElement(self.tempFeedMap.get(url).element);
+            var feedElement = self.addTemporaryFeedItem(feedObj);
+            self.selectFeedItemElement(feedElement);
+            self.scrollToFeedItemElement(feedElement);
             self.openFeed(feedObj);
         });
     };
     NDR.prototype.reloadAllFeeds = function() {
-        this.setStatus('loading', 'Loading');
-        this.loadPreference(0);
+        if (!this.loadPreference(0)) return;
         this.clearFeedItems();
         var list = this.pref.feedList;
         for (var i = 0; i < list.length; i++) {
             var url = list[i];
             if (!url) continue;
             this.loadFeed(url);
-        }
-        if (list.length == 0) {
-            this.setStatus('complete', 'Loading completed.');
         }
     };
     NDR.prototype.refreshFeedList = function() {
@@ -2854,12 +2979,20 @@
         feedObj.unreadItems = unreadItems;
     }
     NDR.prototype.replaceFeedItem = function(feedObj) {
-        var feedItem = this.feedMap.get(feedObj.url);
-        if (feedItem) {
+        var feedElement;
+        if (this.feedMap.has(feedObj.url)) {
+            var feedItem = this.feedMap.get(feedObj.url);
             feedItem.element.parentNode.removeChild(feedItem.element);
             this.feedMap.remove(feedObj.url);
+            feedElement = this.addFeedItem(feedObj);
         }
-        this.addFeedItem(feedObj);
+        else if (this.tempFeedMap.has(feedObj.url)) {
+            var feedItem = this.tempFeedMap.get(feedObj.url);
+            feedItem.element.parentNode.removeChild(feedItem.element);
+            this.tempFeedMap.remove(feedObj.url);
+            feedElement = this.addTemporaryFeedItem(feedObj);
+        }
+        return feedElement;
     };
     NDR.prototype.addFeedItem = function(feedObj) {
         var feedInfo = this.pref.feedInfo[feedObj.url] || {};
@@ -2919,10 +3052,7 @@
         if (feedObj.unreadItems) {
             this.unreadMixItems = this.unreadMixItems.concat(feedObj.unreadItems);
         }
-        // loading completed.
-        if (this.pref.feedList.length == this.feedSelectionIterator.count()) {
-            this.setStatus('complete', 'Loading completed.');
-        }
+        return li;
     };
     NDR.prototype.addTemporaryFeedItem = function(feedObj) {
         var feedList = document.getElementById('NDR_TEMPORARY_FEED_LIST');
@@ -2944,16 +3074,16 @@
             e.preventDefault();
             self.selectFeedItemElement(li);
             self.openFeed(feedObj);
-            removeClass(li, 'ndr_unread_feed');
         }, false);
         var delButton = document.createElement('button');
-        delButton.textContent = '\u00D7';
+        delButton.textContent = NDR.lang.DELETE_MARK;
         delButton.addEventListener('click', function(e) {
             e.stopPropagation();
             li.parentNode.removeChild(li);
             self.tempFeedMap.remove(feedObj.url);
         }, false);
         li.appendChild(delButton, li.firstChild);
+        return li;
     };
     NDR.prototype.getFeedItemClass = function(url) {
         if (!url) return "";
@@ -2982,10 +3112,10 @@
     NDR.prototype.createMixFeed = function() {
         var resultFeedObj = {
             title : 'MIX',
-            description: '\u8CFC\u8AAD\u3057\u3066\u3044\u308B\u30D5\u30A3\u30FC\u30C9\u304B\u3089\u30E9\u30F3\u30C0\u30E0\u306B\u62BD\u51FA\u3057\u3066\u3044\u307E\u3059\u3002'
+            description: NDR.lang.RANDOM_PICKOUT_FROM_FEEDS
         };
         if (this.unreadMixItems.length == 0) {
-            resultFeedObj.description = '\u672A\u8996\u8074\u306E\u52D5\u753B\u306F\u3042\u308A\u307E\u305B\u3093\u3002';
+            resultFeedObj.description = NDR.lang.NO_UNREAD_ITEMS;
             return resultFeedObj;
         }
         var items = [];
@@ -3015,7 +3145,7 @@
     };
     NDR.prototype.createHistoryFeed = function() {
         var feedObj = {
-            title : '\u6700\u8FD1\u898B\u305F\u52D5\u753B',
+            title : NDR.lang.RECENT_VIDEOS,
             link : 'http://www.nicovideo.jp/history',
             description: '',
             items : []
@@ -3024,7 +3154,7 @@
         var cookie = document.cookie;
         var nicohistory = /nicohistory=[^;]+/.exec(cookie);
         if (!nicohistory) {
-            feedObj.description = '\u5C65\u6B74\u306F\u3042\u308A\u307E\u305B\u3093\u3002';
+            feedObj.description = NDR.lang.NO_HISTORY;
             return feedObj;
         }
         var histories = decodeURIComponent(nicohistory[0].slice(12)).split(',');
@@ -3042,6 +3172,7 @@
     };
     NDR.prototype.clearEntriesPanel = function() {
         this.timer.clearTimeout('openFeed');
+        this.timer.clearTimeout('openFeedItem');
         thumbnailInfo.cancelRequest();
         hatenaStar.cancelRequest();
         this.stopObserveScrollEntriesPanel();
@@ -3059,8 +3190,8 @@
             '<h2 class="ndr_title">' + title + '</h2>',
             '<h3 class="ndr_subtitle">' + this.makeNicoLinks(stripTag(feedObj.description)) + '</h3>',
             '<ul class="ndr_entry_menu">',
-            feedObj.unreadItems ? ('    <li>\u65B0\u7740: ' + feedObj.unreadItems.length + ' entry</li>') : '',
-            '    <li>\u5408\u8A08: ' + feedObj.items.length + ' entry</li>',
+            feedObj.unreadItems ? ('    <li>' + NDR.lang.NEW_ARRIVAL + ': ' + feedObj.unreadItems.length + ' entry</li>') : '',
+            '    <li>' + NDR.lang.TOTAL + ': ' + feedObj.items.length + ' entry</li>',
             '</ul>',
         ].join('');
         var range = document.createRange();
@@ -3075,10 +3206,20 @@
         appendClass(entryPageButtons, 'ndr_page_button');
         var self = this;
         if (feedObj.readItems) {
+            /*
+            if (this.pref.feedInfo[feedObj.url]) {
+                var editButton = document.createElement('button');
+                editButton.id = 'NDR_C_ENTRIES_EDIT';
+                editButton.textContent = NDR.lang.EDIT;
+                editButton.addEventListener('click', function(e) {
+                    self.editFeedProcess(feedObj.url);
+                }, false);
+                entryPageButtons.appendChild(editButton);
+            }
+            */
             var reloadButton = document.createElement('button');
             reloadButton.id = 'NDR_C_ENTRIES_RELOAD';
-            appendClass(reloadButton, 'ndr_reload_button');
-            reloadButton.textContent = '\u66F4\u65B0';
+            reloadButton.textContent = NDR.lang.RELOAD;
             reloadButton.addEventListener('click', function(e) {
                 self.reloadFeed(feedObj.url);
             }, false);
@@ -3156,9 +3297,9 @@
             
             var video_id = regV_ID.exec(item.link)[0];
             buf.push('<div class="ndr_entry_controls">');
-            buf.push('    <button class="ndr_clip" title="\u30DE\u30A4\u30EA\u30B9\u30C8\u306B\u8FFD\u52A0"><span class="ndr_opera_icon"></span></button>');
-            buf.push('    <button class="ndr_pin" title="\u30D4\u30F3\u3092\u7ACB\u3066\u308B"><span class="ndr_opera_icon"></span></button>');
-            buf.push('    <button class="ndr_mark_as_read" title="\u65E2\u8AAD\u306B\u3059\u308B"><span class="ndr_opera_icon"></span></button>');
+            buf.push('    <button class="ndr_clip" title="' + NDR.lang.ADD_MYLIST + '"><span class="ndr_opera_icon"></span></button>');
+            buf.push('    <button class="ndr_pin" title="' + NDR.lang.PIN_TOGGLE + '"><span class="ndr_opera_icon"></span></button>');
+            buf.push('    <button class="ndr_mark_as_read" title="' + NDR.lang.MARK_AS_READ + '"><span class="ndr_opera_icon"></span></button>');
             buf.push('</div>');
             buf.push('<h4>');
             buf.push('<a href="' + escAttr(item.link) + '" target="_blank">' + accentPhrase(stripTag(item.title || video_id)) + '</a>');
@@ -3167,8 +3308,8 @@
             if (!thumbnailURL) {
                 thumbnailURL = 'http://tn-skr2.smilevideo.jp/smile?i=' + regNumb.exec(video_id)[0];
             }
-            buf.push('<p class="ndr_entry_thumbnail">');
-            buf.push('<a href="' + escAttr(item.link) + '" target="_blank"><img src="' + escAttr(thumbnailURL) + '" class="ndr_entry_thumbnail" width="130" height="100" alt="' + escAttr(item.title) + '"></a>');
+            buf.push('<div class="ndr_entry_thumbnail">');
+            buf.push('<a href="' + escAttr(item.link) + '" target="_blank"><img src="' + escAttr(thumbnailURL) + '" class="ndr_thumbnail_img" width="130" height="100" alt="' + escAttr(item.title) + '"></a>');
             if (self.pref.enableHatenaBookmark) buf.push('<a href="http://b.hatena.ne.jp/entry/' + escAttr(item.link) + '" target="_blank"><img src="http://b.hatena.ne.jp/entry/image/normal/' + escAttr(item.link) + '" height="13" alt=""></a><br>');
             if (self.pref.enableHatenaStar) buf.push('<span class="ndr_hstar"></span>');
             if (item.from) {
@@ -3184,11 +3325,11 @@
                     }
                 }
             }
-            buf.push('</p>');
+            buf.push('</div>');
 
             var desc_html = self.makeNicoLinks(accentPhrase(stripTag(item.description).replace(regTrim, '')).split(regCRLF).join('<br>'));
             buf.push('<p>' + desc_html + '</p>');
-            buf.push('<p class="ndr_entry_footer">\u6295\u7A3F: ' + (item.date ? formatDate(item.date) : '') + ' | </p>');
+            buf.push('<p class="ndr_entry_footer">' + NDR.lang.POSTED + ': ' + (item.date ? formatDate(item.date) : '') + ' | </p>');
             dv.innerHTML = buf.join('');
             
             dv.addEventListener('click', function(e) {
@@ -3294,7 +3435,7 @@
                 thumbnailInfo.getThumbnailInfo(item.link, function(thumb_info) {
                     if (thumb_info.timeout) {
                         var info = document.createElement('p');
-                        info.textContent = '\u901A\u4FE1\u3092\u4E2D\u65AD\u3057\u307E\u3057\u305F\u3002';
+                        info.textContent = NDR.lang.ABORTED_CONNECTION;
                         dv.insertBefore(info, dv.lastChild);
                         return;
                     }
@@ -3308,9 +3449,9 @@
                     if (thumb_info.status == 'ok') {
                         dv.lastChild.previousSibling.innerHTML = [
                             formatLength(thumb_info.length) + '<br>',
-                            '\u518D\u751F\uFF1A' + formatNumber(thumb_info.view) + '<br>',
-                            '\u30B3\u30E1\u30F3\u30C8\uFF1A' + formatNumber(thumb_info.comment) + '<br>',
-                            '\u30DE\u30A4\u30EA\u30B9\u30C8\uFF1A' + formatNumber(thumb_info.mylist) + '<br>',
+                            NDR.lang.PLAY_COUNT + ':' + formatNumber(thumb_info.view) + '<br>',
+                            NDR.lang.COMMENT + ':' + formatNumber(thumb_info.comment) + '<br>',
+                            NDR.lang.MYLIST + ':' + formatNumber(thumb_info.mylist) + '<br>',
                         ].join('');
                         var p = document.createElement('p');
                         p.innerHTML = self.makeNicoLinks(stripTag(thumb_info.description));
@@ -3319,11 +3460,23 @@
                         appendClass(res, 'ndr_thumb_res');
                         res.innerHTML = thumb_info.response;
                         dv.insertBefore(res, dv.lastChild);
-                        dv.lastChild.innerHTML = '\u6295\u7A3F: ' + formatDate(parseDate(thumb_info.date)) + ' | ';
+                        dv.getElementsByClassName('ndr_entry_footer')[0].innerHTML = NDR.lang.POSTED + ': ' + formatDate(parseDate(thumb_info.date)) + ' | ';
+                        // tag link.
+                        var thmb_place = dv.getElementsByClassName('ndr_entry_thumbnail')[0];
+                        if (thumb_info.tags) {
+                            var tagsEl = document.createElement('p');
+                            var tagsHtml = NDR.lang.TAG + ':';
+                            for (var j = 0; j < thumb_info.tags.length; j++) {
+                                var tag = thumb_info.tags[j];
+                                tagsHtml += '<a href="http://www.nicovideo.jp/tag/' + escAttr(tag) + '" target="_blank" rel="nofollow">' + stripTag(tag) + '</a> ';
+                            }
+                            tagsEl.innerHTML = tagsHtml;
+                            thmb_place.appendChild(tagsEl);
+                        }
                     }
                     else {
                         var info = document.createElement('p');
-                        info.textContent = '\u52D5\u753B\u60C5\u5831\u306E\u53D6\u5F97\u306B\u5931\u6557\u3057\u307E\u3057\u305F\u3002 (' + thumb_info.code + ') ';
+                        info.textContent = NDR.lang.FAIL_TO_LOAD_THUMBNAIL_INFO + ' (' + thumb_info.code + ') ';
                         dv.insertBefore(info, dv.lastChild);
                     }
                 });
@@ -3432,13 +3585,11 @@
             if (content) {
                 content.style.position = 'absolute';
                 content.style.zIndex = '1001';
-                content.style.visibility = 'hidden';
                 content.style.left = '50%';
                 content.style.top = '40%';
                 document.body.appendChild(content);
                 content.style.marginLeft = -(content.offsetWidth/2) + 'px';
                 content.style.marginTop  = -(content.offsetHeight/2) + 'px';
-                content.style.visibility = '';
                 content.addEventListener('mousedown', function(e) {
                     var inputs = evaluate('descendant::*[self::input or self::select or self::button or self::textarea]', content);
                     if (inputs.indexOf(e.target) < 0) {
@@ -3510,11 +3661,11 @@
     };
     NDR.prototype.addFeedURL = function(p_url) {
         if (p_url && this.hasSubscribed(p_url)) {
-            alert(lang.HAS_SUBSCRIBED);
+            alert(NDR.lang.HAS_SUBSCRIBED);
             return;
         }
-        if (!this.loadPreference(0)) {
-            alert('\u30B9\u30C8\u30EC\u30FC\u30B8\u304C\u8AAD\u307F\u8FBC\u307E\u308C\u3066\u3044\u306A\u3044\u305F\u3081\u3001\u5229\u7528\u3067\u304D\u307E\u305B\u3093\u3002');
+        if (this.pref.enableStorage &&!this.loadPreference(0)) {
+            alert(NDR.lang.UNAVAILABLE_FOR_MISSING_STORAGE);
             return;
         }
         this.blockUI(this.createFeedUriInputPanel(p_url));
@@ -3522,16 +3673,15 @@
     // respect Remedie.
     NDR.prototype.createFeedUriInputPanel = function(p_url) {
         var feedInputPanel = document.createElement('div');
-        feedInputPanel.className = 'ndr_feed_input_pane';
+        feedInputPanel.className = 'ndr_input_pane';
         feedInputPanel.innerHTML = [
             '<form action="javascript:void(0)">',
-            '<p>\u8CFC\u8AAD\u3059\u308B\u30DA\u30FC\u30B8\uFF08\u307E\u305F\u306F\u30D5\u30A3\u30FC\u30C9\uFF09\u306EURL\u3092\u5165\u529B\u3057\u3066\u304F\u3060\u3055\u3044\u3002</p>',
+            '<p>' + NDR.lang.INPUT_FEED_URL + '</p>',
             '<p><input type="url" name="feed_url" class="ndr_feed_url" value="' + (p_url || '') + '"></p>',
-            '<p><input type="checkbox" name="discovery_skip" id="NDR_AUTO_DISCOVERY_SKIP_CHECK"><label for="NDR_AUTO_DISCOVERY_SKIP_CHECK">RSS\u30D5\u30A3\u30FC\u30C9\u3092\u63A2\u3055\u305A\u306B\u3053\u306EURL\u3092\u8CFC\u8AAD\u3059\u308B</label></p>',
+            '<p><input type="checkbox" name="discovery_skip" id="NDR_AUTO_DISCOVERY_SKIP_CHECK"><label for="NDR_AUTO_DISCOVERY_SKIP_CHECK">' + NDR.lang.SKIP_AUTO_DISCOVERY + '</label></p>',
             '<p class="ndr_message"></p>',
-            // TODO: OPML import.
-            '<p class="ndr_feed_input_import" style="display:none"><input type="button" name="opml_import" value="OPML\u3092\u30A4\u30F3\u30DD\u30FC\u30C8"></p>',
-            '<p class="ndr_feed_input_submit"><input type="submit" value="\u8CFC\u8AAD\u3059\u308B"><input type="button" name="cancel" class="ndr_button_cancel" value="\u30AD\u30E3\u30F3\u30BB\u30EB"></p>',
+            '<p class="ndr_feed_input_import"><input type="button" name="opml_import" value="' + NDR.lang.IMPORT_OPML + '"></p>',
+            '<p class="ndr_feed_input_submit"><input type="submit" value="' + NDR.lang.SUBSCRIBE + '"><input type="button" name="cancel" class="ndr_button_cancel" value="' + NDR.lang.CANCEL + '"></p>',
             '</form>',
         ].join('');
         var self = this;
@@ -3541,17 +3691,17 @@
             var url = form.feed_url.value;
             var message = form.getElementsByClassName('ndr_message')[0];
             if (!/https?:\/\/.+/.test(url)) {
-                message.textContent = 'http\u0020\u304B\u3089\u59CB\u307E\u308B\u0020URL\u0020\u3092\u5165\u529B\u3057\u3066\u304F\u3060\u3055\u3044\u3002';
+                message.textContent = NDR.lang.INPUT_HTTP_URL;
                 return;
             }
             else if (self.hasSubscribed(url)) {
-                message.textContent = lang.HAS_SUBSCRIBED;
+                message.textContent = NDR.lang.HAS_SUBSCRIBED;
                 return;
             }
             else {
                 message.textContent = '';
             }
-            self.blockUI('\u8AAD\u307F\u8FBC\u307F\u4E2D');
+            self.blockUI(NDR.lang.LOADING);
             if (form.discovery_skip.checked) {
                 feedRequest(url, function(feedObj) {
                     self.confirmRegisterFeedProcess(feedObj);
@@ -3565,18 +3715,22 @@
         cancelButton.addEventListener('click', function(e) {
             self.unblockUI();
         }, false);
+        var opmlButton = form.opml_import;
+        opmlButton.addEventListener('click', function(e) {
+            self.opmlImportProcess();
+        }, false);
         return feedInputPanel;
     };
     NDR.prototype.rssAutoDiscoveryProcess = function(url) {
         var self = this;
         httpRequest(url, function(xhr) {
             if (xhr.readyState < 4) { // timeout.
-                alert('\u63A5\u7D9A\u304C\u30BF\u30A4\u30E0\u30A2\u30A6\u30C8\u3057\u307E\u3057\u305F\u3002');
+                alert(NDR.lang.TIMEOUT);
                 self.unblockUI();
                 return;
             }
             if (xhr.responseText == '') {
-                alert('\u6307\u5B9A\u3055\u308C\u305FURL\u304B\u3089\u60C5\u5831\u3092\u53D6\u5F97\u3067\u304D\u307E\u305B\u3093\u3067\u3057\u305F\u3002');
+                alert(NDR.lang.MISSING_DATA);
                 self.unblockUI();
                 return;
             }
@@ -3621,9 +3775,9 @@
                 }
                 var feedURL = rss || rdf || atom || xml;
                 if (!feedURL) {
-                    if (confirm('RSS\u30D5\u30A3\u30FC\u30C9\u304C\u898B\u3064\u304B\u308A\u307E\u305B\u3093\u3067\u3057\u305F\u3002\u3053\u306E\u30DA\u30FC\u30B8\u3092\u30D5\u30A3\u30FC\u30C9\u3068\u3057\u3066\u8CFC\u8AAD\u3057\u307E\u3059\u304B\uFF1F')){
+                    if (confirm(NDR.lang.CONFIRM_SUBSCRIBE_PAGE_AS_FEED)){
                         if (self.hasSubscribed(feedURL)) {
-                            alert(lang.HAS_SUBSCRIBED);
+                            alert(NDR.lang.HAS_SUBSCRIBED);
                             self.unblockUI();
                             return;
                         }
@@ -3643,7 +3797,7 @@
                 var baseURL = (base && base.href) || url;
                 feedURL = getAbsoluteURL(feedURL, baseURL);
                 if (self.hasSubscribed(feedURL)) {
-                    alert(lang.HAS_SUBSCRIBED);
+                    alert(MDR.lang.HAS_SUBSCRIBED);
                     self.unblockUI();
                     return;
                 }
@@ -3655,48 +3809,62 @@
     };
     NDR.prototype.confirmRegisterFeedProcess = function(feedObj) {
         if (feedObj.status != 'ok') {
-            alert('\u30D5\u30A3\u30FC\u30C9\u306E\u8AAD\u307F\u8FBC\u307F\u306B\u5931\u6557\u3057\u307E\u3057\u305F\u3002\n' + feedObj.description);
+            alert(NDR.lang.FAIL_TO_LOAD_FEED + '\n' + feedObj.description);
             this.unblockUI();
             return;
         }
         this.blockUI(this.createFeedEditorPanel(feedObj));
     };
     NDR.prototype.createFeedEditorPanel = function(feedObj) {
-        var feedEditorPanel = document.createElement('div');
-        feedEditorPanel.className = 'ndr_feed_input_pane ndr_feed_editor';
+        var panel = document.createElement('div');
+        panel.className = 'ndr_input_pane ndr_feed_editor';
         var tmp_id = "NDR_TMP_" + (new Date() * Math.random() | 0);
         var feedItemClass = this.getFeedItemClass(feedObj.url);
-        feedEditorPanel.innerHTML = [
+        panel.innerHTML = [
             '<form action="javascript:void(0)">',
             '<table>'
-            '<tr><td>\u30BF\u30A4\u30C8\u30EB</td><td><input type="text" class="ndr_feed_title ' + feedItemClass + '" size="80" value="' + escAttr(feedObj.otitle || feedObj.title) + '"></td></tr>',
-            '<tr><td></td><td><input type="checkbox" class="ndr_feed_title_check" id="' + tmp_id + 'TI"' + (feedObj.otitle ? ' checked' : '') + '><label for="' + tmp_id + 'TI">\u81EA\u5206\u3067\u3064\u3051\u305F\u30BF\u30A4\u30C8\u30EB\u3092\u4F7F\u3046</label></td></tr>',
-            '<tr><td>\u30A2\u30C9\u30EC\u30B9</td><td><span class="ndr_feed_address">' + stripTag(feedObj.url) + '</span></td></tr>',
-            '<tr><td>\u4E26\u3073\u9806</td>',
+            '<tr><td>' + NDR.lang.TITLE + '</td><td><input type="text" class="ndr_feed_title ' + feedItemClass + '" size="80"></td></tr>',
+            '<tr><td></td><td><input type="checkbox" class="ndr_feed_title_check" id="' + tmp_id + 'TI"><label for="' + tmp_id + 'TI">' + NDR.lang.GET_TITLE_FROM_FEED + '</label></td></tr>',
+            '<tr><td>' + NDR.lang.ADDRESS + '</td><td><span class="ndr_feed_address"></span></td></tr>',
+            '<tr><td>' + NDR.lang.SORT_ORDER + '</td>',
             '<td><select class="ndr_feed_order">',
-            '<option value="entryOrder">\u30A8\u30F3\u30C8\u30EA\u30FC\u9806\uFF08\u30C7\u30D5\u30A9\u30EB\u30C8\uFF09</option>',
-            '<option value="entryDate">\u30A8\u30F3\u30C8\u30EA\u30FC\u306E\u65E5\u4ED8\u9806</option>',
-            '<option value="uploadDate">\u30A2\u30C3\u30D7\u30ED\u30FC\u30C9\u9806\uFF08\u30CB\u30B3\u30CB\u30B3\u52D5\u753B\u306ERSS\u3067\u306E\u307F\u6709\u52B9\u3067\u3059\uFF09</option>',
+            '<option value="entryOrder">' + NDR.lang.ORDER_NONE + '</option>',
+            '<option value="entryDate">' + NDR.lang.ORDER_ENTRY_DATE + '</option>',
+            '<option value="uploadDate">' + NDR.lang.ORDER_UPLOAD_DATE + '</option>',
             '</select></td></tr>',
-            '<tr><td>\u30B5\u30E0\u30CD\u30A4\u30EB\u60C5\u5831</td>',
+            '<tr><td>' + NDR.lang.THUMBNAIL_INFO + '</td>',
             '<td><select class="ndr_feed_thumb">',
-            '<option value="always">\u5E38\u306B\u53D6\u5F97\u3059\u308B</option>',
-            '<option value="necessary" selected>\u8AAC\u660E\u6587\u304C\u7121\u3044\u3068\u304D\u3060\u3051\u53D6\u5F97\u3059\u308B\uFF08\u30C7\u30D5\u30A9\u30EB\u30C8\uFF09</option>',
-            '<option value="never">\u53D6\u5F97\u3057\u306A\u3044</option>',
+            '<option value="always">' + NDR.lang.THUMB_ALWAYS + '</option>',
+            '<option value="necessary" selected>' + NDR.lang.THUMB_NECESSARY + '</option>',
+            '<option value="never">' + NDR.lang.THUMB_NEVER + '</option>',
             '</select></td></tr>',
             '</table>'
-            '<p class="ndr_feed_input_submit"><input type="submit" value="\u8CFC\u8AAD\u3059\u308B"><input type="button" name="cancel" class="ndr_button_cancel" value="\u30AD\u30E3\u30F3\u30BB\u30EB"></p>',
+            '<p class="ndr_feed_input_submit"><input type="submit" value="' + NDR.lang.SUBSCRIBE + '"><input type="button" name="cancel" class="ndr_button_cancel" value="' + NDR.lang.CANCEL + '"></p>',
             '</form>',
         ].join('');
+        
+        var feed_title = panel.getElementsByClassName('ndr_feed_title')[0];
+        feed_title.value = feedObj.title || feedObj.url;
+        var feed_address = panel.getElementsByClassName('ndr_feed_address')[0];
+        feed_address.textContent = feedObj.url;
+        
         var self = this;
-        var form = feedEditorPanel.getElementsByTagName('form')[0];
+        var form = panel.getElementsByTagName('form')[0];
         form.addEventListener('submit', function(e) {
             e.preventDefault();
-            self.pref.feedList.push(feedObj.url);
-            self.pref.feedInfo[feedObj.url] = self.createFeedInfoFromFeedEditPanel(feedObj.url, feedEditorPanel);
-            self.storePreference();
             self.processFeedObj(feedObj);
-            self.addFeedItem(feedObj);
+            var feedElement;
+            if (self.pref.enableStorage) {
+                self.pref.feedList.push(feedObj.url);
+                self.pref.feedInfo[feedObj.url] = self.createFeedInfoFromFeedEditPanel(feedObj.url, panel);
+                self.storePreference();
+                feedElement = self.addFeedItem(feedObj);
+            }
+            else {
+                feedElement = self.addTemporaryFeedItem(feedObj);
+            }
+            self.selectFeedItemElement(feedElement);
+            self.scrollToFeedItemElement(feedElement);
             self.openFeed(feedObj);
             self.unblockUI();
         }, false);
@@ -3704,17 +3872,17 @@
         cancelButton.addEventListener('click', function(e) {
             self.unblockUI();
         }, false);
-        return feedEditorPanel;
+        return panel;
     };
     NDR.prototype.openFeedEdit = function() {
         if (!this.loadPreference(0)) {
-            alert('\u30B9\u30C8\u30EC\u30FC\u30B8\u304C\u8AAD\u307F\u8FBC\u307E\u308C\u3066\u3044\u306A\u3044\u305F\u3081\u3001\u5229\u7528\u3067\u304D\u307E\u305B\u3093\u3002');
+            alert(NDR.lang.UNAVAILABLE_FOR_MISSING_STORAGE);
             return;
         }
         this.clearEntriesPanel();
         var dv = document.createElement('div');
         dv.innerHTML = [
-            '<h2 class="ndr_title">\u30A2\u30A4\u30C6\u30E0\u306E\u7DE8\u96C6</h2>',
+            '<h2 class="ndr_title">' + NDR.lang.EDIT_FEED_INFO + '</h2>',
             '<ul class="ndr_entry_menu">',
             '    <li></li>',
             '</ul>',
@@ -3724,11 +3892,14 @@
         
         var controls1 = document.createElement('p');
         appendClass(controls1, 'ndr_feed_edit_controls');
-        controls1.innerHTML = '<button class="ndr_feededit_save">\u4FDD\u5B58\u3059\u308B</button>';
+        controls1.innerHTML = '<button class="ndr_feededit_save">' + NDR.lang.SAVE + '</button>';
         var controls2 = controls1.cloneNode(true);
         
-        entry.appendChild(controls1);
+        var exportButton = document.createElement('button');
+        exportButton.textContent = NDR.lang.EXPORT_OPML;
+        controls1.appendChild(exportButton)
         
+        entry.appendChild(controls1);
         var feedEditList = document.createElement('ul');
         appendClass(feedEditList, 'ndr_feed_edit_list');
         var editorList = [];
@@ -3742,23 +3913,20 @@
             editorList.push({ url: url, editor: feedEditPanel});
         }
         entry.appendChild(feedEditList);
-        
         entry.appendChild(controls2);
         
         var self = this;
         function save() {
             var newList = [];
-            var newInfo = {};
             for (var i = 0; i < editorList.length; i++) {
                 var item = editorList[i];
                 var info = self.createFeedInfoFromFeedEditPanel(item.url, item.editor);
                 if (info) {
-                    newList.push(item.url);
-                    newInfo[item.url] = info;
+                    newList.push(info);
                 }
             }
-            self.pref.feedList = newList;
-            self.pref.feedInfo = newInfo;
+            self.loadPreference(0);
+            self.importFeedList(newList, true);
             self.storePreference();
             self.refreshFeedList();
             self.openFeedEdit();
@@ -3767,6 +3935,7 @@
         var save2 = controls2.getElementsByClassName('ndr_feededit_save')[0];
         save1.addEventListener('click', save, false);
         save2.addEventListener('click', save, false);
+        exportButton.addEventListener('click', function() { self.opmlExport(); }, false);
         
         var range = document.createRange();
         var entriesPane = document.getElementById('NDR_ENTRIES');
@@ -3781,49 +3950,56 @@
         var tmp_id = "NDR_TMP_" + (new Date() * Math.random() | 0);
         var feedItemClass = this.getFeedItemClass(url);
         
-        var feedPanel = document.createElement('div');
-        appendClass(feedPanel, 'ndr_feededit_pane');
-        feedPanel.innerHTML = [
-            '<p class="ndr_feed_del_checker"><input type="checkbox" class="ndr_feed_del_check" id="' + tmp_id + 'DEL"><label for="' + tmp_id + 'DEL">\u524A\u9664\u3059\u308B</label></p>',
+        var panel = document.createElement('div');
+        appendClass(panel, 'ndr_feededit_pane');
+        panel.innerHTML = [
+            '<p class="ndr_feed_del_checker"><input type="checkbox" class="ndr_feed_del_check" id="' + tmp_id + 'DEL"><label for="' + tmp_id + 'DEL">' + NDR.lang.DO_DELETE + '</label></p>',
             '<table>'
-            '<tr><td>\u30BF\u30A4\u30C8\u30EB</td><td><input type="text" class="ndr_feed_title ' + feedItemClass + '" size="80"></td></tr>',
-            '<tr><td></td><td><input type="checkbox" class="ndr_feed_title_check" id="' + tmp_id + 'TI"><label for="' + tmp_id + 'TI">\u81EA\u5206\u3067\u3064\u3051\u305F\u30BF\u30A4\u30C8\u30EB\u3092\u4F7F\u3046</label></td></tr>',
-            '<tr><td>\u30A2\u30C9\u30EC\u30B9</td><td><span class="ndr_feed_address"></span></td></tr>',
-            '<tr><td>\u4E26\u3073\u9806</td>',
+            '<tr><td>' + NDR.lang.TITLE + '</td><td><input type="text" class="ndr_feed_title ' + feedItemClass + '" size="80"></td></tr>',
+            '<tr><td></td><td><input type="checkbox" class="ndr_feed_title_check" id="' + tmp_id + 'TI"><label for="' + tmp_id + 'TI">' + NDR.lang.GET_TITLE_FROM_FEED + '</label></td></tr>',
+            '<tr><td>' + NDR.lang.ADDRESS + '</td><td><span class="ndr_feed_address"></span></td></tr>',
+            '<tr><td>' + NDR.lang.SORT_ORDER + '</td>',
             '<td><select class="ndr_feed_order">',
-            '<option value="entryOrder">\u30A8\u30F3\u30C8\u30EA\u30FC\u9806\uFF08\u30C7\u30D5\u30A9\u30EB\u30C8\uFF09</option>',
-            '<option value="entryDate">\u30A8\u30F3\u30C8\u30EA\u30FC\u306E\u65E5\u4ED8\u9806</option>',
-            '<option value="uploadDate">\u30A2\u30C3\u30D7\u30ED\u30FC\u30C9\u9806\uFF08\u30CB\u30B3\u30CB\u30B3\u52D5\u753B\u306ERSS\u3067\u306E\u307F\u6709\u52B9\u3067\u3059\uFF09</option>',
+            '<option value="entryOrder">' + NDR.lang.ORDER_NONE + '</option>',
+            '<option value="entryDate">' + NDR.lang.ORDER_ENTRY_DATE + '</option>',
+            '<option value="uploadDate">' + NDR.lang.ORDER_UPLOAD_DATE + '</option>',
             '</select></td></tr>',
-            '<tr><td>\u30B5\u30E0\u30CD\u30A4\u30EB\u60C5\u5831</td>',
+            '<tr><td>' + NDR.lang.THUMBNAIL_INFO + '</td>',
             '<td><select class="ndr_feed_thumb">',
-            '<option value="always">\u5E38\u306B\u53D6\u5F97\u3059\u308B</option>',
-            '<option value="necessary" selected>\u8AAC\u660E\u6587\u304C\u7121\u3044\u3068\u304D\u3060\u3051\u53D6\u5F97\u3059\u308B\uFF08\u30C7\u30D5\u30A9\u30EB\u30C8\uFF09</option>',
-            '<option value="never">\u53D6\u5F97\u3057\u306A\u3044</option>',
+            '<option value="always">' + NDR.lang.THUMB_ALWAYS + '</option>',
+            '<option value="necessary" selected>' + NDR.lang.THUMB_NECESSARY + '</option>',
+            '<option value="never">' + NDR.lang.THUMB_NEVER + '</option>',
             '</select></td></tr>',
             '</table>'
         ].join('');
         
-        var feed_del_check = feedPanel.getElementsByClassName('ndr_feed_del_check')[0];
+        var feed_del_check = panel.getElementsByClassName('ndr_feed_del_check')[0];
         feed_del_check.addEventListener('click', function() {
-            feedPanel.style.backgroundColor = (feed_del_check.checked) ? 'lightgray' : '';
+            panel.style.backgroundColor = (feed_del_check.checked) ? 'lightgray' : '';
         }, false);
-        var feed_title = feedPanel.getElementsByClassName('ndr_feed_title')[0];
+        var feed_title = panel.getElementsByClassName('ndr_feed_title')[0];
         if (feedInfo.otitle) feed_title.value = feedInfo.otitle;
         else                 feed_title.value = feedInfo.title || feedObj.title || url;
-        var feed_title_check = feedPanel.getElementsByClassName('ndr_feed_title_check')[0];
-        if (feedInfo.otitle) feed_title_check.checked = true;
-        var feed_address = feedPanel.getElementsByClassName('ndr_feed_address')[0];
+        if (!feedInfo.otitle) {
+            var feed_title_check = panel.getElementsByClassName('ndr_feed_title_check')[0];
+            feed_title_check.checked = true;
+        }
+        var feed_address = panel.getElementsByClassName('ndr_feed_address')[0];
         feed_address.textContent = url;
-        var feed_order = feedPanel.getElementsByClassName('ndr_feed_order')[0];
-        if (feedInfo.order) feed_order.value = feedInfo.order;
-        var feed_thumb = feedPanel.getElementsByClassName('ndr_feed_thumb')[0];
-        if (feedInfo.thumb) feed_thumb.value = feedInfo.thumb;
-        
-        return feedPanel;
+        if (feedInfo.order) {
+            var feed_order = panel.getElementsByClassName('ndr_feed_order')[0];
+            feed_order.value = feedInfo.order;
+        }
+        if (feedInfo.thumb) {
+            var feed_thumb = panel.getElementsByClassName('ndr_feed_thumb')[0];
+            feed_thumb.value = feedInfo.thumb;
+        }
+        return panel;
     };
     NDR.prototype.createFeedInfoFromFeedEditPanel = function(url, feedPanel) {
-        var feedInfo = {};
+        var feedInfo = {
+            url: url
+        };
         var feed_del_check = feedPanel.getElementsByClassName('ndr_feed_del_check')[0];
         var feed_title = feedPanel.getElementsByClassName('ndr_feed_title')[0];
         var feed_title_check = feedPanel.getElementsByClassName('ndr_feed_title_check')[0];
@@ -3836,7 +4012,7 @@
         if (feedItem && feedItem.feedObj && feedItem.feedObj.title) {
             feedInfo.title = feedItem.feedObj.title;
         }
-        if (feed_title_check.checked) {
+        if (!feed_title_check.checked) {
             feedInfo.otitle = feed_title.value;
         }
         if (feed_order.value != 'entryOrder') {
@@ -3852,7 +4028,7 @@
         if (!this.mylistPanel) {
             var mylist = nicoMylist.mylistGroup;
             var dv = document.createElement('div');
-            dv.innerHTML = '\u30DE\u30A4\u30EA\u30B9\u30C8<br>';
+            dv.innerHTML = NDR.lang.MYLIST + '<br>';
             appendClass(dv, 'ndr_mylist_pane');
             var select = document.createElement('select');
             for (var i = 0; i < mylist.group_list.length; i++) {
@@ -3861,7 +4037,7 @@
             }
             var button = document.createElement('input');
             button.type = 'submit';
-            button.value = '\u767B\u9332';
+            button.value = NDR.lang.REGISTER;
             button.className = 'submit';
             dv.appendChild(select);
             dv.appendChild(button);
@@ -3979,9 +4155,87 @@
             pinnedList.style.display = '';
         }, (time == 0) ? 0 : time || 1000);
     };
+    NDR.prototype.opmlExport = function() {
+        var feedList = this.pref.feedList;
+        var outlineXml = [];
+        for (var i = 0; i < feedList.length; i++) {
+            var url = feedList[i];
+            var feedInfo = this.pref.feedInfo[url];
+            var feedItem = this.feedMap.get(url);
+            var title   = escAttr(feedInfo.otitle || feedInfo.title),
+                xmlUrl  = escAttr(url),
+                htmlUrl = (feedItem && feedItem.feedObj && feedItem.feedObj.link) ? escAttr(feedItem.feedObj.link) : null;
+            outlineXml.push('        <outline text="' + title + '" type="rss" xmlUrl="' + xmlUrl + '"' +  (htmlUrl ? ' htmlUrl="' + htmlUrl + '"' : '')  + ' title="' + title + '" />');
+        }
+        var opmlXml = [
+            '<?xml version="1.0" encoding="utf-8"?>',
+            '<opml version="1.0">',
+            '   <head>',
+            '       <title>niconico douaga reader - feed list</title>',
+            '   </head>',
+            '   <body>',
+            outlineXml.join('\n')
+            '   </body>',
+            '</opml>'].join('\n');
+        location.href = 'data:application/octet-stream;charset=utf-8,' + encodeURIComponent(opmlXml);
+    };
+    NDR.prototype.opmlImport = function(opmlStr) {
+        if (!this.loadPreference(0)) {
+            alert(NDR.lang.UNAVAILABLE_FOR_MISSING_STORAGE);
+            return;
+        }
+        var xmlDocument = new DOMParser().parseFromString(opmlStr, 'application/xml');
+        if (xmlDocument.documentElement.nodeName == 'parsererror') {
+            alert(NDR.lang.XML_PARSER_ERROR);
+            return;
+        }
+        var processor = new OPMLProcessor();
+        var opmlObj = processor.toObject(xmlDocument);
+        var outlines = opmlObj.outline;
+        if (outlines.length == 0) {
+            alert(NDR.lang.RSS_NOT_FOUND);
+            return;
+        }
+        var feedList = [];
+        for (var i = 0, len = outlines.length; i < len; i++) {
+            var ol = outlines[i];
+            feedList.push({ url : ol.xmlUrl, otitle: (ol.title || ol.text) });
+        }
+        this.importFeedList(feedList);
+        this.storePreference();
+    };
+    NDR.prototype.opmlImportProcess = function() {
+        this.blockUI(this.createOpmlImportPanel());
+    };
+    NDR.prototype.createOpmlImportPanel = function() {
+        var panel = document.createElement('div');
+        panel.className = 'ndr_input_pane ndr_opml_editor';
+        panel.innerHTML = [
+            '<form action="javascript:void(0)">',
+            '<p>',
+            NDR.lang.PASTE_OPML + ':<br>',
+            '<textarea class="ndr_opml_text" name="opml_text" cols="80" rows="20"></textarea>',
+            '</p>',
+            '<p class="ndr_feed_input_submit"><input type="submit" value="' + NDR.lang.IMPORT + '"><input type="button" name="cancel" class="ndr_button_cancel" value="' + NDR.lang.CANCEL + '"></p>',
+            '</form>',
+        ].join('');
+        var self = this;
+        var form = panel.getElementsByTagName('form')[0];
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            self.opmlImport(form.opml_text.value);
+            self.unblockUI();
+        }, false);
+        var cancelButton = form.cancel;
+        cancelButton.addEventListener('click', function(e) {
+            self.unblockUI();
+        }, false);
+        return panel;
+    };
     NDR.start = function() {
         var ndr = new NDR(NDR.PREFERENCES);
         ndr.initKeyBind(NDR.SHOPRTCUT);
+        window.ndr = ndr;
     }
     window.NDR = NDR;
 
