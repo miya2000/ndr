@@ -15,9 +15,8 @@ setTimeout(function() {
             video = {},
             title = {},
             image = {};
-        var keys = this.pinnedMap.keys;
-        for (var i = 0; i < keys.length; i++) {
-            var item = this.pinnedMap.get(keys[i]);
+        for (var i = 0; i < urls.length; i++) {
+            var item = this.pinnedMap.get(urls[i]);
             var m = /[a-z]{0,2}[0-9]+(?=\?|$)/.exec(item.url);
             if (!m) continue;
             var video_id = m[0];
