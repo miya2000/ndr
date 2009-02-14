@@ -2843,6 +2843,13 @@
         }
         return pref;
     };
+    NDR.prototype.deleteFeed = function(url) {
+        delete this.pref.feedInfo[url];
+        var delIndex = this.pref.feedList.indexOf(url);
+        if (delIndex >= 0) {
+            this.pref.feedList.splice(delIndex, 1);
+        }
+    };
     NDR.prototype.loadFeed = function(url) {
         var self = this;
         this.setStatus('loading');
@@ -2926,7 +2933,7 @@
         for (var i = 0; i < list.length; i++) {
             var url = list[i];
             if (!url) continue;
-            var feedObj = feedMap.get(url).feedObj;
+            var feedObj = (feedMap.get(url) || {}).feedObj;
             if (feedObj) {
                 if (feedObj.status == 'ok') {
                     this.sortFeed(feedObj);
@@ -4022,6 +4029,7 @@
         
         var self = this;
         function save() {
+            self.loadPreference(0);
             var newList = [];
             for (var i = 0; i < editorList.length; i++) {
                 var item = editorList[i];
@@ -4029,8 +4037,10 @@
                 if (info) {
                     newList.push(info);
                 }
+                else {
+                    self.deleteFeed(item.url);
+                }
             }
-            self.loadPreference(0);
             self.importFeedList(newList, true);
             self.storePreference();
             self.refreshFeedList();
