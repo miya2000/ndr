@@ -53,7 +53,7 @@
     var NDR_IMG_LOADING = 'data:image/gif;base64,R0lGODlhFAAUAIIAAC8vL%2BTl5EdFR%2FT09Dk6OVNVU%2Bzr7Pz%2B%2FCH%2FC05FVFNDQVBFMi4wAwEAAAAh%2BQQADQAAACwAAAAAFAAUAAIDSHi6awLCsDlNkVZSGpsY20SIITN0igOW6XVkLONAa6wMBKHZygPwDACAULPhhB%2FgIVc0MpUK5I43pCmlSpxO6SBCCYCmbRhLAAAh%2BQQADQAAACwAAAAAFAAUAAIDVHi6awLCsDlNkVZSGpsY20SIITN0igOW6XVkLBM8aPw%2BxGofEQHosUHOJ9gphoDc7iRUGg%2BD5PPmA7KaM4KGZSB8qEHvVnglaEVWhtfKDAnTBykjAQAh%2BQQADQAAACwAAAAAFAAUAAIDVni6awLCsDlNkVZSGpsY20SIITN0igOW6XVkLBM8X7wQD7HaZ0AAh11MRyDMbMHPT6BDgn5CHmCEDJ6gTpyRqdkMikUDyEENfQZCQzMUvZWrwTX8%2B04AACH5BAANAAAALAAAAAAUABQAAgNOeLprAsKwOU2RVlIamxjbRIghM3SKA5bpdWQsEzxofJwAsdoKkO%2B8XI63IPg%2BxJsRyDMmU4QRcXBaxgYEQZQQkMYiIJCXBTwxm2fbkJIAACH5BAANAAAALAAAAAAUABQAAgNJeLprAsKwOU2RVlIamxjbRIghM3SKA5bpdWQs40BrrAwEodnKA%2FAMAIBQs52EH%2BBhMCwaCT%2Flkag8CGlKpJOFQ%2FEcuip0GxvGEgAh%2BQQADQAAACwAAAAAFAAUAAIDUHi6awLCsDlNkVZSGpsY20SIITN0igOW6XVkLBM8aHycALHaCuDzC5wOqAgQch8gTcMb5ALEG4EgiFKNu9hgOG12pdnQabXlTXc18VDhHE0SACH5BAANAAAALAAAAAAUABQAAgNXeLprAsKwOU2RVlIamxjbRIghM3SKA5bpdWQsEzxunD5EYC8RAa2x08AnmO0OA0BOQACWhhCkk0XIHRXJ6m4wJPSmJm%2B1cxqVIlzgULMBK7RX7CeOVE4SACH5BAANAAAALAAAAAAUABQAAgNNeLprAsKwOU2RVlIamxjbRIghM3SKA5bpdWQsEzxofJwAsdoK4PMMQg6oGAg%2FxENuBxQyeT4BcWB0xqoEgiAwsn2ooO7VpEsqasDqJgEAOw%3D%3D';
     var NDR_IMG_COMPLETE = 'data:image/gif;base64,R0lGODlhFAAUAIIAADAvMOPl40hHSPT19Dg5OFRWVOzs7Pz%2B%2FCH5BAANAAAALAAAAAAUABQAAgNNeLpqAmSwOU0xx2I6h9iZIHEMMZnk4oHOmGYXDL5HIBAfrT6Gqw8QHcMTFC4ASKOCGFFmCACREwlwHh5NZQDqdHCNXpuSQMCUjdkoKQEAIfkEACgAAAAsAAAAABQAFAACA0Z4umcCZLA5TTHtUjoEVo60McRUjkv3NYKIZpi1vizg0RM04wfEm4AfA%2BLiDQgRoYIAKPJ8ygMzOoAqmU7a8XQl7LQAGyoBACH5BAANAAAALAAAAAAUABQAAgNGeLpqAmSwOU0xx2I6h9iZIHEMMZnk4oHOmGYXDL4h8NGMYc%2F4w9MDCI5CAAxzRdfwcTsGCT%2Ba8LgoUhdTqgd6zey6AFsqAQAh%2BQQADQAAACwAAAAAFAAUAAIDSni6POcsSiOIMDIfU8zgmLYM10JB4kFEa%2FqUyuluggPODwFYoUsBF5RLB8MNdL0ZaYdjAHbC2bPVXAKaJgIVu0sqBUBsrCtWhTUJACH5BAANAAAALAAAAAAUABQAAgNLeLrc%2Fm0cCZ8RRJjaTDGDt3GTtlwURzQreRDjgZJGtom0AACYyV07zSAFAQJgLpmOFyMtCYHkZEcgupbSEwGQXRy7JWTXwARvBZUEACH5BAAKAAAALAAAAAAUABQAAgNKeLo85yxKI4gwMh9TzOCYtgzXQkHiQURr%2BpTK6W6CA84PAVihSwEXlEsHww10vRlph2MAdsLZs9VcApomAhW7SyoFQGysK1aFNQkAIfkEAAoAAAAsAAAAABQAFAACA0Z4umoCZLA5TTHHYjqH2JkgcQwxmeTigc6YZhcMviHw0Yxhz%2FjD0wMIjkIADHNF1%2FBxOwYJP5rwuChSF1OqB3rN7LoAWyoBACH5BAAUAAAALAAAAAAUABQAAgNGeLpnAmSwOU0x7VI6BFaOtDHEVI5L9zWCiGaYtb4s4NETNOMHxJuAHwPi4g0IEaGCACjyfMoDMzqAKplO2vF0Jey0ABsqAQAh%2BQQADQAAACwAAAAAFAAUAAIDS3i6ZwJksDlNMe1SOgRWjrQxxFSOS%2Fc1gohmmLW%2BLODREzTjBnHiig4EyABAXLgB4UhUPABIHrN58EWohICAWlVGaZEfUHVrQmyjBAAh%2BQQADQAAACwAAAAAFAAUAAIDT3i6ZwJksDlNMe1SOgRWjrQxxFSOS%2Fc1gohmmLW%2BLODREzTjBnHiig4EyADoiAehzcXz7WgDAoCJ8%2FmoqN4giiS0Dr8qhgtUKW5AW3K5SQAAIfkEAA0AAAAsAAAAABQAFAACA1J4umcCZLA5TTHtUjoEVo60McRUjkv3NYKIZpi1vizg0ROEtbhC2IYTbvADhHqHH%2BGGhAxcvR%2BS4Zw2CNgZbRkQCGmOGHMbORC%2FI9UiTCPm0IcEACH5BADIAAAALAAAAAAUABQAAgNXeLpqAmSwOU0xx2I6h9iZIHEMMZnk4oHOmGYXDL4hIASHS0NOSys8EepHsOGGtKJR9DsAeLFmMaJ7DSC2WcpBJXyI3wwByekxVq%2BxbjB%2B3ShmzpU5gSwSADs%3D';
     var NDR_HATENASTAR_TOKEN = '43176db8ca94b7e759246873fc3dad868c75fd6f';
-    var NDR_STORAGE_SWF = 'http://miya2000.up.seesaa.net/storage/ndr.swf';
+    var NDR_STORAGE_SWF = 'http://github.com/miya2000/ndr/raw/master/storage/ndr.swf';
     
     // ==== resource ==== //
     NDR.lang = {
@@ -172,7 +172,7 @@
         '    <div class="ndr_feed_pane" id="NDR_FEED_PANE">',
         '        <ul class="ndr_feed_menu" id="NDR_FEED_MENU">',
         '            <li class="ndr_feed_reload"><button class="ndr_control" id="NDR_C_FEED_RELOAD">' + NDR.lang.RELOAD + '</button></li>',
-        pref.enableStorage ? '            <li class="ndr_feed_edit"><button class="ndr_control" id="NDR_C_FEED_EDIT">' + NDR.lang.EDIT + '</button></li>' : '',
+        pref.enableStorage ? '            <li class="ndr_feed_edit"><button class="ndr_control" id="NDR_C_FEEDS_EDIT">' + NDR.lang.EDIT + '</button></li>' : '',
         '            <li class="ndr_feed_add"><button class="ndr_control" id="NDR_C_FEED_ADD">' + NDR.lang.ADD + '</button></li>',
         '            <li class="ndr_feed_search"><input type="text" id="NDR_C_FEED_SEARCH" autocomplete="off"></li>',
         '        </ul>',
@@ -1327,6 +1327,9 @@
             };
             return xhr;
         },
+        sendRequest : function(xhr, content) {
+            XMLHttpRequest.prototype.send.call(xhr, content);
+        },
         next : function() {
             if (this.requestQueue.length == 0) {
                 this.isActive = false;
@@ -1354,17 +1357,192 @@
                 self.next();
                 if (orgListener) orgListener.apply(xhr, []);
             };
-            XMLHttpRequest.prototype.send.call(xhr, target.content);
+            this.sendRequest(xhr, target.content);
         },
         cancelWaitingRequest: function() {
             this.requestQueue = [];
         }
     };
     
-    var sameDomainRequest = (function() {
+    /**
+     * ExRequestManager.
+     */
+    ExRequestManager = {
+        requests : [],
+        initialize : function() {
+            var self = this;
+            opera.addEventListener('BeforeScript', function(e) {
+                var script = e.element, requests = self.requests;
+                for (var i = 0; i < requests.length; i++) {
+                    if (script === requests[i].script) {
+                        e.preventDefault();
+                        var req = requests[i];
+                        requests.splice(i, 1);
+                        script.parentNode.removeChild(req.script);
+                        req.requester.responseText = script.text;
+                        if (req.callback) req.callback.call(null, req.requester);
+                        break;
+                    }
+                }
+            }, false);
+        },
+        request : function(href, callback, usecache) {
+            var reqUrl = href;
+            if (!usecache) {
+                reqUrl = href + ((href.indexOf('?') < 0) ? '?' : '&') + new Date().getTime();
+            }
+            var script = document.createElement('script');
+            script.style.display = 'none';
+            script.src = reqUrl;
+            document.body.appendChild(script);
+            var self = this;
+            var requester = {
+                responseText : '',
+                abort : function() { self.abort(script); }
+            }
+            this.requests.push({ script: script, callback: callback, requester : requester });
+            return requester;
+        },
+        abort : function(script) {
+            var requests = this.requests;
+            for (var i = 0; i < requests.length; i++) {
+                if (script === requests[i].script) {
+                    requests.splice(i, 1);
+                    script.parentNode.removeChild(script);
+                    break;
+                }
+            }
+        }
+    };
+    ExRequestManager.initialize();
+    
+    // prevent scripts for NDR.
+    opera.addEventListener('BeforeExternalScript', function(e) {
+        var script = e.element, requests = ExRequestManager.requests;
+        for (var i = 0; i < requests.length; i++) {
+            if (script == requests[i].script) return;
+        }
+        e.preventDefault();
+    }, false);
+    opera.addEventListener('BeforeScript', function(e) {
+        e.preventDefault();
+    }, false);
+    document.addEventListener('DOMContentLoaded', function() {
+        document.body.removeAttribute('onload');
+    }, false);
+    
+    /**
+     * class XMLHttpRequestEx.
+     */
+    function XMLHttpRequestEx() {
+    }
+    XMLHttpRequestEx.prototype = {
+        abort : function() {
+            if (this.requester) {
+                this.requester.abort();
+                delete this.requester;
+            }
+        },
+        getAllResponseHeaders : function() {
+            return '';
+        },
+        getResponseHeader : function(headerLabel) {
+            return '';
+        },
+        open : function(method, url, async, username, password) {
+            this.option = {
+                method : 'GET', // GET only.
+                url : url,
+                async : true, // async only.
+                username : username,
+                password : password
+            };
+        },
+        overrideMimeType : function() {
+        },
+        send : function(content) {
+            var url = this.option.url;
+            if (this.option.username) {
+                url = url.replace(/(https?:\/\/)/, '\1' + this.option.username + ':' + this.option.password + '@');
+            }
+            if (content) {
+                url += '?' + content;
+            }
+            var self = this;
+            this.requester = ExRequestManager.request(
+                url,
+                function() {
+                    self.responseText = self.requester.responseText;
+                    self.status = "200";
+                    self.statusText = "OK";
+                    self.readyState = 4;
+                    if (self.onreadystatechange) self.onreadystatechange();
+                    if (self.onload) self.onload();
+                },
+                this.option.useCache
+            );
+            this.readyState = 1;
+            if (this.onreadystatechange) this.onreadystatechange();
+        },
+        setRequestHeader : function(label, value) {
+        },
+        onload : null,
+        onreadystatechange : null,
+        readyState : 0,
+        responseText : '',
+        get responseXML() {
+            if (this.readyState == 4) {
+                return new DOMParser().parseFromString(this.responseText, 'application/xml');
+            }
+            else {
+                return null;
+            }
+        },
+        set useCache(b) { this.option.useCache = !!b; }
+    }
+    
+    /**
+     * class RequestPoolEx.
+     *   Extends RequestPool.
+     */
+    function RequestPoolEx(poolCount) {
+        this.poolCount = poolCount;
+        this.requestQueue = [];
+        this.working = 0;
+        this.timeout = 5000;
+    }
+    RequestPoolEx.prototype = new RequestPool();
+    RequestPoolEx.prototype.getRequest = function(usecache) {
+        var xhr = new XMLHttpRequestEx();
+        var self = this;
+        xhr.send = function(content) {
+            xhr.useCache = !!usecache;
+            self.requestQueue.push({ xhr: xhr, content : content });
+            self.next();
+        };
+        return xhr;
+    };
+    RequestPoolEx.prototype.sendRequest = function(xhr, content) {
+        XMLHttpRequestEx.prototype.send.call(xhr, content);
+    };
+
+    var isSameDomain = (function() {
+        var homeAddress = location.href.match(/.*?[/][/].*?[/]/).toString();
+        return function(url) {
+            return url.indexOf(':') < 0 || url.indexOf(homeAddress) == 0;
+        }
+    })();
+    var httpRequest = (function() {
         var requestPool = new RequestPool(2);
+        var requestPoolEx = new RequestPoolEx(5);
         return function(href, callback, usecache) {
-            var xhr = requestPool.getRequest(usecache);
+            var xhr;
+            if (isSameDomain(href)) {
+                xhr = requestPool.getRequest(usecache);
+            }
+            else {
+                xhr = requestPoolEx.getRequest(usecache);
+            }
             if (callback) {
                 xhr.onload = function() {
                     callback(xhr);
@@ -1375,68 +1553,6 @@
             return xhr;
         }
     })();
-    var crossDomainRequest = (function() {
-        // for Cross Domain Access. (http://orera.g.hatena.ne.jp/misttrap/20080302/p1)
-        var requests = [];
-        function crossDomainListener(e) {
-            var script = e.element;
-            for (var i = 0; i < requests.length; i++) {
-                if (script === requests[i].script) {
-                    e.preventDefault();
-                    var callback = requests[i].callback;
-                    requests.splice(i, 1);
-                    script.parentNode.removeChild(script);
-                    if (callback) {
-                        callback({ responseText: script.text });
-                    }
-                    break;
-                }
-            }
-            // prevent other script.
-            e.preventDefault();
-        }
-        opera.addEventListener('BeforeScript', crossDomainListener, false);
-        // prevent other script.
-        function beforeExternalScriptListener(e) {
-            var script = e.element;
-            for (var i = 0; i < requests.length; i++) {
-                if (script == requests[i].script) return;
-            }
-            e.preventDefault();
-        }
-        opera.addEventListener('BeforeExternalScript', beforeExternalScriptListener, false);
-        document.addEventListener('DOMContentLoaded', function() { document.body.removeAttribute('onload') }, false);
-        return function(href, callback, usecache) {
-            var reqUrl = href;
-            if (!usecache) reqUrl = href + ((href.indexOf('?') < 0) ? '?' : '&') + new Date().getTime();
-            var script = document.createElement('script');
-            script.style.display = 'none';
-            script.src = reqUrl;
-            requests.push({ script: script, callback: callback } );
-            document.body.appendChild(script);
-        }
-    })();
-    
-    var isSameDomain = (function() {
-        var homeAddress = location.href.match(/.*?[/][/].*?[/]/).toString();
-        return function(url) {
-            return url.indexOf(':') < 0 || url.indexOf(homeAddress) == 0;
-        }
-    })();
-    
-    function httpRequest(href, callback) {
-        if (isSameDomain(href)) {
-            sameDomainRequest(href, callback);
-        }
-        else {
-            if (href.indexOf('atwiki') > 0) {
-                crossDomainRequest(href, callback, true);
-            }
-            else {
-                crossDomainRequest(href, callback);
-            }
-        }
-    }
     
     function feedRequest(href, feedCallback) {
         var callback = function(e) {
@@ -1487,12 +1603,12 @@
      * class ThumbnailInfo.
      */
     var ThumbnailInfo = {
-        BASE : 'http://www.nicovideo.jp/api/getthumbinfo/',
-        IMG_DELETED : 'http://www.nicovideo.jp/img/thumb/del_img.jpg'
+        BASE : 'http://ext.nicovideo.jp/api/getthumbinfo/',
+        IMG_DELETED : 'http://res.nicovideo.jp/img/common/video_deleted.jpg'
     }
     ThumbnailInfo.Instance = function() {
         this.cache = {};
-        this.requestPool = new RequestPool(1);
+        this.requestPool = new RequestPoolEx(3);
         this.requestPool.timeout = 2000;
         this.tagExp = new XPathEvaluator().createExpression('//tags[@domain="jp"]/tag', null);
     };
@@ -1630,7 +1746,7 @@
             if (requests.length == 0) return;
             var url = HatenaStar.ENTRIES + '?uri=' + uris.join('&uri=') + '&' + this.session;
             var self = this;
-            crossDomainRequest(url, function(xhr) {
+            httpRequest(url, function(xhr) {
                 try {
                     var json = eval('(' + xhr.responseText + ')'); // trust s.hatena
                 }
@@ -1705,7 +1821,7 @@
         expandStar : function(uri, numPlace) {
             var url = HatenaStar.ENTRY + '?uri=' + uri + '&' + this.session;
             var self = this;
-            crossDomainRequest(url, function(xhr) {
+            httpRequest(url, function(xhr) {
                 var json = eval('(' + xhr.responseText + ')');
                 var stars = json.entries[0].stars;
                 var df = numPlace.ownerDocument.createDocumentFragment();
@@ -1764,7 +1880,7 @@
     NicoMylist.Instance.prototype = {
         loadMylistGroup : function() {
             var self = this;
-            sameDomainRequest(NicoMylist.GROUP_EDIT, function(x) {
+            httpRequest(NicoMylist.GROUP_EDIT, function(x) {
                 if (x.status == 200) {
                     var group_list = [];
                     var group_info = {};
@@ -2022,6 +2138,13 @@
                 xmlUrl  : ol.getAttribute('xmlUrl'),
                 htmlUrl : ol.getAttribute('htmlUrl')
             };
+            // ndr options.
+            if (ol.hasAttribute('ndrOrder')) {
+                olObj.ndrOrder = ol.getAttribute('ndrOrder');
+            }
+            if (ol.hasAttribute('ndrThumb')) {
+                olObj.ndrThumb = ol.getAttribute('ndrThumb');
+            }
             opmlObj.outline.push(olObj);
         }
         return opmlObj;
@@ -2248,7 +2371,7 @@
             self.reloadAllFeeds();
         }, false);
         
-        var feedEditButton = document.getElementById('NDR_C_FEED_EDIT');
+        var feedEditButton = document.getElementById('NDR_C_FEEDS_EDIT');
         feedEditButton && feedEditButton.addEventListener('click', function(e) {
             e.preventDefault();
             self.openFeedEdit();
@@ -2811,6 +2934,9 @@
             var storePref = (jsonStr) ? eval('(' + jsonStr + ')') : null;
             self.importPreference(storePref);
             self._loadSucceeded = true;
+            if (self.pref.feedList.length == 0) {
+                self.setStatus('complete');
+            }
             return true;
         }
         return _loadPreference();
@@ -3305,7 +3431,7 @@
             /*
             if (this.pref.feedInfo[feedObj.url]) {
                 var editButton = document.createElement('button');
-                editButton.id = 'NDR_C_ENTRIES_EDIT';
+                editButton.id = 'NDR_C_FEED_EDIT';
                 editButton.textContent = NDR.lang.EDIT;
                 editButton.addEventListener('click', function(e) {
                     self.editFeedProcess(feedObj.url);
@@ -3340,6 +3466,15 @@
                 }, false);
                 entryPageButtons.appendChild(nextButton);
             }
+            /*
+            var sortButton = document.createElement('button');
+            sortButton.id = 'NDR_C_ENTRIES_SORT';
+            sortButton.textContent = 'desc';
+            sortButton.addEventListener('click', function(e) {
+                self.reloadFeed(feedObj.url);
+            }, false);
+            entryPageButtons.appendChild(sortButton);
+            */
         }
         return entryPageButtons;
     };
@@ -3377,7 +3512,7 @@
             regV_ID = /[a-z]{0,2}[0-9]+(?=\?|$)/,
             regNumb = /\d+/;
             
-        var accentPhrase = null;
+        var accentPhrase = function(s) { return s; };
         if (feedObj.option && feedObj.option.emphases) {
             var emphases = feedObj.option.emphases;
             var regEmphasis = new RegExp(emphases.join('|'), 'gi');
@@ -3391,9 +3526,6 @@
                     return '<span class="' + emphasisClasses[index] + '">' + s + '</span>'
                 });
             };
-        }
-        else {
-            accentPhrase = function(s) { return s; };
         }
         
         var self = this;
@@ -3554,7 +3686,7 @@
                     items[i] = thumb_info;
                     item = thumb_info;
                     if (typeof starRequest != 'undefined') starRequest.title = thumb_info.title;
-                    dv.getElementsByTagName('h4')[0].innerHTML = '<a href="' + escAttr(thumb_info.link) + '" target="_blank">' + stripTag(thumb_info.title) + '</a>';
+                    dv.getElementsByTagName('h4')[0].innerHTML = '<a href="' + escAttr(thumb_info.link) + '" target="_blank">' + accentPhrase(stripTag(thumb_info.title)) + '</a>';
                     var thumbnail = dv.getElementsByTagName('img')[0];
                     if (thumb_info.image) thumbnail.src = thumb_info.image;
                     thumbnail.setAttribute('alt', thumb_info.title);
@@ -3964,15 +4096,16 @@
         var form = panel.getElementsByTagName('form')[0];
         form.addEventListener('submit', function(e) {
             e.preventDefault();
-            self.processFeedObj(feedObj);
             var feedElement;
             if (self.pref.enableStorage) {
                 self.pref.feedList.push(feedObj.url);
                 self.pref.feedInfo[feedObj.url] = self.createFeedInfoFromFeedEditPanel(feedObj.url, panel);
                 self.storePreference();
+                self.processFeedObj(feedObj);
                 feedElement = self.addFeedItem(feedObj);
             }
             else {
+                self.processFeedObj(feedObj);
                 feedElement = self.addTemporaryFeedItem(feedObj);
             }
             self.selectFeedItemElement(feedElement);
@@ -4284,7 +4417,11 @@
             var title   = escAttr(feedInfo.otitle || feedInfo.title),
                 xmlUrl  = escAttr(url),
                 htmlUrl = (feedItem && feedItem.feedObj && feedItem.feedObj.link) ? escAttr(feedItem.feedObj.link) : null;
-            outlineXml.push('        <outline text="' + title + '" type="rss" xmlUrl="' + xmlUrl + '"' +  (htmlUrl ? ' htmlUrl="' + htmlUrl + '"' : '')  + ' title="' + title + '" />');
+            outlineXml.push('        <outline text="' + title + '" type="rss" xmlUrl="' + xmlUrl + '"' +  
+                (htmlUrl ? ' htmlUrl="' + htmlUrl + '"' : '')  + 
+                (feedInfo.order ? ' ndrOrder="' + feedInfo.order + '"' : '')  + 
+                (feedInfo.thumb ? ' ndrThumb="' + feedInfo.thumb + '"' : '')  + 
+                ' title="' + title + '" />');
         }
         var opmlXml = [
             '<?xml version="1.0" encoding="utf-8"?>',
@@ -4318,7 +4455,10 @@
         var feedList = [];
         for (var i = 0, len = outlines.length; i < len; i++) {
             var ol = outlines[i];
-            feedList.push({ url : ol.xmlUrl, otitle: (ol.title || ol.text) });
+            var feedInfo = { url : ol.xmlUrl, otitle: (ol.title || ol.text) };
+            feedInfo.order = ol.ndrOrder;
+            feedInfo.thumb = ol.ndrThumb;
+            feedList.push(feedInfo);
         }
         this.importFeedList(feedList);
         this.storePreference();
