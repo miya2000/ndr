@@ -188,7 +188,7 @@
         ].join('\n');
     };
     NDR.style = function(pref) { return [
-        'body { width: 99%; min-width: 580px; overflow: hidden; background-image: none; } ',
+        'body { width: 99%; height: 100%; min-width: 580px; overflow: hidden; background-image: none; } ',
         'a, a:hover, a:active { color: inherit; text-decoration: underline; } ',
         'h1 a { text-decoration: none !important; } ',
         '.ndr_body { height: 100%; } ',
