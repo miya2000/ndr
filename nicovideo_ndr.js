@@ -7,7 +7,7 @@
 // @include   http://www.nicovideo.jp/ndr/
 // ==/UserScript==
 (function() {
-
+    
     // ==== preferences ==== //
     NDR.PREFERENCES = {
         MIX_COUNT : 30,
@@ -188,7 +188,7 @@
         ].join('\n');
     };
     NDR.style = function(pref) { return [
-        'body { width: 99%; min-width: 580px; overflow: hidden; background-image: none; } ',
+        'body { width: 99%; height: 100%; min-width: 580px; overflow: hidden; background-image: none; } ',
         'a, a:hover, a:active { color: inherit; text-decoration: underline; } ',
         'h1 a { text-decoration: none !important; } ',
         '.ndr_body { height: 100%; } ',
@@ -224,7 +224,7 @@
         '    overflow: hidden; ',
         '} ',
         '.ndr_header {',
-        '    background: #FFFFFF url(http://res.nicovideo.jp/img/index/bg_ch_kanren.gif) repeat-x scroll 0 0; ',
+        '    background: #FFFFFF url(http://res.nicovideo.jp/img/category_tab/b1_off.gif) repeat-x scroll 0 0; ',
         '    border-color: #CCCCCC; ',
         '    border-style: solid; ',
         '    border-width: 1px 0; ',
@@ -329,7 +329,7 @@
         '    overflow: hidden; ',
         '} ',
         'ul.ndr_feed_menu {',
-        '    background: #FFFFFF url(http://res.nicovideo.jp/img/index/top/guide_bg.gif) repeat-x scroll 0 -20px; ',
+        '    background: #FFFFFF url(http://www.niconicommons.jp/images/index/featured_contents.png) repeat-x scroll 0 -20px; ',
         '    border-bottom: #CCCCCC solid 1px; ',
         '    list-style-type: none; ',
         '    margin: 0; ',
@@ -1018,7 +1018,7 @@
     KeyBind.prototype.start = function() {
         var self = this;
         this.target.addEventListener('keypress', this._listener = function(e) {
-            if (self.target != e.target && /^(?:input|textarea|select|button)$/i.test(e.target.nodeName)) return;
+            if (self.target != e.target && /^(?:input|textarea|select)$/i.test(e.target.nodeName)) return;
             self.binds.forEach(function(shortcut) {
                 if (self.checkShortcut(shortcut, e)) {
                     e.preventDefault();
@@ -1282,24 +1282,18 @@
         this.intervals = {};
     }
     TimerManager.prototype.setTimeout = function(name, func, delay) {
-        this.clearTimeout(name);
-        var self = this;
-        this.timeouts[name] = this.win.setTimeout(function() {
-            delete self.timeouts[name];
-            func();
-        }, delay);
+        this.clear(name);
+        this.timeouts[name] = this.win.setTimeout(func, delay);
     };
-    TimerManager.prototype.clearTimeout = function(name) {
+    TimerManager.prototype.setInterval = function(name, func, delay) {
+        this.clear(name);
+        this.intervals[name] = this.win.setInterval(func, delay);
+    };
+    TimerManager.prototype.clear = function(name) {
         if (this.timeouts[name]) {
             this.win.clearTimeout(this.timeouts[name]);
             delete this.timeouts[name];
         }
-    };
-    TimerManager.prototype.setInterval = function(name, func, delay) {
-        this.clearInterval(name);
-        this.intervals[name] = this.win.setInterval(func, delay);
-    };
-    TimerManager.prototype.clearInterval = function(name) {
         if (this.intervals[name]) {
             this.win.clearInterval(this.intervals[name]);
             delete this.intervals[name];
@@ -1388,7 +1382,7 @@
         },
         request : function(href, callback, usecache) {
             var reqUrl = href;
-            if (!usecache) {
+            if (!usecache && !/wiki/.test(href)) {
                 reqUrl = href + ((href.indexOf('?') < 0) ? '?' : '&') + new Date().getTime();
             }
             var script = document.createElement('script');
@@ -2406,12 +2400,12 @@
                     }
                     else {
                         if (++intervalCount > 10) {
-                            self.timer.clearInterval('feedSearch');
+                            self.timer.clear('feedSearch');
                         }
                     }
                 }, 500);
             }
-            self.timer.clearTimeout('entrySearch');
+            self.timer.clear('entrySearch');
             if (e.keyCode == 13) {
                 self.timer.setTimeout('entrySearch', function() {
                     var feed = self.createEntrySearchResultFeed(feedSearchBox);
@@ -2568,7 +2562,7 @@
         if (!str) return '';
         var p = str.replace(/^[\s|]+|[\s|]+$/g, '');
         if (!p) return '';
-        return p.replace(/\s+/g, ' ').replace(/\s*\|\s*/g, '|').replace(/[|]+/g, '|').replace(/[.+?*()\[\]\\{}^$]/g, '\\$1');
+        return p.replace(/\s+/g, ' ').replace(/\s*\|\s*/g, '|').replace(/[|]+/g, '|').replace(/[.+?*()\[\]\\{}^$]/g, '\\$&');
     };
     NDR.prototype.createSearchTester = function(phrase) {
         if (!phrase) {
@@ -3392,8 +3386,8 @@
         return feedObj;
     };
     NDR.prototype.clearEntriesPanel = function() {
-        this.timer.clearTimeout('openFeed');
-        this.timer.clearTimeout('openFeedItem');
+        this.timer.clear('openFeed');
+        this.timer.clear('openFeedItem');
         thumbnailInfo.cancelRequest();
         hatenaStar.cancelRequest();
         this.stopObserveScrollEntriesPanel();
@@ -3685,12 +3679,12 @@
                     }
                     items[i] = thumb_info;
                     item = thumb_info;
-                    if (typeof starRequest != 'undefined') starRequest.title = thumb_info.title;
-                    dv.getElementsByTagName('h4')[0].innerHTML = '<a href="' + escAttr(thumb_info.link) + '" target="_blank">' + accentPhrase(stripTag(thumb_info.title)) + '</a>';
-                    var thumbnail = dv.getElementsByTagName('img')[0];
-                    if (thumb_info.image) thumbnail.src = thumb_info.image;
-                    thumbnail.setAttribute('alt', thumb_info.title);
                     if (thumb_info.status == 'ok') {
+                        if (typeof starRequest != 'undefined') starRequest.title = thumb_info.title;
+                        dv.getElementsByTagName('h4')[0].innerHTML = '<a href="' + escAttr(thumb_info.link) + '" target="_blank">' + accentPhrase(stripTag(thumb_info.title)) + '</a>';
+                        var thumbnail = dv.getElementsByTagName('img')[0];
+                        if (thumb_info.image) thumbnail.src = thumb_info.image;
+                        thumbnail.setAttribute('alt', thumb_info.title);
                         dv.lastChild.previousSibling.innerHTML = [
                             formatLength(thumb_info.length) + '<br>',
                             NDR.lang.PLAY_COUNT + ':' + formatNumber(thumb_info.view) + '<br>',
@@ -3785,7 +3779,7 @@
         var entriesPane = document.getElementById('NDR_ENTRIES');
         var self = this;
         entriesPane.addEventListener('scroll', this.scrollObserverEntriesPanel = function() {
-            self.timer.clearTimeout('scrollEntriesPanelFunc');
+            self.timer.clear('scrollEntriesPanelFunc');
             if (self.wellScrolledEntriesPanel()) {
                 self.timer.setTimeout('scrollEntriesPanelFunc', function() {
                     if (self.wellScrolledEntriesPanel()) func();
@@ -3795,7 +3789,7 @@
         this.scrollObserverEntriesPanel(); // first execute.
     };
     NDR.prototype.stopObserveScrollEntriesPanel = function() {
-        this.timer.clearTimeout('scrollEntriesPanelFunc');
+        this.timer.clear('scrollEntriesPanelFunc');
         if (this.scrollObserverEntriesPanel) {
             var entriesPane = document.getElementById('NDR_ENTRIES');
             entriesPane.removeEventListener('scroll', this.scrollObserverEntriesPanel, false);
@@ -4355,7 +4349,7 @@
         countEl.textContent = '0';
     };
     NDR.prototype.showPinnedList = function() {
-        this.timer.clearTimeout('pinTooltip');
+        this.timer.clear('pinTooltip');
         if (this.pinnedMap.size() == 0) return;
         var pinnedList = document.getElementById('NDR_PINNED_LIST');
         if (pinnedList.style.display == 'block') return;
