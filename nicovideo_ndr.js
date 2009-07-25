@@ -1283,7 +1283,11 @@
     }
     TimerManager.prototype.setTimeout = function(name, func, delay) {
         this.clear(name);
-        this.timeouts[name] = this.win.setTimeout(func, delay);
+        var self = this;
+        this.timeouts[name] = this.win.setTimeout(function() {
+            delete self.timeouts[name];
+            func();
+        }, delay);
     };
     TimerManager.prototype.setInterval = function(name, func, delay) {
         this.clear(name);
