@@ -1,9 +1,9 @@
 // ==UserScript==
-// @name      NDR
+// @name      nicovideo - ndr
 // @description niconico douga RSS reader.
 // @namespace http://d.hatena.ne.jp/miya2000/
 // @author    miya2000
-// @version   preview2
+// @version   1.0.0
 // @include   http://www.nicovideo.jp/ndr/
 // ==/UserScript==
 (function() {
@@ -945,6 +945,21 @@
         return a.href;
     }
 
+    var Cookie = {
+        get : function(key) {
+            return decodeURIComponent((new RegExp('(?: |^)' + key + '=([^;]*)').exec(document.cookie) || / _ / )[1]);
+        },
+        set : function(key, value, expires, path, domain) {
+            document.cookie = key + '=' + encodeURIComponent(value) + 
+                (expires ? ('; expires=' + new Date(expires).toGMTString()) : '') +
+                (path    ? ('; path=' + path) : '') +
+                (domain  ? ('; domain=' + domain) : '');
+        },
+        del : function(key) {
+            document.cookie = key + '=; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+        }
+    };
+
     function createPlayInfo(el) {
         var an = el.getElementsByTagName('a');
         if (an.length == 0 && /a/i.test(el.nodeName)) {
@@ -1079,50 +1094,61 @@
      * Map implementation that has listed keys.
      */
     function ListedKeyMap() {
-        this.keys = [];
-        this.values = {};
+        this._keys = [];
+        this._values = {};
     }
     ListedKeyMap.prototype = {
         has : function(key) {
-            return this.values.hasOwnProperty(key);
+            return this._values.hasOwnProperty(key);
         },
         get : function(key) {
-            return this.values[key];
+            return this._values[key];
         },
         getAt : function(index) {
-            return this.values[this.keys[index]];
+            return this._values[this._keys[index]];
         },
         add : function(key, value) {
             if (this.has(key)) this.remove(key);
-            this.values[key] = value;
-            this.keys.push(key);
+            this._values[key] = value;
+            this._keys.push(key);
         },
         insertAt : function(index, key, value) {
             if (this.has(key)) return;
-            this.values[key] = value;
-            this.keys.splice(index, 0, key);
+            this._values[key] = value;
+            this._keys.splice(index, 0, key);
         },
         remove : function(key) {
             if (this.has(key)) {
-                this.keys.splice(this.keys.indexOf(key), 1);
-                delete this.values[key];
+                this._keys.splice(this.indexOf(key), 1);
+                delete this._values[key];
             }
         },
         removeAt : function(index) {
-            var key = keys[index];
-            keys.splice(index, 1);
-            delete this.values[key];
+            var key = this._keys[index];
+            this._keys.splice(index, 1);
+            delete this._values[key];
         },
-        indexOf : function(key) {
-            return this.keys.indexOf(key);
-        },
+        indexOf : (function() {
+            if (Array.prototype.indexOf) {
+                return function(key) { return this._keys.indexOf(key); }
+            }
+            else {
+                return function(key) { 
+                    var kyes = this._keys;
+                    for (var i = 0, len = keys.length; i < len; i++) {
+                        if (keys[i] === key) return i;
+                    }
+                    return -1;
+                }
+            }
+        })(),
         keys : function() {
-            return this.keys.concat();
+            return this._keys.concat();
         },
-        size : function() {
-            return this.keys.length;
+        count : function() {
+            return this._keys.length;
         }
-    }
+    };
     
     /**
      * class ListElementIterator (from wnp)
@@ -1882,12 +1908,14 @@
                 if (x.status == 200) {
                     var group_list = [];
                     var group_info = {};
-                    var m = x.responseText.match(/href\s*=\s*"mylist\/\d+"[^>]*>.+?<\/a>/g);
+                    var m = x.responseText.match(/href\s*=\s*"mylist\/\d+"[^>]*>[^<>]+?<\/a>/g);
                     if (!m) return;
                     for (var i = 0; i < m.length; i++) {
-                        var info = m[i].match(/href\s*=\s*"(mylist\/(\d+))"[^>]*>(.+?)<\/a>/);
-                        group_list.push(info[2]);
-                        group_info[info[2]] = { group_name: info[3], group_uri: '/' + info[1] };
+                        var info = m[i].match(/href\s*=\s*"(mylist\/(\d+))"[^>]*>([^<>]+?)<\/a>/);
+                        if (!group_info[info[2]]) {
+                            group_list.push(info[2]);
+                            group_info[info[2]] = { group_name: info[3], group_uri: '/' + info[1] };
+                        }
                     }
                     self.mylistGroup = { group_list: group_list, group_info: group_info };
                 }
@@ -1898,8 +1926,10 @@
             x.open(method, url, true);
             x.onload = function() { callback(x) };
             x.onerror = function() { throw "XMLHttpRequest error." };
-            x.setRequestHeader('X-Requested-With', 'XMLHttpRequest'); // for niconico API.
-            x.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8'); // for niconico API.
+            if (/POST/i.test(method)) {
+                x.setRequestHeader('X-Requested-With', 'XMLHttpRequest'); // for niconico API.
+                x.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8'); // for niconico API.
+            }
             x.send(data);
             return x;
         },
@@ -1907,14 +1937,20 @@
             var self = this;
             this.enqueueRequest(function() {
                 var d = new Deferred();
-                self.request(window, 'POST', '/watch/' + video_id, 'mylist=add&group_id=' + group_id + '&ajax=1', 
-                    function(x) { d.callback(x) }
-                );
-                d.addCallback(function(x) { 
+                self.request(window, 'GET', '/watch/' + video_id, null, function(x) { 
+                    var m = /<input .*?name="csrf_token" .*?>/i.exec(x.responseText);
+                    var token = (/value="(.*?)"/i.exec(m) || / _ /)[1] || '';
+                    setTimeout(function() {
+                        self.request(window, 'POST', '/watch/' + video_id, 'mylist=add&group_id=' + group_id + '&ajax=1&csrf_token=' + token, 
+                            function(x) { d.callback(x) }
+                        );
+                    }, NicoMylist.REQUEST_INTERVAL * 1000);
+                });
+                d.addCallback(function(x) {
                     try {
                         callback(eval(x.responseText).result);
                     }
-                    catch(e) {}
+                    catch(e) { opera.postError(e) }
                 });
                 return d;
             });
@@ -2167,15 +2203,18 @@
             VisitUtil.checker.href = url;
             return (VisitUtil.checker.offsetHeight == 0);
         },
-        pseudoVisit : function(link) {
+        pseudoVisit : function(link, callback) {
             if (opera9_5Ab) {
                 var w = window.open(link, '', 'width=1,height=1,menubar=no,toolbar=no,scrollbars=no,top=0,left=10000');
-                setTimeout(function() { w.close(); }, 0);
+                w.blur();
+                setTimeout(function() { w.close(); if (callback) callback(); }, 500);
+                setTimeout(function() { if (!w.closed) w.close(); }, 3000);
                 return;
             }
             var iframe = document.createElement('object');
             iframe.style.display = 'none';
-            iframe.src = link;
+            iframe.type = 'text/html';
+            iframe.data = link;
             document.body.appendChild(iframe);
             document.body.removeChild(iframe);
         }
@@ -2496,7 +2535,7 @@
             e.preventDefault();
             e.stopPropagation();
             var link = e.target.href;
-            for (var i = 0, len = this.feedMap.size(); i < len; i++) {
+            for (var i = 0, len = this.feedMap.count(); i < len; i++) {
                 var feedItem = this.feedMap.getAt(i);
                 if (feedItem.feedObj && feedItem.feedObj.link == link) {
                     var element = feedItem.element;
@@ -2610,7 +2649,7 @@
                 return matched;
             }
         };
-        for (var i = 0, len = this.feedMap.size(); i < len; i++) {
+        for (var i = 0, len = this.feedMap.count(); i < len; i++) {
             var feedItem = this.feedMap.getAt(i);
             feedItem.element.style.display = feedFilter.matches(feedItem) ? '' : 'none';
         }
@@ -2632,7 +2671,7 @@
         };
         var items = [];
         var dup = {};
-        for (var i = 0, len = this.feedMap.size(); i < len; i++) {
+        for (var i = 0, len = this.feedMap.count(); i < len; i++) {
             var feedItem = this.feedMap.getAt(i);
             var feedObj = feedItem.feedObj;
             if (!feedObj) continue;
@@ -3211,7 +3250,7 @@
         
         var added = false;
         if (feedObj.date) {
-            for (var i = 0, len = this.feedMap.size(); i < len; i++) {
+            for (var i = 0, len = this.feedMap.count(); i < len; i++) {
                 var feedItem = this.feedMap.getAt(i);
                 if (feedObj.date > (feedItem.feedObj.date || 0)) {
                     feedList.insertBefore(li, feedItem.element);
@@ -3319,7 +3358,7 @@
         var allItems = this.allUnreadItems;
         if (this.pref.viewWithWatchedVideos) {
             allItems = [];
-            for (var i = 0, len = this.feedMap.size(); i < len; i++) {
+            for (var i = 0, len = this.feedMap.count(); i < len; i++) {
                 var feedItem = this.feedMap.getAt(i);
                 if (feedItem.feedObj) {
                     allItems = allItems.concat(feedItem.feedObj.items);
@@ -3370,13 +3409,12 @@
             items : []
         };
         var items = feedObj.items;
-        var cookie = document.cookie;
-        var nicohistory = /nicohistory=[^;]+/.exec(cookie);
+        var nicohistory = Cookie.get('nicohistory');
         if (!nicohistory) {
             feedObj.description = NDR.lang.NO_HISTORY;
             return feedObj;
         }
-        var histories = decodeURIComponent(nicohistory[0].slice(12)).split(',');
+        var histories = nicohistory.split(',');
         for (var i = 0; i < histories.length; i++) {
             var video_id = histories[i].split(':')[0];
             if (!video_id) continue;
@@ -3649,7 +3687,12 @@
             (function() {
                 function markAsRead() {
                     if (!showVisited) {
-                        if (!VisitUtil.isVisited(item.link)) VisitUtil.pseudoVisit(item.link);
+                        if (!VisitUtil.isVisited(item.link)) VisitUtil.pseudoVisit(item.link, function() {
+                            var expires = new Date();
+                            expires.setMonth(expires.getMonth() + 1); // if this month is Dec, set to Jan of next year automatically.
+                            var nicohistory = Cookie.get('nicohistory');
+                            Cookie.set('nicohistory', nicohistory.replace(new RegExp(',' + video_id + '[^,]*'), ''), expires, '/', '.nicovideo.jp')
+                        });
                         if (feedObj.unreadItems) {
                             var myIndex = feedObj.unreadItems.indexOf(item);
                             if (myIndex >= 0) {
@@ -3660,7 +3703,7 @@
                         }
                         if (dv.parentNode) dv.parentNode.removeChild(dv);
                         var nextButton = document.getElementById('NDR_C_ENTRIES_NEXT');
-                        if (nextButton   ) nextButton.removeAttribute('disabled');
+                        if (nextButton) nextButton.removeAttribute('disabled');
                     }
                 }
                 var markAsReadButton = dv.getElementsByClassName('ndr_mark_as_read')[0];
@@ -4305,7 +4348,7 @@
     };
     NDR.prototype.viewPinnedEntries = function() {
         this.hidePinnedListLater(0);
-        if (this.pinnedMap.size() > 0) {
+        if (this.pinnedMap.count() > 0) {
             this.openURLs(this.pinnedMap.keys);
         }
         this.pinClear();
@@ -4333,7 +4376,7 @@
     NDR.prototype.pinAdd = function(url, title) {
         this.pinnedMap.add(url, { url: url, title: title });
         var count = document.getElementById('NDR_PINNED_COUNT');
-        count.textContent = this.pinnedMap.size();
+        count.textContent = this.pinnedMap.count();
     };
     NDR.prototype.pinAdded = function(url) {
         return this.pinnedMap.has(url);
@@ -4341,7 +4384,7 @@
     NDR.prototype.pinRemove = function(url) {
         this.pinnedMap.remove(url);
         var count = document.getElementById('NDR_PINNED_COUNT');
-        count.textContent = this.pinnedMap.size();
+        count.textContent = this.pinnedMap.count();
     };
     NDR.prototype.pinClear = function(time) {
         this.pinnedMap = new ListedKeyMap();
@@ -4354,7 +4397,7 @@
     };
     NDR.prototype.showPinnedList = function() {
         this.timer.clear('pinTooltip');
-        if (this.pinnedMap.size() == 0) return;
+        if (this.pinnedMap.count() == 0) return;
         var pinnedList = document.getElementById('NDR_PINNED_LIST');
         if (pinnedList.style.display == 'block') return;
         var range = document.createRange();
