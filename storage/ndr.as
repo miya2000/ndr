@@ -15,7 +15,7 @@ package {
 				ExternalInterface.addCallback("setData", setData);
 			}
 		}
-		private function setData(key:String = null, data:Object = null, name:String = null):String {
+		private function setData(key:String, data:Object = null, name:String = null):String {
 			if (arguments.length == 1) {
 				data = key;
 				key = "data";
@@ -25,7 +25,7 @@ package {
 			so.data[key] = data;
 			return so.flush();
 		}
-		private function getData(key:String, name:String = null):Object {
+		private function getData(key:String = null, name:String = null):Object {
 			if (arguments.length == 0) {
 				key = "data";
 			}
