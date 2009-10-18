@@ -15,16 +15,28 @@ package {
 				ExternalInterface.addCallback("setData", setData);
 			}
 		}
-		private function setData(data:Object, name:String = null):String {
+		private function setData(key:String = null, data:Object = null, name:String = null):String {
+			if (arguments.length == 1) {
+				data = key;
+				key = "data";
+			}
 			var localName:String = "ndr" + (name ? ("_" + name) : "");
 			var so:SharedObject = SharedObject.getLocal(localName);
-			so.data["data"] = data;
+			so.data[key] = data;
 			return so.flush();
 		}
-		private function getData(name:String = null):Object {
+		private function getData(key:String, name:String = null):Object {
+			if (arguments.length == 0) {
+				key = "data";
+			}
 			var localName:String = "ndr" + (name ? ("_" + name) : "");
 			var so:SharedObject = SharedObject.getLocal(localName);
-			return so.data["data"];
+			return so.data[key];
+		}
+		private function clear(name:String = null):void {
+			var localName:String = "ndr" + (name ? ("_" + name) : "");
+			var so:SharedObject = SharedObject.getLocal(localName);
+			so.clear();
 		}
 	}
 }
