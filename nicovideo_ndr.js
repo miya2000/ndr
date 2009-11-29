@@ -188,7 +188,7 @@
         ].join('\n');
     };
     NDR.style = function(pref) { return [
-        'body { width: 99%; height: 100%; min-width: 580px; overflow: hidden; background-image: none; } ',
+        'body { width: 99%; height: 100%; min-width: 580px; overflow: hidden; background-image: none !important; padding: 0 !important; } ',
         'a, a:hover, a:active { color: inherit; text-decoration: underline; } ',
         'h1 a { text-decoration: none !important; } ',
         '.ndr_body { height: 100%; } ',
@@ -827,6 +827,30 @@
     function escAttr(str) {
         return str.replace(/'/g, '&#39;').replace(/"/g, '&quot;');
     }
+    function escQuery(value) {
+        return value.replace('%', '%25')
+            .replace(/\s+/g, '+')
+            .replace('"', '%22')
+            .replace('#', '%23')
+            .replace('$', '%24')
+            .replace('&', '%26')
+            .replace('/', '%2F')
+            .replace(':', '%3A')
+            .replace(';', '%3B')
+            .replace('<', '%3C')
+            .replace('=', '%3D')
+            .replace('>', '%3E')
+            .replace('?', '%3F')
+            .replace('@', '%40')
+            .replace('[', '%5B')
+            .replace('\\', '%5C')
+            .replace(']', '%5D')
+            .replace('^', '%5E')
+            .replace('{', '%7B')
+            .replace('|', '%7C')
+            .replace('}', '%7D')
+        ;
+    }
 
     function parseDate(s) {
         if (!s) return new Date(0);
@@ -913,6 +937,17 @@
         }
         return arr;
     }
+    
+    var createDocumentFragment = (function() {
+        var range = document.createRange();
+        var dv = document.createElement('div');
+        document.createDocumentFragment().appendChild(dv); // for selectNodeContents.
+        range.selectNodeContents(dv);
+        return function (htmlStr) {
+            return range.createContextualFragment(htmlStr);
+        };
+    })();
+    
     // http(s) only.
     function getAbsoluteURL(url, baseURL) {
         if (!url && !baseURL) return location.href;
@@ -960,7 +995,7 @@
         }
     };
 
-    function createPlayInfo(el) {
+    function createPlayInfo(el, ignoreNoFollow) {
         var an = el.getElementsByTagName('a');
         if (an.length == 0 && /a/i.test(el.nodeName)) {
             an = [el];
@@ -971,7 +1006,7 @@
             image = {};
         for (var i = 0; i < an.length; i++) {
             var a = an[i];
-            if (/\bnofollow\b/.test(a.getAttribute('rel'))) continue;
+            if (!ignoreNoFollow && /\bnofollow\b/.test(a.getAttribute('rel'))) continue;
             var href = a.href;
             if (/^\/?watch\/(.*)/.exec(href)) href = 'http://www.nicovideo.jp/watch/' + RegExp.$1;
             if (/http:\/\/www\.nicovideo\.jp\/watch\/(\w*)$/.test(href)) {
@@ -990,7 +1025,12 @@
                 }
             }
         }
-        return {items: items, video: video, title: title, image: image }
+        if (items.length == 0 && !ignoreNoFollow) {
+            return createPlayInfo(el, true);
+        }
+        else {
+            return {items: items, video: video, title: title, image: image };
+        }
     }
 
     /**
@@ -999,6 +1039,10 @@
     function KeyBind(target) {
         this.target = target || window;
         this.binds = [];
+        this.listeners = {
+            keypress: null,
+            keyup : null
+        };
     };
     KeyBind.KEY_MAP = {
         'backspace' : 8,
@@ -1032,7 +1076,14 @@
     };
     KeyBind.prototype.start = function() {
         var self = this;
-        this.target.addEventListener('keypress', this._listener = function(e) {
+        var keypressCode = -1;
+        this.target.addEventListener('keypress',  this.listeners.keypress = function(e) {
+           if (!('repeat' in e)) {
+                if (keypressCode === e.keyCode) {
+                    e.repeat = true;
+                }
+                keypressCode = e.keyCode;
+            }
             if (self.target != e.target && /^(?:input|textarea|select)$/i.test(e.target.nodeName)) return;
             self.binds.forEach(function(shortcut) {
                 if (self.checkShortcut(shortcut, e)) {
@@ -1041,10 +1092,15 @@
                 }
             });
         }, false);
+        this.target.addEventListener('keyup', this.listeners.keyup = function(e) {
+            keypressCode = -1;
+        }, false);
     };
     KeyBind.prototype.stop = function() {
-        this.target.removeEventListener('keypress', this._listener, false);
-        delete this._listener;
+        this.target.removeEventListener('keypress', this.listeners.keypress, false);
+        this.target.removeEventListener('keyup', this.listeners.keyup, false);
+        this.listeners.keypress = null;
+        this.listeners.keyup = null;
     };
     KeyBind.prototype.clear = function() {
         this.binds = [];
@@ -1338,7 +1394,7 @@
         this.poolCount = poolCount;
         this.requestQueue = [];
         this.working = 0;
-        this.timeout = 5000;
+        this.timeout = 15000;
     }
     RequestPool.prototype = {
         getRequest : function(usecache) {
@@ -1391,7 +1447,7 @@
     /**
      * ExRequestManager.
      */
-    ExRequestManager = {
+    var ExRequestManager = {
         requests : [],
         initialize : function() {
             var self = this;
@@ -1533,7 +1589,7 @@
         this.poolCount = poolCount;
         this.requestQueue = [];
         this.working = 0;
-        this.timeout = 5000;
+        this.timeout = 15000;
     }
     RequestPoolEx.prototype = new RequestPool();
     RequestPoolEx.prototype.getRequest = function(usecache) {
@@ -2277,7 +2333,9 @@
             }, 5000);
         }
     };
-    
+    /**
+     * class Platform
+     */
     function Platform() {
         this.commands = new ListedKeyMap();
         this.currentMode = '';
@@ -2336,7 +2394,7 @@
         // loadPreference delay for Opera9.
         if (this.pref.enableStorage) {
             var self = this;
-            setTimeout(function() { self.loadPreference() }, 0);
+            setTimeout(function() { self.loadPreference() }, 100);
         }
         // no feed.
         if (this.pref.feedList.length == 0 && !this.pref.enableStorage) {
@@ -2379,7 +2437,7 @@
             }
             else {
                 e.preventDefault();
-                self.openTemporaryFeed('http://www.nicovideo.jp/search/' + nicoSearchForm.s.value.replace(/\s+/g, '+'));
+                self.openTemporaryFeed('http://www.nicovideo.jp/search/' + escQuery(nicoSearchForm.s.value));
                 setTimeout(function() { nicoSearchForm.s.value = '' }, 0);
             }
         }, false);
@@ -2500,12 +2558,12 @@
         
         var platform = new Platform();
         // bind commands.
-        platform.bindCommand({ name: 'NextEntry', fn: function() { self.selectNextEntry() }, desc: NDR.lang.COMMAND_NEXT_ENTRY });
-        platform.bindCommand({ name: 'PrevEntry', fn: function() { self.selectPreviousEntry() }, desc: NDR.lang.COMMAND_PREV_ENTRY });
+        platform.bindCommand({ name: 'NextEntry', fn: function(e) { self.selectNextEntry(e.repeat) }, desc: NDR.lang.COMMAND_NEXT_ENTRY });
+        platform.bindCommand({ name: 'PrevEntry', fn: function(e) { self.selectPreviousEntry(e.repeat) }, desc: NDR.lang.COMMAND_PREV_ENTRY });
         platform.bindCommand({ name: 'OlderEntries', fn: function() { self.openOlderEntries() }, desc: NDR.lang.COMMAND_OLDER_ENTRIES });
         platform.bindCommand({ name: 'NewerEntries', fn: function() { self.openNewerEntries() }, desc: NDR.lang.COMMAND_NEWER_ENTRIES });
-        platform.bindCommand({ name: 'NextFeed', fn: function() { self.selectNextFeed() }, desc: NDR.lang.COMMAND_NEXT_FEED });
-        platform.bindCommand({ name: 'PrevFeed', fn: function() { self.selectPreviousFeed() }, desc: NDR.lang.COMMAND_PREV_FEED });
+        platform.bindCommand({ name: 'NextFeed', fn: function(e) { self.selectNextFeed(e.repeat) }, desc: NDR.lang.COMMAND_NEXT_FEED });
+        platform.bindCommand({ name: 'PrevFeed', fn: function(e) { self.selectPreviousFeed(e.repeat) }, desc: NDR.lang.COMMAND_PREV_FEED });
         platform.bindCommand({ name: 'ScrollDown', fn: function() { self.scrollDown() }, desc: NDR.lang.COMMAND_SCROLL_DOWN });
         platform.bindCommand({ name: 'ScrollUp', fn: function() { self.scrollUp() }, desc: NDR.lang.COMMAND_SCROLL_UP });
         platform.bindCommand({ name: 'View', fn: function() { self.viewEntry() }, desc: NDR.lang.COMMAND_VIEW });
@@ -2522,19 +2580,22 @@
         this.feedSelectionIterator = new ListElementIterator(document.getElementById('NDR_FEED_LIST'));
     };
     NDR.prototype.interceptClick = function(e) {
-        if (hasClass(e.target, 'ndr_subscribe')) {
+        var target = e.target;
+        while(target && target.nodeName != 'A') { target = target.parentNode; }
+        if (!target) return;
+        if (hasClass(target, 'ndr_subscribe')) {
             e.preventDefault();
             e.stopPropagation();
-            var a = e.target.previousSibling;
+            var a = target.previousSibling;
             while (a && a.nodeName != 'A') a = a.previousSibling;
             if (a) {
-                this.addFeedURL(a.href + '?rss=2.0');
+                this.addFeedURL(a.href.replace('/user/', '/myvideo/') + '?rss=2.0');
             }
         }
-        if (hasClass(e.target, 'ndr_select_feed')) {
+        else if (hasClass(target, 'ndr_select_feed')) {
             e.preventDefault();
             e.stopPropagation();
-            var link = e.target.href;
+            var link = target.href;
             for (var i = 0, len = this.feedMap.count(); i < len; i++) {
                 var feedItem = this.feedMap.getAt(i);
                 if (feedItem.feedObj && feedItem.feedObj.link == link) {
@@ -2554,7 +2615,7 @@
         }
     };
     NDR.prototype.makeNicoLinks = (function() {
-        var makeNicoReg = /(https?:\/\/[-_.!~*()a-zA-Z0-9;\/?:@&=+$,%#]+)|([a-z]{2}\d+)|(mylist\/\d+)|(^|\D)(\d{10})(?!\d)|(user\/\d+)/mg;
+        var makeNicoReg = /(https?:\/\/[-_.!~*()a-zA-Z0-9;\/?:@&=+$,%#]+)|\b([a-z]{2}\d+)|(mylist\/\d+)|(^|\D)(\d{10})(?!\d)|(user\/\d+)/mg;
         return function(str) {
             return str.replace(makeNicoReg, function(str, $1, $2, $3, $4, $5, $6) {
                 if ($1 != null) return ' <a href="' + $1 + '" target="_blank" rel="nofollow">' + $1 + '</a> ';
@@ -2566,7 +2627,7 @@
                 }
                 if ($3 != null) return ' <a href="http://www.nicovideo.jp/' + $3 + '" target="_blank" rel="nofollow">'+ $3 + '</a> (<a rel="nofollow" class="ndr_subscribe" title="' + NDR.lang.SUBSCRIBE_WITH_NDR + '">' + NDR.lang.SUBSCRIBE + '</a>) ';
                 if ($5 != null) return $4 + ' <a href="http://www.nicovideo.jp/watch/' + $5 + '" target="_blank" rel="nofollow">'+ $5 + '</a> ';
-                if ($6 != null) return ' <a href="http://www.nicovideo.jp/' + $6 + '" target="_blank" rel="nofollow">'+ $6 + '</a> ';
+                if ($6 != null) return ' <a href="http://www.nicovideo.jp/' + $6 + '" target="_blank" rel="nofollow">'+ $6 + '</a> (<a rel="nofollow" class="ndr_subscribe" title="' + NDR.lang.SUBSCRIBE_WITH_NDR + '">' + NDR.lang.SUBSCRIBE + '</a>) ';
             });
         }
     })();
@@ -2782,10 +2843,18 @@
         }
         return iterator.item;
     };
-    NDR.prototype.selectNextEntry = function() {
+    NDR.prototype.selectNextEntry = function(isKeyRepeat) {
+        var current = this.entrySelectionIterator.item;
         var nextEntry = null;
         if (this.scrollSoar) { // now scrolling.
-            nextEntry = this.entrySelectionIterator.next().isNullThenFirst().item;
+            this.entrySelectionIterator.next();
+            if (isKeyRepeat) {
+                this.entrySelectionIterator.isNullThenLast();
+            }
+            else {
+                this.entrySelectionIterator.isNullThenFirst();
+            }
+            nextEntry = this.entrySelectionIterator.item;
         }
         else {
             var entries = this.entrySelectionIterator.listElement;
@@ -2799,19 +2868,27 @@
                     nextEntry = this.entrySelectionIterator.item;
                 }
                 else {
-                    nextEntry = this.entrySelectionIterator.next().isNullThenFirst().item;
+                    this.entrySelectionIterator.next();
+                    if (isKeyRepeat) {
+                        this.entrySelectionIterator.isNullThenLast();
+                    }
+                    else {
+                        this.entrySelectionIterator.isNullThenFirst();
+                    }
+                    nextEntry = this.entrySelectionIterator.item;
                 }
             }
         }
-        if (nextEntry) {
+        if (nextEntry && nextEntry !== current) {
             var self = this;
             this.scrollTo(nextEntry, function() { self.selectEntryItem(nextEntry); });
         }
     };
-    NDR.prototype.selectPreviousEntry = function() {
+    NDR.prototype.selectPreviousEntry = function(isKeyRepeat) {
+        var current = this.entrySelectionIterator.item;
         var prevEntry = null;
-        if (this.entrySelectionIterator.item == this.entrySelectionIterator.listElement.firstChild) {
-            prevEntry = this.entrySelectionIterator.last().item;
+        if (this.entrySelectionIterator.item === this.entrySelectionIterator.listElement.firstChild) {
+            prevEntry = isKeyRepeat ? this.entrySelectionIterator.item : this.entrySelectionIterator.last().item;
         }
         else if (this.scrollSoar) { // now scrolling.
             prevEntry = this.entrySelectionIterator.previous().item;
@@ -2832,7 +2909,7 @@
         if (this.entrySelectionIterator.item == null) {
             prevEntry = this.entrySelectionIterator.current(this.entrySelectionIterator.listElement.firstChild).item;
         }
-        if (prevEntry) {
+        if (prevEntry && prevEntry !== current) {
             var self = this;
             this.scrollTo(prevEntry, function() { self.selectEntryItem(prevEntry); });
         }
@@ -2865,30 +2942,44 @@
             this.currenFeedItem.style.backgroundColor = '#80A0DF';
         }
     };
-    NDR.prototype.selectNextFeed = function() {
+    NDR.prototype.selectNextFeed = function(isKeyRepeat) {
         var current = this.feedSelectionIterator.item;
         this.feedSelectionIterator.next();
         while (this.feedSelectionIterator.item && this.feedSelectionIterator.item.offsetHeight == 0) {
             this.feedSelectionIterator.next();
         }
-        this.feedSelectionIterator.isNullThenFirst();
+        if (isKeyRepeat) {
+            this.feedSelectionIterator.isNullThenLast();
+        }
+        else {
+            this.feedSelectionIterator.isNullThenFirst();
+        }
         while (this.feedSelectionIterator.item && this.feedSelectionIterator.item !== current && this.feedSelectionIterator.item.offsetHeight == 0) {
             this.feedSelectionIterator.next();
         }
-        if (this.feedSelectionIterator.item == null) return;
+        if (this.feedSelectionIterator.item == null) {
+            return;
+        }
         this.openFeedItemFromElement(this.feedSelectionIterator.item);
     };
-    NDR.prototype.selectPreviousFeed = function() {
+    NDR.prototype.selectPreviousFeed = function(isKeyRepeat) {
         var current = this.feedSelectionIterator.item;
         this.feedSelectionIterator.previous();
         while (this.feedSelectionIterator.item && this.feedSelectionIterator.item.offsetHeight == 0) {
             this.feedSelectionIterator.previous();
         }
-        this.feedSelectionIterator.isNullThenLast();
+        if (isKeyRepeat) {
+            this.feedSelectionIterator.isNullThenFirst();
+        }
+        else {
+            this.feedSelectionIterator.isNullThenLast();
+        }
         while (this.feedSelectionIterator.item && this.feedSelectionIterator.item !== current && this.feedSelectionIterator.item.offsetHeight == 0) {
             this.feedSelectionIterator.previous();
         }
-        if (this.feedSelectionIterator.item == null) return;
+        if (this.feedSelectionIterator.item == null) {
+            return;
+        }
         this.openFeedItemFromElement(this.feedSelectionIterator.item);
     };
     NDR.prototype.scrollToFeedItemElement = function(element) {
@@ -3166,6 +3257,10 @@
         }
         // attach upload date (nicovideo RSS only)
         if (/http:\/\/www\.nicovideo\.jp\/.*\?rss/.test(feedObj.url)) {
+            // overwrite feedObj.date ( http://orera.g.hatena.ne.jp/miya2000/20091129/p0 )
+            if (items.length > 0) {
+                feedObj.date = lastDate;
+            }
             for (var i = 0; i < items.length; i++) {
                 var item = items[i];
                 var upload = /\"nico-info-date\">(.*?)</.exec(item.description);
@@ -3262,7 +3357,7 @@
         }
         if (!added) {
             feedList.appendChild(li);
-            this.feedMap.add( feedObj.url, newFeedItem );
+            this.feedMap.add(feedObj.url, newFeedItem);
         }
         
         // load completed.
@@ -3339,7 +3434,14 @@
         favicon_img.onerror = function(e) {
             self.faviconClass[hostName] = '';
             style.parentNode.removeChild(style);
+            favicon_img = null;
         };
+        favicon_img.onload = function(e) {
+            favicon_img = null;
+        };
+        setTimeout(function() {
+            if (favicon_img) favicon_img.onerror();
+        }, 5000);
         favicon_img.src = favicon_url;
         return className;
     };
@@ -3489,7 +3591,9 @@
                 prevButton.textContent = '<';
                 if (!showVisited) prevButton.setAttribute('disabled', 'disabled');
                 prevButton.addEventListener('click', function(e) {
-                    self.openFeed(feedObj);
+                    if (!prevButton.disabled) {
+                        self.openFeed(feedObj);
+                    }
                 }, false);
                 entryPageButtons.appendChild(prevButton);
                 var nextButton = document.createElement('button');
@@ -3498,7 +3602,9 @@
                 nextButton.textContent = '>';
                 if (feedObj.readItems.length == 0 || showVisited) nextButton.setAttribute('disabled', 'disabled');
                 nextButton.addEventListener('click', function(e) {
-                    self.openFeed(feedObj, true);
+                    if (!nextButton.disabled) {
+                        self.openFeed(feedObj, true);
+                    }
                 }, false);
                 entryPageButtons.appendChild(nextButton);
             }
@@ -3551,10 +3657,10 @@
         var accentPhrase = function(s) { return s; };
         if (feedObj.option && feedObj.option.emphases) {
             var emphases = feedObj.option.emphases;
-            var regEmphasis = new RegExp(emphases.join('|'), 'gi');
+            var regEmphasis = new RegExp('(' + emphases.join(')|(') + ')', 'gi');
             accentPhrase = function(str) {
                 return str.replace(regEmphasis, function(s) {
-                    var index = emphases.indexOf(s);
+                    var index = arguments.indexOf(s, 1) - 1;
                     var emphasisClasses = NDR.styles.NDR_EMPHASIS_CLASSES;
                     if (index < 0 || index >= emphasisClasses.length) {
                         index = emphasisClasses.length - 1;
@@ -3568,14 +3674,14 @@
         var feedInfo = this.pref.feedInfo[feedObj.url] || {};
         var process = function(i) {
             var item = items[i];
-            var buf = [];
             var dv = document.createElement('div');
             var className = 'ndr_entry';
             if (i % 2 == 1) className += ' ndr_entry_even';
             if (self.pinAdded(item.link)) className += ' ndr_entry_pin';
             dv.className = className;
-            
             var video_id = regV_ID.exec(item.link)[0];
+            
+            var buf = [];
             buf.push('<div class="ndr_entry_controls">');
             buf.push('    <button class="ndr_clip" title="' + NDR.lang.ADD_MYLIST + '"><span class="ndr_opera_icon"></span></button>');
             buf.push('    <button class="ndr_pin" title="' + NDR.lang.PIN_TOGGLE + '"><span class="ndr_opera_icon"></span></button>');
@@ -3606,11 +3712,28 @@
                 }
             }
             buf.push('</div>');
+            
+            var headDf = createDocumentFragment(buf.join(''));
+            dv.appendChild(headDf);
 
-            var desc_html = self.makeNicoLinks(accentPhrase(stripTag(item.description).replace(regTrim, '')).split(regCRLF).join('<br>'));
-            buf.push('<p>' + desc_html + '</p>');
-            buf.push('<p class="ndr_entry_footer">' + NDR.lang.POSTED + ': ' + (item.date ? formatDate(item.date) : '') + ' | </p>');
-            dv.innerHTML = buf.join('');
+            var bodyDf = createDocumentFragment('<p>' + self.makeNicoLinks(stripTag(item.description).replace(regTrim, '').split(regCRLF).join('<br>')) + '</p>');
+            // word highlight http://userscripts.org/scripts/show/43419
+            if (feedObj.option && feedObj.option.emphases) {
+                var textNodes = evaluate('descendant::text()[string-length(normalize-space(self::text())) > 0]', bodyDf);
+                for (var i = 0; i < textNodes.length; i++) {
+                    var t = textNodes[i];
+                    var ac = accentPhrase(t.nodeValue);
+                    if (ac != t.nodeValue) {
+                        t.parentNode.replaceChild(createDocumentFragment(ac), t);
+                    }
+                }
+            }
+            dv.appendChild(bodyDf);
+            
+            var footDf = createDocumentFragment('<p class="ndr_entry_footer">' + NDR.lang.POSTED + ': ' + (item.date ? formatDate(item.date) : '') + ' | </p>');
+            dv.appendChild(footDf);
+            
+            buf = headDf = bodyDf = footDf = null;
             
             dv.addEventListener('click', function(e) {
                 if (/^(?:a|input|button|img)$/i.test(e.target.nodeName)) return;
@@ -4349,7 +4472,7 @@
     NDR.prototype.viewPinnedEntries = function() {
         this.hidePinnedListLater(0);
         if (this.pinnedMap.count() > 0) {
-            this.openURLs(this.pinnedMap.keys);
+            this.openURLs(this.pinnedMap.keys());
         }
         this.pinClear();
     };
@@ -4404,7 +4527,7 @@
         range.selectNodeContents(pinnedList);
         range.deleteContents();
         var self = this;
-        var keys = this.pinnedMap.keys;
+        var keys = this.pinnedMap.keys();
         for (var i = 0; i < keys.length; i++) {
             var item = this.pinnedMap.get(keys[i]);
             var li = document.createElement('li');
