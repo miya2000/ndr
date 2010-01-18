@@ -815,12 +815,18 @@
         return el;
     }
 
-    var stripTag = (function() {
+    var stripTag, escTag;
+    (function() {
         var dv = document.createElement('div');
-        return function (str) {
+        stripTag = function (str) {
             if (!str) return '';
             dv.innerHTML = str;
             return dv.textContent;
+        };
+        escTag = function(str) {
+            if (!str) return '';
+            dv.textContent = str;
+            return dv.innerHTML;
         };
     })();
     
@@ -1579,7 +1585,7 @@
             }
         },
         set useCache(b) { this.option.useCache = !!b; }
-    }
+    };
     
     /**
      * class RequestPoolEx.
@@ -3721,9 +3727,10 @@
             if (feedObj.option && feedObj.option.emphases) {
                 var textNodes = evaluate('descendant::text()[string-length(normalize-space(self::text())) > 0]', bodyDf);
                 for (var i = 0; i < textNodes.length; i++) {
-                    var t = textNodes[i];
-                    var ac = accentPhrase(t.nodeValue);
-                    if (ac != t.nodeValue) {
+                    var t = textNodes[i], 
+                        ec = escTag(t.nodeValue),
+                        ac = accentPhrase(ec);
+                    if (ac != ec) {
                         t.parentNode.replaceChild(createDocumentFragment(ac), t);
                     }
                 }
@@ -4230,7 +4237,7 @@
         var feedItemClass = this.getFeedItemClass(feedObj.url);
         panel.innerHTML = [
             '<form action="javascript:void(0)">',
-            '<table>'
+            '<table>',
             '<tr><td>' + NDR.lang.TITLE + '</td><td><input type="text" class="ndr_feed_title ' + feedItemClass + '" size="80"></td></tr>',
             '<tr><td></td><td><input type="checkbox" class="ndr_feed_title_check" id="' + tmp_id + 'TI"><label for="' + tmp_id + 'TI">' + NDR.lang.GET_TITLE_FROM_FEED + '</label></td></tr>',
             '<tr><td>' + NDR.lang.ADDRESS + '</td><td><span class="ndr_feed_address"></span></td></tr>',
@@ -4246,7 +4253,7 @@
             '<option value="necessary" selected>' + NDR.lang.THUMB_NECESSARY + '</option>',
             '<option value="never">' + NDR.lang.THUMB_NEVER + '</option>',
             '</select></td></tr>',
-            '</table>'
+            '</table>',
             '<p class="ndr_feed_input_submit"><input type="submit" value="' + NDR.lang.DO_SUBSCRIBE + '"><input type="button" name="cancel" class="ndr_button_cancel" value="' + NDR.lang.CANCEL + '"></p>',
             '</form>',
         ].join('');
@@ -4366,7 +4373,7 @@
         appendClass(panel, 'ndr_feededit_pane');
         panel.innerHTML = [
             '<p class="ndr_feed_del_checker"><input type="checkbox" class="ndr_feed_del_check" id="' + tmp_id + 'DEL"><label for="' + tmp_id + 'DEL">' + NDR.lang.DO_DELETE + '</label></p>',
-            '<table>'
+            '<table>',
             '<tr><td>' + NDR.lang.TITLE + '</td><td><input type="text" class="ndr_feed_title ' + feedItemClass + '" size="80"></td></tr>',
             '<tr><td></td><td><input type="checkbox" class="ndr_feed_title_check" id="' + tmp_id + 'TI"><label for="' + tmp_id + 'TI">' + NDR.lang.GET_TITLE_FROM_FEED + '</label></td></tr>',
             '<tr><td>' + NDR.lang.ADDRESS + '</td><td><span class="ndr_feed_address"></span></td></tr>',
@@ -4594,7 +4601,7 @@
             '       <title>niconico douaga reader - feed list</title>',
             '   </head>',
             '   <body>',
-            outlineXml.join('\n')
+            outlineXml.join('\n'),
             '   </body>',
             '</opml>'].join('\n');
         location.href = 'data:application/octet-stream;charset=utf-8,' + encodeURIComponent(opmlXml);
