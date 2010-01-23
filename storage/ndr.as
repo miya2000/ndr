@@ -13,6 +13,7 @@ package {
 			if (host == "www.nicovideo.jp" && path == "/ndr/") {
 				ExternalInterface.addCallback("getData", getData);
 				ExternalInterface.addCallback("setData", setData);
+				ExternalInterface.addCallback("clear", clear);
 			}
 		}
 		private function setData(key:String, data:Object = null, name:String = null):String {
