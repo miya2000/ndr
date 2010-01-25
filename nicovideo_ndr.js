@@ -3882,7 +3882,8 @@
                             a.setAttribute('target', '_blank');
                             a.textContent = NDR.lang.GOTO_MYLIST_REGISTER_PAGE;
                             a.addEventListener('click', function(e) {
-                                window.open(a.href, 'nicomylistadd', 'width=500,height=360');
+                                var w = window.open(a.href, 'nicomylistadd', 'width=500,height=360');
+                                setTimeout(function() { w.focus() }, 100);
                                 e.preventDefault();
                             }, false);
                             mylistPanel.appendChild(a);
