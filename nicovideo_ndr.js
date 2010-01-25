@@ -139,12 +139,13 @@
         COMMAND_FOCUS_SEARCH : '\u691C\u7D22\u30DC\u30C3\u30AF\u30B9\u3092\u30D5\u30A9\u30FC\u30AB\u30B9',
         COMMAND_TOGGLE_FEED_PANE : '\u30DE\u30A4\u30D5\u30A3\u30FC\u30C9\u3092\u7573\u3080\u0020/\u0020\u623B\u3059',
         COMMAND_TOGGLE_COMPACT_MODE : '\u672C\u6587\u306E\u8868\u793A\u0020/\u0020\u975E\u8868\u793A',
+        GOTO_MYLIST_REGISTER_PAGE : '\u30DE\u30A4\u30EA\u30B9\u30C8\u767B\u9332\u30DA\u30FC\u30B8\u3078\u79FB\u52D5',
+        TEMPORARY_MYLIST : '\u3068\u308A\u3042\u3048\u305A\u30DE\u30A4\u30EA\u30B9\u30C8'
     };
     
     // ==== main ==== //
     var opera9_5Ab = (window.opera && parseFloat(opera.version()) >= 9.5);
     NDR.html = function(pref) { return [
-        pref.enableStorage ? '<embed id="NDR_STORAGE" type="application/x-shockwave-flash" src="' + NDR_STORAGE_SWF + '" width="1" height="1" allowScriptAccess="always">' : '',
         '<h1 class="ndr_title"><a href="http://www.nicovideo.jp/" target="_blank"><img src="/favicon.ico" width="16" height="16"></a><a href="' + location.href + '" onclick="javascript:void(location.reload())">niconico douga Reader</a></h1>',
         '<div class="ndr_status"><img id="NDR_STATUS_IMAGE" width="20" height="20" src="' + NDR_IMG_LOADING + '">&lt; <span id="NDR_STATUS_MESSAGE">Welcome.</span></div>',
         '<form id="NDR_NICO_SEARCH" class="ndr_search_form" action="/search" method="get" target="ndr_search_result">',
@@ -224,7 +225,7 @@
         '    overflow: hidden; ',
         '} ',
         '.ndr_header {',
-        '    background: #FFFFFF url(http://res.nicovideo.jp/img/category_tab/b1_off.gif) repeat-x scroll 0 0; ',
+        '    background-color: #F4FFFF; ',
         '    border-color: #CCCCCC; ',
         '    border-style: solid; ',
         '    border-width: 1px 0; ',
@@ -563,6 +564,9 @@
         '    background-color: #E8E8E8 !important; ',
         '    border: inset gray 1px !important; ',
         '} ',
+        '.ndr_entry_clip a.ndr_mylist_register_page {',
+        '    margin-left: 1em; ',
+        '} ',
         '.ndr_entry_pin {',
         '    background-color: #FFF0F0 !important; ',
         '} ',
@@ -785,6 +789,11 @@
             '} ',
         ].join('\n')
     };
+
+    function postError(e) {
+        if (window.opera) opera.postError(e);
+        else if (window.console) console.error(e);
+    }
     
     function addStyle(styleStr, doc) {
         var document = doc || window.document;
@@ -896,43 +905,56 @@
         };
     })();
     
-    function toJSON(o) {
-        if (o == void(0)) {
-            return 'null';
+    var toJSON;
+    var fromJSON;
+    (function() {
+        if (typeof JSON != 'undefined') {
+            toJSON = JSON.stringify;
+            fromJSON = JSON.parse;
         }
-        var c = o.constructor;
-        if (c == Boolean) {
-            return o.toString();
-        }
-        if (c == Number) {
-            return isNaN(o) ? '"NaN"' : !isFinite(o) ? '"Infinity"' : o.toString(10);
-        }
-        if (c == String) {
-            return '"' + uescape(o) + '"';
-        }
-        if (c == Array) {
-            var tmp = [];
-            for (var i=0; i<o.length; i++) {
-                tmp[i] = toJSON(o[i]);
-            }
-            return '[' + tmp.join(',') + ']';
-        }
-        if (o.toString() == '[object Object]') {
-            var tmp = [];
-            for (var i in o) {
-                if (o.hasOwnProperty(i)) {
-                    tmp.push('"' + uescape(i) + '":' + toJSON(o[i]));
+        else {
+            toJSON = function toJSON(o) {
+                if (o == void(0)) {
+                    return 'null';
                 }
-            }
-            return '{' + tmp.join(',') + '}';
+                var c = o.constructor;
+                if (c == Boolean) {
+                    return o.toString();
+                }
+                if (c == Number) {
+                    return isNaN(o) ? '"NaN"' : !isFinite(o) ? '"Infinity"' : o.toString(10);
+                }
+                if (c == String) {
+                    return '"' + uescape(o) + '"';
+                }
+                if (c == Array) {
+                    var tmp = [];
+                    for (var i=0; i<o.length; i++) {
+                        tmp[i] = toJSON(o[i]);
+                    }
+                    return '[' + tmp.join(',') + ']';
+                }
+                if (o.toString() == '[object Object]') {
+                    var tmp = [];
+                    for (var i in o) {
+                        if (o.hasOwnProperty(i)) {
+                            tmp.push('"' + uescape(i) + '":' + toJSON(o[i]));
+                        }
+                    }
+                    return '{' + tmp.join(',') + '}';
+                }
+                return '\"' + uescape(o.toString()) + '\"';
+            };
+            fromJSON = function fromJSON(jsonStr) {
+                return eval('(' + jsonStr + ')');
+            };
         }
-        return '\"' + uescape(o.toString()) + '\"';
-    }
+    })();
     function uescape(s) {
         return escape(s).replace(/%([0-9A-F]{2})/g,'\\u00$1').replace(/%u/g,'\\u');
     }
     function clone(obj) {
-        return eval('(' + toJSON(obj) + ')');
+        return fromJSON(toJSON(obj));
     }
     
     function evaluate(xpath, context) {
@@ -1393,6 +1415,83 @@
     };
 
     /**
+     * class SwfStorage.
+     */
+    function SwfStorage(swfUrl) {
+        this.url = swfUrl;
+        this.isLoaded = false;
+        this.onload = null;
+        this.onerror = null;
+        this.timer = new TimerManager();
+        this.load();
+    }
+    SwfStorage.prototype = {
+        load : function() {
+            var swf = document.createElement('embed');
+            swf.setAttribute('type', 'application/x-shockwave-flash');
+            swf.setAttribute('allowScriptAccess', 'always');
+            swf.setAttribute('wmode', 'transparent');
+            swf.setAttribute('src', this.url);
+            swf.setAttribute('width', '1');
+            swf.setAttribute('height', '1');
+            swf.style.cssText = 'position: absolute; z-index: -1; top: 0; left: 0; width: 1px; height: 1px;';
+            (document.body || document.documentElement).appendChild(swf);
+            this.swf = swf;
+            this.observeLoad();
+        },
+        observeLoad : function() {
+            var self = this;
+            var retry = 100;
+            this.timer.setInterval('observe', function() {
+                try {
+                    if (test()) {
+                        self.isLoaded = true;
+                        self.timer.clear('observe');
+                        if (self.onload) try { self.onload(); } catch(ee) { postError(ee); }
+                    }
+                }
+                catch (e) {
+                    if (--retry == 0) {
+                        self.timer.clear('observe');
+                        postError(e);
+                        if (self.onerror) try { self.onerror(); } catch(ee) { postError(ee); }
+                    }
+                }
+            }, 200);
+            function test() {
+                self.swf.setData('test', 'test', '_tmp');
+                if (self.swf.getData('test', '_tmp') == 'test') {
+                    self.swf.clear('_tmp');
+                    return true;
+                }
+                return false;
+            }
+        },
+        getData : function(key, name) {
+            if (arguments.length == 0) {
+                key = "data";
+            }
+            return this.swf.getData(key, name);
+        },
+        setData : function(key, data, name) {
+            if (arguments.length == 1) {
+                data = key;
+                key = "data";
+            }
+            return this.swf.setData(key, data, name);
+        },
+        clear : function(name) {
+            this.swf.clear(name);
+        }
+    };
+    var createStorage = (function() {
+        var storage = null;
+        return function() {
+            return storage || (storage = new SwfStorage(NDR_STORAGE_SWF));
+        }
+    })();
+
+    /**
      * class RequestPool.
      *   limit number of Ajax request.
      */
@@ -1834,10 +1933,10 @@
             var self = this;
             httpRequest(url, function(xhr) {
                 try {
-                    var json = eval('(' + xhr.responseText + ')'); // trust s.hatena
+                    var json = fromJSON(xhr.responseText); // trust s.hatena
                 }
                 catch (e) {
-                    opera.postError('eval failed:[' + xhr.responseText + ']');
+                    postError('invalid JSON:[' + xhr.responseText + ']');
                     throw e;
                 }
                 self.rks = json.rks;
@@ -1908,7 +2007,7 @@
             var url = HatenaStar.ENTRY + '?uri=' + uri + '&' + this.session;
             var self = this;
             httpRequest(url, function(xhr) {
-                var json = eval('(' + xhr.responseText + ')');
+                var json = fromJSON(xhr.responseText);
                 var stars = json.entries[0].stars;
                 var df = numPlace.ownerDocument.createDocumentFragment();
                 for (var i = 1, len = stars.length - 1; i < len; i++) { // remove first and last.
@@ -1946,8 +2045,10 @@
      * class NicoMylist.
      */
     var NicoMylist = {
-        GROUP_EDIT : '/mylistgroup_edit',
-        EDIT       : '/mylist_edit',
+        GROUP_EDIT : '/my/mylist',
+        MYLIST_ADD : '/mylist_add/video/',
+        API_MYLIST_ADD : '/api/mylist/add',
+        API_DEFLIST_ADD : '/api/deflist/add',
         STATUS     : {
             'loading':'\u8FFD\u52A0\u4E2D\u3067\u3059\u2026\u3002',
             //'success':'<a href="%HREF%">%NAME%</a> \u306B\u767B\u9332\u3057\u307E\u3057\u305F\u3002',
@@ -1955,7 +2056,7 @@
             'maxerror':'\u6700\u5927\u767B\u9332\u6570\u3092\u30AA\u30FC\u30D0\u30FC\u3057\u3066\u3044\u307E\u3059\u3002',
             'error':'\u767B\u9332\u306B\u5931\u6557\u3057\u307E\u3057\u305F\u3002'
         },
-        REQUEST_INTERVAL : 3
+        REQUEST_INTERVAL : 1
     };
     NicoMylist.Instance = function() {
         this.mylistGroup = null;
@@ -1968,16 +2069,17 @@
             var self = this;
             httpRequest(NicoMylist.GROUP_EDIT, function(x) {
                 if (x.status == 200) {
-                    var group_list = [];
-                    var group_info = {};
-                    var m = x.responseText.match(/href\s*=\s*"mylist\/\d+"[^>]*>[^<>]+?<\/a>/g);
+                    var group_list = ['default'];
+                    var group_info = { 
+                        'default' : { group_name: NDR.lang.TEMPORARY_MYLIST, group_uri: '/my/mylist' }
+                    };
+                    var m = /MylistGroup.preload\((.*?)\)/.exec(x.responseText);
                     if (!m) return;
-                    for (var i = 0; i < m.length; i++) {
-                        var info = m[i].match(/href\s*=\s*"(mylist\/(\d+))"[^>]*>([^<>]+?)<\/a>/);
-                        if (!group_info[info[2]]) {
-                            group_list.push(info[2]);
-                            group_info[info[2]] = { group_name: info[3], group_uri: '/' + info[1] };
-                        }
+                    var mylistGroup = fromJSON(m[1]);
+                    for (var i = 0; i < mylistGroup.length; i++) {
+                        var g = mylistGroup[i];
+                        group_list.push(g.id);
+                        group_info[g.id] = { group_name: g.name, group_uri: '/mylist/' + g.id };
                     }
                     self.mylistGroup = { group_list: group_list, group_info: group_info };
                 }
@@ -1999,20 +2101,37 @@
             var self = this;
             this.enqueueRequest(function() {
                 var d = new Deferred();
-                self.request(window, 'GET', '/watch/' + video_id, null, function(x) { 
-                    var m = /<input .*?name="csrf_token" .*?>/i.exec(x.responseText);
-                    var token = (/value="(.*?)"/i.exec(m) || / _ /)[1] || '';
+                self.request(window, 'GET', NicoMylist.MYLIST_ADD + video_id, null, function(x) {
+                    var m = /<input .*?name="item_type" .*?>/i.exec(x.responseText);
+                    var item_type = (/value="(.*?)"/i.exec(m) || / _ /)[1] || '';
+                    var m = /<input .*?name="item_id" .*?>/i.exec(x.responseText);
+                    var item_id = (/value="(.*?)"/i.exec(m) || / _ /)[1] || '';
+                    var m = /NicoAPI\.token\s*=\s*"(.*?)"/.exec(x.responseText);
+                    if (!m) return;
+                    var token = m[1];
+                    var url = NicoMylist.API_MYLIST_ADD;
+                    var params = [
+                        'token=' + token,
+                        'item_type=' + item_type,
+                        'item_id=' + item_id
+                    ];
+                    if (group_id == 'default') {
+                        url = NicoMylist.API_DEFLIST_ADD;
+                    }
+                    else {
+                        params.push('group_id=' + group_id);
+                    }
                     setTimeout(function() {
-                        self.request(window, 'POST', '/watch/' + video_id, 'mylist=add&group_id=' + group_id + '&ajax=1&csrf_token=' + token, 
+                        self.request(window, 'POST', url, params.join('&'), 
                             function(x) { d.callback(x) }
                         );
                     }, NicoMylist.REQUEST_INTERVAL * 1000);
                 });
                 d.addCallback(function(x) {
                     try {
-                        callback(eval(x.responseText).result);
+                        callback(fromJSON(x.responseText).result);
                     }
-                    catch(e) { opera.postError(e) }
+                    catch(e) { postError(e) }
                 });
                 return d;
             });
@@ -2037,7 +2156,6 @@
         }
     };
     var nicoMylist = new NicoMylist.Instance();
-    
     
     // class RSSProcessor (RSS2.0)
     function RSSProcessor() {
@@ -2397,10 +2515,15 @@
         this.openHistoryFeed();
         this.clearFeedItems();
         this.importFeedList(p.FEED_LIST || []);
-        // loadPreference delay for Opera9.
         if (this.pref.enableStorage) {
+            this.storage = createStorage();
             var self = this;
-            setTimeout(function() { self.loadPreference() }, 100);
+            this.storage.onload = function () {
+                self.loadPreference();
+            };
+            this.storage.onerror = function () {
+                alert(NDR.lang.UNAVAILABLE_FOR_MISSING_STORAGE);
+            };
         }
         // no feed.
         if (this.pref.feedList.length == 0 && !this.pref.enableStorage) {
@@ -3031,7 +3154,7 @@
                     this.pref.feedInfo[url] = item;
                     this.loadFeed(url);
                 }
-                delete item.url; // save memory.
+                delete item.url; // save memory?
                 if (overwrite) {
                     this.pref.feedInfo[url] = item;
                 }
@@ -3050,42 +3173,22 @@
     };
     NDR.prototype.loadPreference = function(retry) {
         if (!this.pref.enableStorage) return false;
-        if (this.timer.timeouts['loadPreference'] && retry == 0) return false;
-        var count = (retry + 1) || 30;
-        var self = this;
-        function _loadPreference() {
-            var jsonStr;
-            try {
-                var storage = document.getElementById('NDR_STORAGE');
-                jsonStr = storage.getData();
-            }
-            catch(e) {
-                if (--count > 0) {
-                    self.timer.setTimeout('loadPreference', _loadPreference, 500);
-                }
-                return false;
-            }
-            var storePref = (jsonStr) ? eval('(' + jsonStr + ')') : null;
-            self.importPreference(storePref);
-            self._loadSucceeded = true;
-            if (self.pref.feedList.length == 0) {
-                self.setStatus('complete');
-            }
-            return true;
+        if (!this.storage.isLoaded) return false;
+        var jsonStr = this.storage.getData();
+        var storePref = (jsonStr) ? fromJSON(jsonStr) : null;
+        this.importPreference(storePref);
+        if (this.pref.feedList.length == 0) {
+            this.setStatus('complete');
         }
-        return _loadPreference();
+        return true;
     };
     NDR.prototype.storePreference = function() {
-        if (!this._loadSucceeded) {
+        if (!this.storage.isLoaded) {
             throw 'storage has not been loaded.';
-        }
-        var storage = document.getElementById('NDR_STORAGE');
-        if (!storage || !storage.setData) {
-            throw 'storage is unavailable.';
         }
         var storePref = this.createStorePreference();
         var jsonStr = toJSON(storePref).replace(/\\u/g,'\\u005cu');
-        storage.setData(jsonStr);
+        this.storage.setData(jsonStr);
     };
     NDR.prototype.createStorePreference = function() {
         var pref = { 
@@ -3177,7 +3280,7 @@
         });
     };
     NDR.prototype.reloadAllFeeds = function() {
-        if (!this.loadPreference(0)) return;
+        if (!this.loadPreference()) return;
         this.clearFeedItems();
         var list = this.pref.feedList;
         for (var i = 0; i < list.length; i++) {
@@ -3772,6 +3875,17 @@
                                 removeClass(dv, 'ndr_entry_clip');
                             }, false);
                             var entry_title = dv.getElementsByTagName('h4')[0];
+                            
+                            var a = document.createElement('a');
+                            a.href = '/mylist_add/video/' + video_id;
+                            a.className = 'ndr_mylist_register_page';
+                            a.setAttribute('target', '_blank');
+                            a.textContent = NDR.lang.GOTO_MYLIST_REGISTER_PAGE;
+                            a.addEventListener('click', function(e) {
+                                window.open(a.href, 'nicomylistadd', 'width=500,height=360');
+                                e.preventDefault();
+                            }, false);
+                            mylistPanel.appendChild(a);
                             entry_title.parentNode.insertBefore(mylistPanel, entry_title.nextSibling);
                         }
                         appendClass(dv, 'ndr_entry_clip');
@@ -4079,7 +4193,7 @@
             alert(NDR.lang.HAS_SUBSCRIBED);
             return;
         }
-        if (this.pref.enableStorage &&!this.loadPreference(0)) {
+        if (this.pref.enableStorage && !this.loadPreference()) {
             alert(NDR.lang.UNAVAILABLE_FOR_MISSING_STORAGE);
             return;
         }
@@ -4291,7 +4405,7 @@
         return panel;
     };
     NDR.prototype.openFeedEdit = function() {
-        if (!this.loadPreference(0)) {
+        if (!this.loadPreference()) {
             alert(NDR.lang.UNAVAILABLE_FOR_MISSING_STORAGE);
             return;
         }
@@ -4300,7 +4414,6 @@
         dv.innerHTML = [
             '<h2 class="ndr_title">' + NDR.lang.EDIT_FEED_INFO + '</h2>',
             '<ul class="ndr_entry_menu">',
-            '    <li></li>',
             '</ul>',
             '<div class="ndr_entry"></div>'
         ].join('');
@@ -4333,7 +4446,7 @@
         
         var self = this;
         function save() {
-            self.loadPreference(0);
+            self.loadPreference();
             var newList = [];
             for (var i = 0; i < editorList.length; i++) {
                 var item = editorList[i];
@@ -4607,7 +4720,7 @@
         location.href = 'data:application/octet-stream;charset=utf-8,' + encodeURIComponent(opmlXml);
     };
     NDR.prototype.opmlImport = function(opmlStr) {
-        if (!this.loadPreference(0)) {
+        if (!this.loadPreference()) {
             alert(NDR.lang.UNAVAILABLE_FOR_MISSING_STORAGE);
             return;
         }
