@@ -1010,7 +1010,8 @@
 
     var Cookie = {
         get : function(key) {
-            return decodeURIComponent((new RegExp('(?: |^)' + key + '=([^;]*)').exec(document.cookie) || / _ / )[1]);
+            var m = new RegExp('(?: |^)' + key + '=([^;]*)').exec(document.cookie);
+            return m && decodeURIComponent(m[1]);
         },
         set : function(key, value, expires, path, domain) {
             document.cookie = key + '=' + encodeURIComponent(value) + 
@@ -1434,7 +1435,7 @@
             swf.setAttribute('src', this.url);
             swf.setAttribute('width', '1');
             swf.setAttribute('height', '1');
-            swf.style.cssText = 'position: absolute; z-index: -1; top: 0; left: 0; width: 1px; height: 1px;';
+            swf.style.cssText = 'position: absolute; z-index: -1; top: 0; left: 0; width: 0px; height: 50px;'; // stretch for load.
             (document.body || document.documentElement).appendChild(swf);
             this.swf = swf;
             this.observeLoad();
