@@ -189,8 +189,10 @@
         ].join('\n');
     };
     NDR.style = function(pref) { return [
-        'body { width: 99%; height: 100%; min-width: 580px; overflow: hidden; background-image: none !important; padding: 0 !important; } ',
+        'html { height: 100% } ',
+        'body { width: 99%; height: 100%; min-width: 580px; overflow: hidden; background-image: none !important; padding: 0 !important; text-align: left; } ',
         'a, a:hover, a:active { color: inherit; text-decoration: underline; } ',
+        'a, a:visited { color: #353535; } ',
         'h1 a { text-decoration: none !important; } ',
         '.ndr_body { height: 100%; } ',
         'h1.ndr_title {',
@@ -2823,6 +2825,28 @@
         if (!p) return '';
         return p.replace(/\s+/g, ' ').replace(/\s*\|\s*/g, '|').replace(/[|]+/g, '|').replace(/[.+?*()\[\]\\{}^$]/g, '\\$&');
     };
+    NDR.prototype.extendSearchPharse = (function() {
+        // from JavaScript/Migemo
+        var hiragana = "\u3042\u3044\u3046\u3048\u304A\u304B\u304D\u304F\u3051\u3053\u3055\u3057\u3059\u305B\u305D\u305F\u3061\u3064\u3066\u3068\u306A\u306B\u306C\u306D\u306E\u306F\u3072\u3075\u3078\u307B\u307E\u307F\u3080\u3081\u3082\u3084\u3086\u3088\u3089\u308A\u308B\u308C\u308D\u308F\u3090\u3091\u3092\u3093\u304C\u304E\u3050\u3052\u3054\u3056\u3058\u305A\u305C\u305E\u3060\u3058\u3065\u3067\u3069\u3070\u3073\u3076\u3079\u307C\u3071\u3074\u3077\u307A\u307D\u3083\u3085\u3087\u3041\u3043\u3045\u3047\u3049\u3063";
+        var katakana = "\u30A2\u30A4\u30A6\u30A8\u30AA\u30AB\u30AD\u30AF\u30B1\u30B3\u30B5\u30B7\u30B9\u30BB\u30BD\u30BF\u30C1\u30C4\u30C6\u30C8\u30CA\u30CB\u30CC\u30CD\u30CE\u30CF\u30D2\u30D5\u30D8\u30DB\u30DE\u30DF\u30E0\u30E1\u30E2\u30E4\u30E6\u30E8\u30E9\u30EA\u30EB\u30EC\u30ED\u30EF\u30F0\u30F1\u30F2\u30F3\u30AC\u30AE\u30B0\u30B2\u30B4\u30B6\u30B8\u30BA\u30BC\u30BE\u30C0\u30B8\u30C5\u30C7\u30C9\u30D0\u30D3\u30D6\u30D9\u30DC\u30D1\u30D4\u30D7\u30DA\u30DD\u30E3\u30E5\u30E7\u30A1\u30A3\u30A5\u30A7\u30A9\u30C3";
+        return function(phrase) {
+            var res = "";
+            var index = -1;
+            for (var i = 0, len = phrase.length; i < len; i++) {
+                var c = phrase.charAt(i);
+                if ((index = hiragana.indexOf(c)) >= 0) {
+                    res += '[' + c + katakana.charAt(index) + ']';
+                }
+                else if ((index = katakana.indexOf(c)) >= 0) {
+                    res += '[' + c + hiragana.charAt(index) + ']';
+                }
+                else {
+                    res += c;
+                }
+            }
+            return res;
+        }
+    })();
     NDR.prototype.createSearchTester = function(phrase) {
         if (!phrase) {
             return { test: function() { return true } };
@@ -2844,6 +2868,7 @@
     NDR.prototype.feedSearch = function(searchBox) {
         searchBox.style.color = '';
         var phrase = this.escapeSearchPhrase(searchBox.value);
+        var phrase = this.extendSearchPharse(phrase);
         var tester = this.createSearchTester(phrase);
         if (!tester) {
             searchBox.style.color = 'red';
@@ -2874,6 +2899,7 @@
     NDR.prototype.createEntrySearchResultFeed = function(searchBox) {
         var phrase = this.escapeSearchPhrase(searchBox.value);
         if (!phrase) return;
+        var phrase = this.extendSearchPharse(phrase);
         var tester = this.createSearchTester(phrase);
         if (!tester) {
             return;
