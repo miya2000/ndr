@@ -3,10 +3,13 @@
 // @description niconico douga RSS reader.
 // @namespace http://d.hatena.ne.jp/miya2000/
 // @author    miya2000
-// @version   1.0.0
+// @version   1.0.1
 // @include   http://www.nicovideo.jp/ndr/
 // ==/UserScript==
 (function() {
+    
+    // avoid wnp window on Opera12.
+    if (window.name != '') return;
     
     // ==== preferences ==== //
     NDR.PREFERENCES = {
@@ -53,7 +56,7 @@
     var NDR_IMG_LOADING = 'data:image/gif;base64,R0lGODlhFAAUAIIAAC8vL%2BTl5EdFR%2FT09Dk6OVNVU%2Bzr7Pz%2B%2FCH%2FC05FVFNDQVBFMi4wAwEAAAAh%2BQQADQAAACwAAAAAFAAUAAIDSHi6awLCsDlNkVZSGpsY20SIITN0igOW6XVkLONAa6wMBKHZygPwDACAULPhhB%2FgIVc0MpUK5I43pCmlSpxO6SBCCYCmbRhLAAAh%2BQQADQAAACwAAAAAFAAUAAIDVHi6awLCsDlNkVZSGpsY20SIITN0igOW6XVkLBM8aPw%2BxGofEQHosUHOJ9gphoDc7iRUGg%2BD5PPmA7KaM4KGZSB8qEHvVnglaEVWhtfKDAnTBykjAQAh%2BQQADQAAACwAAAAAFAAUAAIDVni6awLCsDlNkVZSGpsY20SIITN0igOW6XVkLBM8X7wQD7HaZ0AAh11MRyDMbMHPT6BDgn5CHmCEDJ6gTpyRqdkMikUDyEENfQZCQzMUvZWrwTX8%2B04AACH5BAANAAAALAAAAAAUABQAAgNOeLprAsKwOU2RVlIamxjbRIghM3SKA5bpdWQsEzxofJwAsdoKkO%2B8XI63IPg%2BxJsRyDMmU4QRcXBaxgYEQZQQkMYiIJCXBTwxm2fbkJIAACH5BAANAAAALAAAAAAUABQAAgNJeLprAsKwOU2RVlIamxjbRIghM3SKA5bpdWQs40BrrAwEodnKA%2FAMAIBQs52EH%2BBhMCwaCT%2Flkag8CGlKpJOFQ%2FEcuip0GxvGEgAh%2BQQADQAAACwAAAAAFAAUAAIDUHi6awLCsDlNkVZSGpsY20SIITN0igOW6XVkLBM8aHycALHaCuDzC5wOqAgQch8gTcMb5ALEG4EgiFKNu9hgOG12pdnQabXlTXc18VDhHE0SACH5BAANAAAALAAAAAAUABQAAgNXeLprAsKwOU2RVlIamxjbRIghM3SKA5bpdWQsEzxunD5EYC8RAa2x08AnmO0OA0BOQACWhhCkk0XIHRXJ6m4wJPSmJm%2B1cxqVIlzgULMBK7RX7CeOVE4SACH5BAANAAAALAAAAAAUABQAAgNNeLprAsKwOU2RVlIamxjbRIghM3SKA5bpdWQsEzxofJwAsdoK4PMMQg6oGAg%2FxENuBxQyeT4BcWB0xqoEgiAwsn2ooO7VpEsqasDqJgEAOw%3D%3D';
     var NDR_IMG_COMPLETE = 'data:image/gif;base64,R0lGODlhFAAUAIIAADAvMOPl40hHSPT19Dg5OFRWVOzs7Pz%2B%2FCH5BAANAAAALAAAAAAUABQAAgNNeLpqAmSwOU0xx2I6h9iZIHEMMZnk4oHOmGYXDL5HIBAfrT6Gqw8QHcMTFC4ASKOCGFFmCACREwlwHh5NZQDqdHCNXpuSQMCUjdkoKQEAIfkEACgAAAAsAAAAABQAFAACA0Z4umcCZLA5TTHtUjoEVo60McRUjkv3NYKIZpi1vizg0RM04wfEm4AfA%2BLiDQgRoYIAKPJ8ygMzOoAqmU7a8XQl7LQAGyoBACH5BAANAAAALAAAAAAUABQAAgNGeLpqAmSwOU0xx2I6h9iZIHEMMZnk4oHOmGYXDL4h8NGMYc%2F4w9MDCI5CAAxzRdfwcTsGCT%2Ba8LgoUhdTqgd6zey6AFsqAQAh%2BQQADQAAACwAAAAAFAAUAAIDSni6POcsSiOIMDIfU8zgmLYM10JB4kFEa%2FqUyuluggPODwFYoUsBF5RLB8MNdL0ZaYdjAHbC2bPVXAKaJgIVu0sqBUBsrCtWhTUJACH5BAANAAAALAAAAAAUABQAAgNLeLrc%2Fm0cCZ8RRJjaTDGDt3GTtlwURzQreRDjgZJGtom0AACYyV07zSAFAQJgLpmOFyMtCYHkZEcgupbSEwGQXRy7JWTXwARvBZUEACH5BAAKAAAALAAAAAAUABQAAgNKeLo85yxKI4gwMh9TzOCYtgzXQkHiQURr%2BpTK6W6CA84PAVihSwEXlEsHww10vRlph2MAdsLZs9VcApomAhW7SyoFQGysK1aFNQkAIfkEAAoAAAAsAAAAABQAFAACA0Z4umoCZLA5TTHHYjqH2JkgcQwxmeTigc6YZhcMviHw0Yxhz%2FjD0wMIjkIADHNF1%2FBxOwYJP5rwuChSF1OqB3rN7LoAWyoBACH5BAAUAAAALAAAAAAUABQAAgNGeLpnAmSwOU0x7VI6BFaOtDHEVI5L9zWCiGaYtb4s4NETNOMHxJuAHwPi4g0IEaGCACjyfMoDMzqAKplO2vF0Jey0ABsqAQAh%2BQQADQAAACwAAAAAFAAUAAIDS3i6ZwJksDlNMe1SOgRWjrQxxFSOS%2Fc1gohmmLW%2BLODREzTjBnHiig4EyABAXLgB4UhUPABIHrN58EWohICAWlVGaZEfUHVrQmyjBAAh%2BQQADQAAACwAAAAAFAAUAAIDT3i6ZwJksDlNMe1SOgRWjrQxxFSOS%2Fc1gohmmLW%2BLODREzTjBnHiig4EyADoiAehzcXz7WgDAoCJ8%2FmoqN4giiS0Dr8qhgtUKW5AW3K5SQAAIfkEAA0AAAAsAAAAABQAFAACA1J4umcCZLA5TTHtUjoEVo60McRUjkv3NYKIZpi1vizg0ROEtbhC2IYTbvADhHqHH%2BGGhAxcvR%2BS4Zw2CNgZbRkQCGmOGHMbORC%2FI9UiTCPm0IcEACH5BADIAAAALAAAAAAUABQAAgNXeLpqAmSwOU0xx2I6h9iZIHEMMZnk4oHOmGYXDL4hIASHS0NOSys8EepHsOGGtKJR9DsAeLFmMaJ7DSC2WcpBJXyI3wwByekxVq%2BxbjB%2B3ShmzpU5gSwSADs%3D';
     var NDR_HATENASTAR_TOKEN = '43176db8ca94b7e759246873fc3dad868c75fd6f';
-    var NDR_STORAGE_SWF = 'http://miya2000.github.com/storage/ndr.swf';
+    var NDR_STORAGE_SWF = 'http://miya2000.github.io/storage/ndr.swf';
     
     // ==== resource ==== //
     NDR.lang = {
@@ -119,6 +122,7 @@
         MARK_AS_READ : '\u65E2\u8AAD\u306B\u3059\u308B',
         NEW_ARRIVAL : '\u65B0\u7740',
         TOTAL : '\u5408\u8A08',
+        UPDATED_DATE : '\u66F4\u65B0\u65E5\u6642',
         NO_HISTORY : '\u5C65\u6B74\u306F\u3042\u308A\u307E\u305B\u3093\u3002',
         NO_UNREAD_ITEMS : '\u672A\u8996\u8074\u306E\u52D5\u753B\u306F\u3042\u308A\u307E\u305B\u3093\u3002',
         RANDOM_PICKOUT_FROM_FEEDS : '\u8CFC\u8AAD\u3057\u3066\u3044\u308B\u30D5\u30A3\u30FC\u30C9\u304B\u3089\u30E9\u30F3\u30C0\u30E0\u306B\u62BD\u51FA\u3057\u3066\u3044\u307E\u3059\u3002',
@@ -367,6 +371,7 @@
         '    margin: 8px 0 0 2px; ',
         '    display: inline-block;',
         '    position: absolute;',
+        '    z-index: 1;',
         '} ',
         '.ndr_feed_edit:before {',
         '    content: ""; ',
@@ -376,6 +381,7 @@
         '    margin: 8px 0 0 2px; ',
         '    display: inline-block;',
         '    position: absolute;',
+        '    z-index: 1;',
         '} ',
         '.ndr_feed_add:before {',
         '    content: ""; ',
@@ -385,6 +391,7 @@
         '    margin: 8px 0 0 2px; ',
         '    display: inline-block;',
         '    position: absolute;',
+        '    z-index: 1;',
         '} ',
         '.ndr_feed_search {',
         '    width: auto; ',
@@ -414,6 +421,8 @@
         '    width: 100%; ',
         '    height: 100%; ',
         '    padding: 3px 5px; ',
+        '    position: relative; ',
+        '    z-index: 10; ',
         '} ',
         '.ndr_feed_list {',
         '    list-style-type: none; ',
@@ -435,6 +444,8 @@
         '} ',
         '.ndr_feed_item {',
         '    background: url("' + NDR_DEF_FAVICON + '") no-repeat 2px 5px; ',
+        '    -o-background-size: 16px 16px; ',
+        '    background-size: 16px 16px; ',
         '} ',
         '.ndr_feed_origin_nico, .ndr_temporary_feed_list > li { ',
         '    background-image: url("/favicon.ico") !important; ',
@@ -472,6 +483,7 @@
         '} ',
         '.ndr_entries h2 a {',
         '    text-decoration: none; ',
+        '    color: #353535; ',
         '} ',
         '.ndr_entries h3.ndr_subtitle {',
         '    font-weight: normal; ',
@@ -705,6 +717,7 @@
         '    background-color: white; ',
         '    padding-left: 22px; ',
         '    border: #555 solid 1px; ',
+        '    width: 90%; ',
         '} ',
         '.ndr_subscribe {',
         '    text-decoration: underline; ',
@@ -718,8 +731,8 @@
         '.ndr_input_pane {',
         '    color: white; ',
         '    background-color: #202020; ',
-        '    width: 400px; ',
-        '    padding: 13px 15px;',
+        '    width: 450px; ',
+        '    padding: 16px 15px 13px;',
         '    font-size: 12px; ',
         '    box-sizing: border-box; ',
         '} ',
@@ -728,13 +741,13 @@
         '    padding: 0; ',
         '} ',
         '.ndr_input_pane .ndr_feed_url {',
-        '    width: 364px; ',
+        '    width: 95%; ',
         '    margin: auto; ',
         '} ',
         '.ndr_input_pane p {',
         '    line-height: 1.2; ',
         '    border-width: 0; ',
-        '    margin: 5px 0; ',
+        '    margin: 0; ',
         '} ',
         '.ndr_feed_input_import {',
         '    float: left; ',
@@ -753,13 +766,25 @@
         '    height: 1.5em; ',
         '} ',
         '.ndr_input_pane.ndr_feed_editor {',
-        '    width: 600px; ',
+        '    width: 520px; ',
+        '} ',
+        '.ndr_feed_editor td {',
+        '    vertical-align: top; ',
+        '    line-height: 1.5; ',
+        '    padding: 0 5px 5px 0; ',
+        '} ',
+        '.ndr_feed_editor td.ndr_input_label {',
+        '    padding-top: 5px; ',
+        '    white-space: nowrap; ',
         '} ',
         '.ndr_input_pane.ndr_opml_editor {',
         '    width: 600px; ',
         '} ',
         '.ndr_opml_editor .ndr_opml_text {',
         '    width: 564px; ',
+        '} ',
+        '.ndr_tag_link a {',
+        '    color: #353535; ',
         '} ',
         ].join('\n');
     };
@@ -1040,11 +1065,11 @@
             if (!ignoreNoFollow && /\bnofollow\b/.test(a.getAttribute('rel'))) continue;
             var href = a.href;
             if (/^\/?watch\/(.*)/.exec(href)) href = 'http://www.nicovideo.jp/watch/' + RegExp.$1;
-            if (/http:\/\/www\.nicovideo\.jp\/watch\/(\w*)$/.test(href)) {
-                var videoid = RegExp.$1;
+            if (/(http:\/\/www\.nicovideo\.jp\/watch\/(\w*))/.test(href)) {
+                var videoid = RegExp.$2;
                 if (!video[videoid]) {
                     items.push(videoid);
-                    video[videoid] = href;
+                    video[videoid] = RegExp.$1;
                 }
                 var img = a.getElementsByTagName('img')[0];
                 if (img) {
@@ -2276,7 +2301,7 @@
     AtomProcessor.prototype.initialize = function() {
         this.xProps = {
             title       : '//atom:feed/atom:title',
-            link        : '//atom:feed/atom:link[@rel="alternate" or true()]/@href',
+            link        : '//atom:feed/atom:link[@rel="alternate"]/@href',
             description : '//atom:feed/atom:subtitle',
             date        : '//atom:feed/atom:updated'
         };
@@ -3713,6 +3738,7 @@
             '<ul class="ndr_entry_menu">',
             feedObj.unreadItems ? ('    <li>' + NDR.lang.NEW_ARRIVAL + ': ' + feedObj.unreadItems.length + ' entry</li>') : '',
             '    <li>' + NDR.lang.TOTAL + ': ' + feedObj.items.length + ' entry</li>',
+            feedObj.date ? '    <li style="white-space: nowrap; overflow: visible;">' +  NDR.lang.UPDATED_DATE + ': ' + formatDate(feedObj.date) + '</li>' : '',
             '</ul>',
         ].join('');
         var range = document.createRange();
@@ -4047,6 +4073,7 @@
                         var thmb_place = dv.getElementsByClassName('ndr_entry_thumbnail')[0];
                         if (thumb_info.tags) {
                             var tagsEl = document.createElement('p');
+                            appendClass(tagsEl, 'ndr_tag_link');
                             var tagsHtml = NDR.lang.TAG + ':';
                             for (var j = 0; j < thumb_info.tags.length; j++) {
                                 var tag = thumb_info.tags[j];
@@ -4405,10 +4432,12 @@
         panel.innerHTML = [
             '<form action="javascript:void(0)">',
             '<table>',
-            '<tr><td>' + NDR.lang.TITLE + '</td><td><input type="text" class="ndr_feed_title ' + feedItemClass + '" size="80"></td></tr>',
-            '<tr><td></td><td><input type="checkbox" class="ndr_feed_title_check" id="' + tmp_id + 'TI"><label for="' + tmp_id + 'TI">' + NDR.lang.GET_TITLE_FROM_FEED + '</label></td></tr>',
-            '<tr><td>' + NDR.lang.ADDRESS + '</td><td><span class="ndr_feed_address"></span></td></tr>',
-            '<tr><td>' + NDR.lang.SORT_ORDER + '</td>',
+            '<tr><td class="ndr_input_label">' + NDR.lang.TITLE + '</td>',
+            '<td><input type="text" class="ndr_feed_title ' + feedItemClass + '" size="80">',
+            '<br><input type="checkbox" class="ndr_feed_title_check" id="' + tmp_id + 'TI"><label for="' + tmp_id + 'TI">' + NDR.lang.GET_TITLE_FROM_FEED + '</label>',
+            '</td></tr>',
+            '<tr><td >' + NDR.lang.ADDRESS + '</td><td><span class="ndr_feed_address"></span></td></tr>',
+            '<tr><td class="ndr_input_label">' + NDR.lang.SORT_ORDER + '</td>',
             '<td><select class="ndr_feed_order">',
             '<option value="entryOrder">' + NDR.lang.ORDER_NONE + '</option>',
             '<option value="entryDate">' + NDR.lang.ORDER_ENTRY_DATE + '</option>',
